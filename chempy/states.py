@@ -150,9 +150,7 @@ class Translation(Mode):
         constant, and :math:`h` is the Planck constant.
         """
         cython.declare(qt=cython.double)
-        qt = (
-            (2 * constants.pi * self.mass / constants.Na) / (constants.h * constants.h)
-        ) ** 1.5 / 1e5
+        qt = ((2 * constants.pi * self.mass / constants.Na) / (constants.h * constants.h)) ** 1.5 / 1e5
         return qt * (constants.kB * T) ** 2.5
 
     def getHeatCapacity(self, T):
@@ -201,10 +199,7 @@ class Translation(Mode):
         """
         cython.declare(rho=numpy.ndarray, qt=cython.double)
         rho = numpy.zeros_like(Elist)
-        qt = (
-            (2 * constants.pi * self.mass / constants.Na / constants.Na)
-            / (constants.h * constants.h)
-        ) ** (1.5) / 1e5
+        qt = ((2 * constants.pi * self.mass / constants.Na / constants.Na) / (constants.h * constants.h)) ** (1.5) / 1e5
         rho = qt * Elist**1.5 / (numpy.sqrt(math.pi) * 0.25) / constants.Na
         return rho
 
@@ -270,12 +265,7 @@ class RigidRotor(Mode):
             theta = (
                 constants.kB
                 * T
-                / (
-                    self.symmetry
-                    * constants.h
-                    * constants.h
-                    / (8 * constants.pi * constants.pi * inertia)
-                )
+                / (self.symmetry * constants.h * constants.h / (8 * constants.pi * constants.pi * inertia))
             )
             return theta
         else:
@@ -362,22 +352,12 @@ class RigidRotor(Mode):
         """
         cython.declare(theta=cython.double, inertia=cython.double)
         if self.linear:
-            theta = (
-                constants.h
-                * constants.h
-                / (8 * constants.pi * constants.pi * self.inertia[0])
-                * constants.Na
-            )
+            theta = constants.h * constants.h / (8 * constants.pi * constants.pi * self.inertia[0]) * constants.Na
             return numpy.ones_like(Elist) / theta / self.symmetry
         else:
             theta = 1.0
             for inertia in self.inertia:
-                theta *= (
-                    constants.h
-                    * constants.h
-                    / (8 * constants.pi * constants.pi * inertia)
-                    * constants.Na
-                )
+                theta *= constants.h * constants.h / (8 * constants.pi * constants.pi * inertia) * constants.Na
             return 2.0 * numpy.sqrt(Elist / theta) / self.symmetry
 
 
@@ -438,9 +418,7 @@ class HinderedRotor(Mode):
         V = numpy.zeros_like(phi)
         if self.fourier is not None:
             for k in range(self.fourier.shape[1]):
-                V += self.fourier[0, k] * numpy.cos((k + 1) * phi) + self.fourier[1, k] * numpy.sin(
-                    (k + 1) * phi
-                )
+                V += self.fourier[0, k] * numpy.cos((k + 1) * phi) + self.fourier[1, k] * numpy.sin((k + 1) * phi)
             V -= numpy.sum(self.fourier[0, :])
         else:
             V = 0.5 * self.barrier * (1 - numpy.cos(self.symmetry * phi))
@@ -475,9 +453,7 @@ class HinderedRotor(Mode):
         A = numpy.sum(self.fourier[0, :]) / constants.Na
         row = 0
         for m in range(-M, M + 1):
-            H[row, row] = A + constants.h * constants.h * m * m / (
-                8 * math.pi * math.pi * self.inertia
-            )
+            H[row, row] = A + constants.h * constants.h * m * m / (8 * math.pi * math.pi * self.inertia)
             for n in range(fourier.shape[1]):
                 if row - n - 1 > -1:
                     H[row, row - n - 1] = complex(fourier[0, n], -fourier[1, n])
@@ -542,9 +518,7 @@ class HinderedRotor(Mode):
             return (
                 x
                 / (1 - numpy.exp(-x))
-                * numpy.sqrt(
-                    2 * math.pi * self.inertia * constants.kB * T / constants.h / constants.h
-                )
+                * numpy.sqrt(2 * math.pi * self.inertia * constants.kB * T / constants.h / constants.h)
                 * (2 * math.pi / self.symmetry)
                 * numpy.exp(-z)
                 * besseli0(z)
@@ -594,9 +568,7 @@ class HinderedRotor(Mode):
             exp_x = numpy.exp(x)
             one_minus_exp_x = 1.0 - exp_x
             BB = besseli1(z) / besseli0(z)
-            return (
-                x * x * exp_x / one_minus_exp_x / one_minus_exp_x - 0.5 + z * (z - BB - z * BB * BB)
-            ) * constants.R
+            return (x * x * exp_x / one_minus_exp_x / one_minus_exp_x - 0.5 + z * (z - BB - z * BB * BB)) * constants.R
 
     def getEnthalpy(self, T):
         """
@@ -623,10 +595,7 @@ class HinderedRotor(Mode):
             return (
                 (
                     T
-                    * (
-                        numpy.log(self.getPartitionFunction(Thigh))
-                        - numpy.log(self.getPartitionFunction(Tlow))
-                    )
+                    * (numpy.log(self.getPartitionFunction(Thigh)) - numpy.log(self.getPartitionFunction(Tlow)))
                     / (Thigh - Tlow)
                 )
                 * constants.R
@@ -660,10 +629,7 @@ class HinderedRotor(Mode):
             return (
                 numpy.log(self.getPartitionFunction(Thigh))
                 + T
-                * (
-                    numpy.log(self.getPartitionFunction(Thigh))
-                    - numpy.log(self.getPartitionFunction(Tlow))
-                )
+                * (numpy.log(self.getPartitionFunction(Thigh)) - numpy.log(self.getPartitionFunction(Tlow)))
                 / (Thigh - Tlow)
             ) * constants.R
 
@@ -687,21 +653,10 @@ class HinderedRotor(Mode):
         kind. There is currently no functionality for using the Fourier series
         potential.
         """
-        cython.declare(
-            rho=numpy.ndarray, q1f=cython.double, pre=cython.double, V0=cython.double, i=cython.int
-        )
+        cython.declare(rho=numpy.ndarray, q1f=cython.double, pre=cython.double, V0=cython.double, i=cython.int)
         rho = numpy.zeros_like(Elist)
         q1f = (
-            math.sqrt(
-                8
-                * math.pi
-                * math.pi
-                * math.pi
-                * self.inertia
-                / constants.h
-                / constants.h
-                / constants.Na
-            )
+            math.sqrt(8 * math.pi * math.pi * math.pi * self.inertia / constants.h / constants.h / constants.Na)
             / self.symmetry
         )
         V0 = self.barrier
@@ -729,13 +684,7 @@ class HinderedRotor(Mode):
         V0 = self.barrier
         if self.fourier is not None:
             V0 = -numpy.sum(self.fourier[:, 0])
-        return (
-            self.symmetry
-            / 2.0
-            / math.pi
-            * math.sqrt(V0 / constants.Na / 2 / self.inertia)
-            / (constants.c * 100)
-        )
+        return self.symmetry / 2.0 / math.pi * math.sqrt(V0 / constants.Na / 2 / self.inertia) / (constants.c * 100)
 
 
 def besseli0(x):
@@ -998,9 +947,7 @@ class StatesModel:
         in J/mol above the ground state. The sum of states is computed via
         numerical integration of the density of states.
         """
-        cython.declare(
-            densStates=numpy.ndarray, sumStates=numpy.ndarray, i=cython.int, dE=cython.double
-        )
+        cython.declare(densStates=numpy.ndarray, sumStates=numpy.ndarray, i=cython.int, dE=cython.double)
         densStates = self.getDensityOfStates(Elist)
         sumStates = numpy.zeros_like(densStates)
         dE = Elist[1] - Elist[0]
@@ -1061,16 +1008,12 @@ class StatesModel:
         for i in range(1, len(Elist)):
             E = Elist[i]
             # Find minimum of phi         func x0 arg  xtol  ftol maxi  maxf fullout  disp retall  callback
-            x = scipy.optimize.fmin(
-                self.__phi, x, (Elist[i],), 1e-8, 1e-8, 100, 1000, False, False, False, None
-            )
+            x = scipy.optimize.fmin(self.__phi, x, (Elist[i],), 1e-8, 1e-8, 100, 1000, False, False, False, None)
             # scipy.optimize.fmin returns array, extract scalar safely
             x = float(x[0]) if isinstance(x, numpy.ndarray) else float(x)
             dx = 1e-4 * x
             # Determine value of density of states using steepest descents approximation
-            d2fdx2 = (self.__phi(x + dx, E) - 2 * self.__phi(x, E) + self.__phi(x - dx, E)) / (
-                dx**2
-            )
+            d2fdx2 = (self.__phi(x + dx, E) - 2 * self.__phi(x, E) + self.__phi(x - dx, E)) / (dx**2)
             # Apply first-order steepest descents approximation (accurate to 1-3%, smoother)
             f = self.__phi(x, E)
             rho[i] = math.exp(f) / math.sqrt(2 * math.pi * d2fdx2)

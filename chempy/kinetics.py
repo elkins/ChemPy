@@ -487,9 +487,7 @@ class ChebyshevModel(KineticsModel):
             for p1, P in enumerate(Pred):
                 for t2 in range(degreeT):
                     for p2 in range(degreeP):
-                        A[p1 * nT + t1, p2 * degreeT + t2] = self.__chebyshev(
-                            t2, T
-                        ) * self.__chebyshev(p2, P)
+                        A[p1 * nT + t1, p2 * degreeT + t2] = self.__chebyshev(t2, T) * self.__chebyshev(p2, P)
                 b[p1 * nT + t1] = math.log10(K[t1, p1])
 
         # Do linear least-squares fit to get coefficients

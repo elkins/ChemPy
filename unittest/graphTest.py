@@ -70,19 +70,13 @@ class GraphCheck(unittest.TestCase):
 
         for i, cv_ in enumerate([1, 3, 2, 2, 1, 1]):
             cv = vertices[i].connectivity1
-            self.assertEqual(
-                cv, cv_, "On vertex %d got connectivity[0]=%d but expected %d" % (i, cv, cv_)
-            )
+            self.assertEqual(cv, cv_, "On vertex %d got connectivity[0]=%d but expected %d" % (i, cv, cv_))
         for i, cv_ in enumerate([3, 4, 5, 3, 2, 3]):
             cv = vertices[i].connectivity2
-            self.assertEqual(
-                cv, cv_, "On vertex %d got connectivity[1]=%d but expected %d" % (i, cv, cv_)
-            )
+            self.assertEqual(cv, cv_, "On vertex %d got connectivity[1]=%d but expected %d" % (i, cv, cv_))
         for i, cv_ in enumerate([4, 11, 7, 7, 3, 4]):
             cv = vertices[i].connectivity3
-            self.assertEqual(
-                cv, cv_, "On vertex %d got connectivity[2]=%d but expected %d" % (i, cv, cv_)
-            )
+            self.assertEqual(cv, cv_, "On vertex %d got connectivity[2]=%d but expected %d" % (i, cv, cv_))
 
     def testSplit(self):
         """

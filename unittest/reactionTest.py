@@ -201,9 +201,7 @@ class ReactionTest(unittest.TestCase):
         states = StatesModel(
             modes=[
                 Translation(mass=0.0280313),
-                RigidRotor(
-                    linear=False, inertia=[5.69516e-47, 2.77584e-46, 3.34536e-46], symmetry=4
-                ),
+                RigidRotor(linear=False, inertia=[5.69516e-47, 2.77584e-46, 3.34536e-46], symmetry=4),
                 HarmonicOscillator(
                     frequencies=[
                         834.499,
@@ -234,9 +232,7 @@ class ReactionTest(unittest.TestCase):
         states = StatesModel(
             modes=[
                 Translation(mass=0.0290391),
-                RigidRotor(
-                    linear=False, inertia=[8.07491e-47, 3.69475e-46, 3.9885e-46], symmetry=1
-                ),
+                RigidRotor(linear=False, inertia=[8.07491e-47, 3.69475e-46, 3.9885e-46], symmetry=1),
                 HarmonicOscillator(
                     frequencies=[
                         466.816,
@@ -263,9 +259,7 @@ class ReactionTest(unittest.TestCase):
         states = StatesModel(
             modes=[
                 Translation(mass=0.0290391),
-                RigidRotor(
-                    linear=False, inertia=[1.2553e-46, 3.68827e-46, 3.80416e-46], symmetry=2
-                ),
+                RigidRotor(linear=False, inertia=[1.2553e-46, 3.68827e-46, 3.80416e-46], symmetry=2),
                 HarmonicOscillator(
                     frequencies=[
                         241.47,

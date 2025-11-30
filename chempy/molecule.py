@@ -408,8 +408,7 @@ class Bond(Edge):
             self.order = "T"
         else:
             raise ChemPyError(
-                'Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".'
-                % (self.order)
+                'Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".' % (self.order)
             )
 
     def decrementOrder(self):
@@ -423,8 +422,7 @@ class Bond(Edge):
             self.order = "D"
         else:
             raise ChemPyError(
-                'Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".'
-                % (self.order)
+                'Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".' % (self.order)
             )
 
     def __changeBond(self, order):
@@ -440,8 +438,7 @@ class Bond(Edge):
                 self.order = "T"
             else:
                 raise ChemPyError(
-                    'Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".'
-                    % (self.order)
+                    'Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".' % (self.order)
                 )
         elif order == -1:
             if self.order == "D":
@@ -450,13 +447,10 @@ class Bond(Edge):
                 self.order = "D"
             else:
                 raise ChemPyError(
-                    'Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".'
-                    % (self.order)
+                    'Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".' % (self.order)
                 )
         else:
-            raise ChemPyError(
-                'Unable to update Bond due to CHANGE_BOND action: Invalid order "%g".' % order
-            )
+            raise ChemPyError('Unable to update Bond due to CHANGE_BOND action: Invalid order "%g".' % order)
 
     def applyAction(self, action):
         """
@@ -471,10 +465,7 @@ class Bond(Edge):
             elif action[2] == -1:
                 self.decrementOrder()
             else:
-                raise ChemPyError(
-                    'Unable to update Bond due to CHANGE_BOND action: Invalid order "%g".'
-                    % action[2]
-                )
+                raise ChemPyError('Unable to update Bond due to CHANGE_BOND action: Invalid order "%g".' % action[2])
         else:
             raise ChemPyError('Unable to update BondPattern: Invalid action %s".' % (action))
 
@@ -770,8 +761,7 @@ class Molecule(Graph):
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, Molecule):
             raise TypeError(
-                'Got a %s object for parameter "other", when a Molecule object is required.'
-                % other.__class__
+                'Got a %s object for parameter "other", when a Molecule object is required.' % other.__class__
             )
         # Ensure that both self and other have the same implicit hydrogen status
         # If not, make them both explicit just to be safe
@@ -802,8 +792,7 @@ class Molecule(Graph):
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, Molecule):
             raise TypeError(
-                'Got a %s object for parameter "other", when a Molecule object is required.'
-                % other.__class__
+                'Got a %s object for parameter "other", when a Molecule object is required.' % other.__class__
             )
         # Ensure that both self and other have the same implicit hydrogen status
         # If not, make them both explicit just to be safe
@@ -832,8 +821,7 @@ class Molecule(Graph):
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, MoleculePattern):
             raise TypeError(
-                'Got a %s object for parameter "other", when a MoleculePattern object is required.'
-                % other.__class__
+                'Got a %s object for parameter "other", when a MoleculePattern object is required.' % other.__class__
             )
         # Ensure that self is explicit (assume other is explicit)
         implicitH = self.implicitHydrogens
@@ -860,8 +848,7 @@ class Molecule(Graph):
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, MoleculePattern):
             raise TypeError(
-                'Got a %s object for parameter "other", when a MoleculePattern object is required.'
-                % other.__class__
+                'Got a %s object for parameter "other", when a MoleculePattern object is required.' % other.__class__
             )
         # Ensure that self is explicit (assume other is explicit)
         implicitH = self.implicitHydrogens
@@ -1146,9 +1133,7 @@ class Molecule(Graph):
         otherwise.
         """
 
-        atomCount: int = len(self.vertices) + sum(
-            [atom.implicitHydrogens for atom in self.vertices]
-        )
+        atomCount: int = len(self.vertices) + sum([atom.implicitHydrogens for atom in self.vertices])
 
         # Monatomic molecules are definitely nonlinear
         if atomCount == 1:
@@ -1253,9 +1238,7 @@ class Molecule(Graph):
         groups = molecule.split()
 
         # Determine equivalence of functional groups around atom
-        groupIsomorphism: Dict[Molecule, Dict[Molecule, bool]] = dict(
-            [(group, dict()) for group in groups]
-        )
+        groupIsomorphism: Dict[Molecule, Dict[Molecule, bool]] = dict([(group, dict()) for group in groups])
         for group1 in groups:
             for group2 in groups:
                 if group1 is not group2 and group2 not in groupIsomorphism[group1]:
@@ -1263,9 +1246,7 @@ class Molecule(Graph):
                     groupIsomorphism[group2][group1] = groupIsomorphism[group1][group2]
                 elif group1 is group2:
                     groupIsomorphism[group1][group1] = True
-        count: List[int] = [
-            sum([int(groupIsomorphism[group1][group2]) for group2 in groups]) for group1 in groups
-        ]
+        count: List[int] = [sum([int(groupIsomorphism[group1][group2]) for group2 in groups]) for group1 in groups]
         for i in range(count.count(2) // 2):
             count.remove(2)
         for i in range(count.count(3) // 3):
@@ -1326,10 +1307,7 @@ class Molecule(Graph):
             if atom1.equivalent(atom2):
                 # An O-O bond is considered to be an "optical isomer" and so no
                 # symmetry correction will be applied
-                if (
-                    atom1.atomType == atom2.atomType == "Os"
-                    and atom1.radicalElectrons == atom2.radicalElectrons == 0
-                ):
+                if atom1.atomType == atom2.atomType == "Os" and atom1.radicalElectrons == atom2.radicalElectrons == 0:
                     pass
                 # If the molecule is diatomic, then we don't have to check the
                 # ligands on the two atoms in this bond (since we know there
@@ -1360,13 +1338,9 @@ class Molecule(Graph):
                         if groups1[0].isIsomorphic(groups2[0]):
                             symmetryNumber *= 2
                     elif len(groups1) == len(groups2) == 2:
-                        if groups1[0].isIsomorphic(groups2[0]) and groups1[1].isIsomorphic(
-                            groups2[1]
-                        ):
+                        if groups1[0].isIsomorphic(groups2[0]) and groups1[1].isIsomorphic(groups2[1]):
                             symmetryNumber *= 2
-                        elif groups1[1].isIsomorphic(groups2[0]) and groups1[0].isIsomorphic(
-                            groups2[1]
-                        ):
+                        elif groups1[1].isIsomorphic(groups2[0]) and groups1[0].isIsomorphic(groups2[1]):
                             symmetryNumber *= 2
                     elif len(groups1) == len(groups2) == 3:
                         if (
@@ -1445,9 +1419,7 @@ class Molecule(Graph):
         doubleBonds: List[Tuple[Atom, Atom]] = []
         for atom1 in self.edges:
             for atom2 in self.edges[atom1]:
-                if self.edges[atom1][atom2].isDouble() and self.vertices.index(
-                    atom1
-                ) < self.vertices.index(atom2):
+                if self.edges[atom1][atom2].isDouble() and self.vertices.index(atom1) < self.vertices.index(atom2):
                     doubleBonds.append((atom1, atom2))
 
         # Search for adjacent double bonds
@@ -1641,9 +1613,7 @@ class Molecule(Graph):
 
         for atom1 in self.edges:
             for atom2 in self.edges[atom1]:
-                if self.vertices.index(atom1) < self.vertices.index(
-                    atom2
-                ) and not self.isBondInCycle(atom1, atom2):
+                if self.vertices.index(atom1) < self.vertices.index(atom2) and not self.isBondInCycle(atom1, atom2):
                     symmetryNumber *= self.calculateBondSymmetryNumber(atom1, atom2)
 
         symmetryNumber *= self.calculateAxisSymmetryNumber()

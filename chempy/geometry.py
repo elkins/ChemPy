@@ -151,9 +151,7 @@ class Geometry:
             top1CenterOfMass=numpy.ndarray,
             top2CenterOfMass=numpy.ndarray,
         )
-        cython.declare(
-            axis=numpy.ndarray, I1=cython.double, I2=cython.double, atom=cython.int, i=cython.int
-        )
+        cython.declare(axis=numpy.ndarray, I1=cython.double, I2=cython.double, atom=cython.int, i=cython.int)
 
         # The total number of atoms in the geometry
         Natoms = len(self.mass)
@@ -161,8 +159,7 @@ class Geometry:
         # Check that exactly one pivot atom is in the specified top
         if pivots[0] not in top1 and pivots[1] not in top1:
             raise ChemPyError(
-                "No pivot atom included in top; you must specify which "
-                "pivot atom belongs with the specified top."
+                "No pivot atom included in top; you must specify which " "pivot atom belongs with the specified top."
             )
         elif pivots[0] in top1 and pivots[1] in top1:
             raise ChemPyError(

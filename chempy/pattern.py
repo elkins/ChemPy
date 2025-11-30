@@ -147,9 +147,7 @@ class AtomType:
     def __repr__(self):
         return '<AtomType "%s">' % self.label
 
-    def setActions(
-        self, incrementBond, decrementBond, formBond, breakBond, incrementRadical, decrementRadical
-    ):
+    def setActions(self, incrementBond, decrementBond, formBond, breakBond, incrementRadical, decrementRadical):
         self.incrementBond = incrementBond
         self.decrementBond = decrementBond
         self.formBond = formBond
@@ -236,9 +234,7 @@ atomTypes["R!H"] = AtomType(
         "Sa",
     ],
 )
-atomTypes["C"] = AtomType(
-    "C", generic=["R", "R!H"], specific=["Cs", "Cd", "Cdd", "Ct", "CO", "Cb", "Cbf"]
-)
+atomTypes["C"] = AtomType("C", generic=["R", "R!H"], specific=["Cs", "Cd", "Cdd", "Ct", "CO", "Cb", "Cbf"])
 atomTypes["Cs"] = AtomType("Cs", generic=["R", "R!H", "C"], specific=[])
 atomTypes["Cd"] = AtomType("Cd", generic=["R", "R!H", "C"], specific=[])
 atomTypes["Cdd"] = AtomType("Cdd", generic=["R", "R!H", "C"], specific=[])
@@ -251,9 +247,7 @@ atomTypes["O"] = AtomType("O", generic=["R", "R!H"], specific=["Os", "Od", "Oa"]
 atomTypes["Os"] = AtomType("Os", generic=["R", "R!H", "O"], specific=[])
 atomTypes["Od"] = AtomType("Od", generic=["R", "R!H", "O"], specific=[])
 atomTypes["Oa"] = AtomType("Oa", generic=["R", "R!H", "O"], specific=[])
-atomTypes["Si"] = AtomType(
-    "Si", generic=["R", "R!H"], specific=["Sis", "Sid", "Sidd", "Sit", "SiO", "Sib", "Sibf"]
-)
+atomTypes["Si"] = AtomType("Si", generic=["R", "R!H"], specific=["Sis", "Sid", "Sidd", "Sit", "SiO", "Sib", "Sibf"])
 atomTypes["Sis"] = AtomType("Sis", generic=["R", "R!H", "Si"], specific=[])
 atomTypes["Sid"] = AtomType("Sid", generic=["R", "R!H", "Si"], specific=[])
 atomTypes["Sidd"] = AtomType("Sidd", generic=["R", "R!H", "Si"], specific=[])
@@ -510,9 +504,7 @@ def getAtomType(atom, bonds):
     """
 
     cython.declare(atomType=str)
-    cython.declare(
-        double=cython.double, double0=cython.double, triple=cython.double, benzene=cython.double
-    )
+    cython.declare(double=cython.double, double0=cython.double, triple=cython.double, benzene=cython.double)
 
     atomType = ""
 
@@ -616,9 +608,7 @@ class AtomPattern(Vertex):
     cannot store implicit hydrogen atoms.
     """
 
-    def __init__(
-        self, atomType=None, radicalElectrons=None, spinMultiplicity=None, charge=None, label=""
-    ):
+    def __init__(self, atomType=None, radicalElectrons=None, spinMultiplicity=None, charge=None, label=""):
         Vertex.__init__(self)
         self.atomType = atomType or []
         for index in range(len(self.atomType)):
@@ -639,15 +629,12 @@ class AtomPattern(Vertex):
         """
         Return a representation that can be used to reconstruct the object.
         """
-        return (
-            "AtomPattern(atomType=%s, radicalElectrons=%s, spinMultiplicity=%s, charge=%s, label='%s')"
-            % (
-                self.atomType,
-                self.radicalElectrons,
-                self.spinMultiplicity,
-                self.charge,
-                self.label,
-            )
+        return "AtomPattern(atomType=%s, radicalElectrons=%s, spinMultiplicity=%s, charge=%s, label='%s')" % (
+            self.atomType,
+            self.radicalElectrons,
+            self.spinMultiplicity,
+            self.charge,
+            self.label,
         )
 
     def copy(self):
@@ -676,10 +663,7 @@ class AtomPattern(Vertex):
             elif order == -1:
                 atomType.extend(atom.decrementBond)
             else:
-                raise ChemPyError(
-                    'Unable to update AtomPattern due to CHANGE_BOND action: Invalid order "%g".'
-                    % order
-                )
+                raise ChemPyError('Unable to update AtomPattern due to CHANGE_BOND action: Invalid order "%g".' % order)
         if len(atomType) == 0:
             raise ChemPyError(
                 'Unable to update AtomPattern due to CHANGE_BOND action: Unknown atom type produced from set "%s".'
@@ -695,9 +679,7 @@ class AtomPattern(Vertex):
         'S' (since we only allow forming of single bonds).
         """
         if order != "S":
-            raise ChemPyError(
-                'Unable to update AtomPattern due to FORM_BOND action: Invalid order "%s".' % order
-            )
+            raise ChemPyError('Unable to update AtomPattern due to FORM_BOND action: Invalid order "%s".' % order)
         atomType = []
         for atom in self.atomType:
             atomType.extend(atom.formBond)
@@ -716,9 +698,7 @@ class AtomPattern(Vertex):
         'S' (since we only allow breaking of single bonds).
         """
         if order != "S":
-            raise ChemPyError(
-                'Unable to update AtomPattern due to BREAK_BOND action: Invalid order "%s".' % order
-            )
+            raise ChemPyError('Unable to update AtomPattern due to BREAK_BOND action: Invalid order "%s".' % order)
         atomType = []
         for atom in self.atomType:
             atomType.extend(atom.breakBond)
@@ -852,12 +832,8 @@ class AtomPattern(Vertex):
             else:
                 return False
         # Each free radical electron state in self must have an equivalent in other (and vice versa)
-        for radical1, spin1 in zip(
-            self.radicalElectrons, self.spinMultiplicity
-        ):  # all these must match
-            for radical2, spin2 in zip(
-                other.radicalElectrons, other.spinMultiplicity
-            ):  # can match any of these
+        for radical1, spin1 in zip(self.radicalElectrons, self.spinMultiplicity):  # all these must match
+            for radical2, spin2 in zip(other.radicalElectrons, other.spinMultiplicity):  # can match any of these
                 if radical1 == radical2 and spin1 == spin2:
                     break
             else:
@@ -937,10 +913,7 @@ class BondPattern(Edge):
                         % (bond, self.order)
                     )
             else:
-                raise ChemPyError(
-                    'Unable to update BondPattern due to CHANGE_BOND action: Invalid order "%g".'
-                    % order
-                )
+                raise ChemPyError('Unable to update BondPattern due to CHANGE_BOND action: Invalid order "%g".' % order)
         # Set the new bond orders, removing any duplicates
         self.order = list(set(newOrder))
 
@@ -1186,9 +1159,7 @@ class MoleculePattern(Graph):
         Skips the first line (assuming it's a label) unless `withLabel` is
         ``False``.
         """
-        self.vertices, self.edges = fromAdjacencyList(
-            adjlist, pattern=True, addH=False, withLabel=withLabel
-        )
+        self.vertices, self.edges = fromAdjacencyList(adjlist, pattern=True, addH=False, withLabel=withLabel)
         self.updateConnectivityValues()
         return self
 
@@ -1210,8 +1181,7 @@ class MoleculePattern(Graph):
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, MoleculePattern):
             raise TypeError(
-                'Got a %s object for parameter "other", when a MoleculePattern object is required.'
-                % other.__class__
+                'Got a %s object for parameter "other", when a MoleculePattern object is required.' % other.__class__
             )
         # Do the isomorphism comparison
         return Graph.isIsomorphic(self, other, initialMap)
@@ -1230,8 +1200,7 @@ class MoleculePattern(Graph):
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, MoleculePattern):
             raise TypeError(
-                'Got a %s object for parameter "other", when a MoleculePattern object is required.'
-                % other.__class__
+                'Got a %s object for parameter "other", when a MoleculePattern object is required.' % other.__class__
             )
         # Do the isomorphism comparison
         return Graph.findIsomorphism(self, other, initialMap)
@@ -1248,8 +1217,7 @@ class MoleculePattern(Graph):
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, MoleculePattern):
             raise TypeError(
-                'Got a %s object for parameter "other", when a MoleculePattern object is required.'
-                % other.__class__
+                'Got a %s object for parameter "other", when a MoleculePattern object is required.' % other.__class__
             )
         # Do the isomorphism comparison
         return Graph.isSubgraphIsomorphic(self, other, initialMap)
@@ -1269,8 +1237,7 @@ class MoleculePattern(Graph):
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, MoleculePattern):
             raise TypeError(
-                'Got a %s object for parameter "other", when a MoleculePattern object is required.'
-                % other.__class__
+                'Got a %s object for parameter "other", when a MoleculePattern object is required.' % other.__class__
             )
         # Do the isomorphism comparison
         return Graph.findSubgraphIsomorphisms(self, other, initialMap)
@@ -1371,9 +1338,7 @@ def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
 
         # Create a new atom based on the above information
         if pattern:
-            atom = AtomPattern(
-                atomType, radicalElectrons, spinMultiplicity, [0 for e in radicalElectrons], label
-            )
+            atom = AtomPattern(atomType, radicalElectrons, spinMultiplicity, [0 for e in radicalElectrons], label)
         else:
             atom = Atom(atomType[0], radicalElectrons[0], spinMultiplicity[0], 0, 0, label)
 
@@ -1425,8 +1390,7 @@ def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
                 valence = valences[atom.symbol]
             except KeyError:
                 raise ChemPyError(
-                    'Cannot add hydrogens to adjacency list: Unknown valence for atom "%s".'
-                    % atom.symbol
+                    'Cannot add hydrogens to adjacency list: Unknown valence for atom "%s".' % atom.symbol
                 )
             radical = atom.radicalElectrons
             order = 0

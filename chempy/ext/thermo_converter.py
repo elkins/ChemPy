@@ -68,9 +68,7 @@ def convertGAtoWilhoit(GAthermo, atoms, rotors, linear, B0=500.0, constantB=Fals
             GAthermo.Tdata, GAthermo.Cpdata, linear, freq, rotors, GAthermo.H298, GAthermo.S298, B0
         )
     else:
-        wilhoit.fitToData(
-            GAthermo.Tdata, GAthermo.Cpdata, linear, freq, rotors, GAthermo.H298, GAthermo.S298, B0
-        )
+        wilhoit.fitToData(GAthermo.Tdata, GAthermo.Cpdata, linear, freq, rotors, GAthermo.H298, GAthermo.S298, B0)
     return wilhoit
 
 
@@ -138,27 +136,20 @@ def convertWilhoitToNASA(wilhoit, Tmin, Tmax, Tint, fixedTint=False, weighting=T
     if fixedTint:
         nasa_low, nasa_high = Wilhoit2NASA(wilhoit_scaled, Tmin, Tmax, Tint, weighting, continuity)
     else:
-        nasa_low, nasa_high, Tint = Wilhoit2NASA_TintOpt(
-            wilhoit_scaled, Tmin, Tmax, weighting, continuity
-        )
+        nasa_low, nasa_high, Tint = Wilhoit2NASA_TintOpt(wilhoit_scaled, Tmin, Tmax, weighting, continuity)
     iseUnw = TintOpt_objFun(
         Tint, wilhoit_scaled, Tmin, Tmax, 0, continuity
     )  # the scaled, unweighted ISE (integral of squared error)
     rmsUnw = math.sqrt(iseUnw / (Tmax - Tmin))
     rmsStr = "(Unweighted) RMS error = %.3f*R;" % (rmsUnw)
     if weighting == 1:
-        iseWei = TintOpt_objFun(
-            Tint, wilhoit_scaled, Tmin, Tmax, weighting, continuity
-        )  # the scaled, weighted ISE
+        iseWei = TintOpt_objFun(Tint, wilhoit_scaled, Tmin, Tmax, weighting, continuity)  # the scaled, weighted ISE
         rmsWei = math.sqrt(iseWei / math.log(Tmax / Tmin))
         rmsStr = "Weighted RMS error = %.3f*R;" % (rmsWei) + rmsStr
 
     # print a warning if the rms fit is worse that 0.25*R
     if rmsUnw > 0.25 or rmsWei > 0.25:
-        logging.warning(
-            "Poor Wilhoit-to-NASA fit quality: RMS error = %.3f*R"
-            % (rmsWei if weighting == 1 else rmsUnw)
-        )
+        logging.warning("Poor Wilhoit-to-NASA fit quality: RMS error = %.3f*R" % (rmsWei if weighting == 1 else rmsUnw))
 
     # restore to conventional units of K for Tint and units based on K rather than kK in NASA polynomial coefficients
     Tint *= 1000.0
@@ -236,16 +227,9 @@ def Wilhoit2NASA(wilhoit, tmin, tmax, tint, weighting, contCons):
         A[0, 3] = 2.0 * (tint * tint * tint - tmin * tmin * tmin) / 3
         A[0, 4] = (tint * tint * tint * tint - tmin * tmin * tmin * tmin) / 2
         A[1, 4] = 2.0 * (tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin) / 5
-        A[2, 4] = (
-            tint * tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin * tmin
-        ) / 3
+        A[2, 4] = (tint * tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin * tmin) / 3
         A[3, 4] = (
-            2.0
-            * (
-                tint * tint * tint * tint * tint * tint * tint
-                - tmin * tmin * tmin * tmin * tmin * tmin * tmin
-            )
-            / 7
+            2.0 * (tint * tint * tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin * tmin * tmin) / 7
         )
         A[4, 4] = (
             tint * tint * tint * tint * tint * tint * tint * tint
@@ -257,16 +241,9 @@ def Wilhoit2NASA(wilhoit, tmin, tmax, tint, weighting, contCons):
         A[0, 2] = 2.0 * (tint * tint * tint - tmin * tmin * tmin) / 3
         A[0, 3] = (tint * tint * tint * tint - tmin * tmin * tmin * tmin) / 2
         A[0, 4] = 2.0 * (tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin) / 5
-        A[1, 4] = (
-            tint * tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin * tmin
-        ) / 3
+        A[1, 4] = (tint * tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin * tmin) / 3
         A[2, 4] = (
-            2.0
-            * (
-                tint * tint * tint * tint * tint * tint * tint
-                - tmin * tmin * tmin * tmin * tmin * tmin * tmin
-            )
-            / 7
+            2.0 * (tint * tint * tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin * tmin * tmin) / 7
         )
         A[3, 4] = (
             tint * tint * tint * tint * tint * tint * tint * tint
@@ -294,16 +271,9 @@ def Wilhoit2NASA(wilhoit, tmin, tmax, tint, weighting, contCons):
         A[5, 8] = 2.0 * (tmax * tmax * tmax - tint * tint * tint) / 3
         A[5, 9] = (tmax * tmax * tmax * tmax - tint * tint * tint * tint) / 2
         A[6, 9] = 2.0 * (tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint) / 5
-        A[7, 9] = (
-            tmax * tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint * tint
-        ) / 3
+        A[7, 9] = (tmax * tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint * tint) / 3
         A[8, 9] = (
-            2.0
-            * (
-                tmax * tmax * tmax * tmax * tmax * tmax * tmax
-                - tint * tint * tint * tint * tint * tint * tint
-            )
-            / 7
+            2.0 * (tmax * tmax * tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint * tint * tint) / 7
         )
         A[9, 9] = (
             tmax * tmax * tmax * tmax * tmax * tmax * tmax * tmax
@@ -315,16 +285,9 @@ def Wilhoit2NASA(wilhoit, tmin, tmax, tint, weighting, contCons):
         A[5, 7] = 2.0 * (tmax * tmax * tmax - tint * tint * tint) / 3
         A[5, 8] = (tmax * tmax * tmax * tmax - tint * tint * tint * tint) / 2
         A[5, 9] = 2.0 * (tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint) / 5
-        A[6, 9] = (
-            tmax * tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint * tint
-        ) / 3
+        A[6, 9] = (tmax * tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint * tint) / 3
         A[7, 9] = (
-            2.0
-            * (
-                tmax * tmax * tmax * tmax * tmax * tmax * tmax
-                - tint * tint * tint * tint * tint * tint * tint
-            )
-            / 7
+            2.0 * (tmax * tmax * tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint * tint * tint) / 7
         )
         A[8, 9] = (
             tmax * tmax * tmax * tmax * tmax * tmax * tmax * tmax
@@ -356,9 +319,7 @@ def Wilhoit2NASA(wilhoit, tmin, tmax, tint, weighting, contCons):
         A[7, 10] = -A[2, 10]
         A[8, 10] = -A[3, 10]
         A[9, 10] = -A[4, 10]
-        if (
-            contCons > 1
-        ):  # set non-zero elements in the 12th column for dCp/dT continuity constraint
+        if contCons > 1:  # set non-zero elements in the 12th column for dCp/dT continuity constraint
             A[1, 11] = 1.0
             A[2, 11] = 2 * tint
             A[3, 11] = 3 * A[2, 10]
@@ -367,25 +328,19 @@ def Wilhoit2NASA(wilhoit, tmin, tmax, tint, weighting, contCons):
             A[7, 11] = -A[2, 11]
             A[8, 11] = -A[3, 11]
             A[9, 11] = -A[4, 11]
-            if (
-                contCons > 2
-            ):  # set non-zero elements in the 13th column for d2Cp/dT2 continuity constraint
+            if contCons > 2:  # set non-zero elements in the 13th column for d2Cp/dT2 continuity constraint
                 A[2, 12] = 2.0
                 A[3, 12] = 6 * tint
                 A[4, 12] = 12 * A[2, 10]
                 A[7, 12] = -A[2, 12]
                 A[8, 12] = -A[3, 12]
                 A[9, 12] = -A[4, 12]
-                if (
-                    contCons > 3
-                ):  # set non-zero elements in the 14th column for d3Cp/dT3 continuity constraint
+                if contCons > 3:  # set non-zero elements in the 14th column for d3Cp/dT3 continuity constraint
                     A[3, 13] = 6
                     A[4, 13] = 24 * tint
                     A[8, 13] = -A[3, 13]
                     A[9, 13] = -A[4, 13]
-                    if (
-                        contCons > 4
-                    ):  # set non-zero elements in the 15th column for d4Cp/dT4 continuity constraint
+                    if contCons > 4:  # set non-zero elements in the 15th column for d4Cp/dT4 continuity constraint
                         A[4, 14] = 24
                         A[9, 14] = -A[4, 14]
 
@@ -444,12 +399,8 @@ def Wilhoit2NASA(wilhoit, tmin, tmax, tint, weighting, contCons):
     # Lagrange multipliers will differ by a factor of two)
     x = linalg.solve(A, b, overwrite_a=1, overwrite_b=1)
 
-    nasa_low = NASAPolynomial(
-        Tmin=0, Tmax=0, coeffs=[x[0], x[1], x[2], x[3], x[4], 0.0, 0.0], comment=""
-    )
-    nasa_high = NASAPolynomial(
-        Tmin=0, Tmax=0, coeffs=[x[5], x[6], x[7], x[8], x[9], 0.0, 0.0], comment=""
-    )
+    nasa_low = NASAPolynomial(Tmin=0, Tmax=0, coeffs=[x[0], x[1], x[2], x[3], x[4], 0.0, 0.0], comment="")
+    nasa_high = NASAPolynomial(Tmin=0, Tmax=0, coeffs=[x[5], x[6], x[7], x[8], x[9], 0.0, 0.0], comment="")
 
     return nasa_low, nasa_high
 
@@ -459,9 +410,7 @@ def Wilhoit2NASA_TintOpt(wilhoit, tmin, tmax, weighting, contCons):
     # output: NASA parameters for Cp/R, b1, b2, b3, b4, b5 (low temp parameters) and b6, b7, b8, b9, b10 (high temp parameters), and Tint
     # 1. vary Tint, bounded by tmin and tmax, to minimize TintOpt_objFun
     # cf. http://docs.scipy.org/doc/scipy/reference/tutorial/optimize.html and http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fminbound.html#scipy.optimize.fminbound)
-    tint = optimize.fminbound(
-        TintOpt_objFun, tmin, tmax, args=(wilhoit, tmin, tmax, weighting, contCons)
-    )
+    tint = optimize.fminbound(TintOpt_objFun, tmin, tmax, args=(wilhoit, tmin, tmax, weighting, contCons))
     # note that we have not used any guess when using this minimization routine
     # 2. determine the bi parameters based on the optimized Tint (alternatively, maybe we could have TintOpt_objFun also return these parameters, along with the objective function, which would avoid an extra calculation)
     (nasa1, nasa2) = Wilhoit2NASA(wilhoit, tmin, tmax, tint, weighting, contCons)
@@ -591,9 +540,7 @@ def TintOpt_objFun_W(tint, wilhoit, tmin, tmax, contCons):
 # below are functions for conversion of general Cp to NASA polynomials
 # because they use numerical integration, they are, in general, likely to be slower and less accurate than versions with analytical integrals for the starting Cp form (e.g. Wilhoit polynomials)
 # therefore, this should only be used when no analytic alternatives are available
-def convertCpToNASA(
-    CpObject, H298, S298, fixed=1, weighting=0, tint=1000.0, Tmin=298.0, Tmax=6000.0, contCons=3
-):
+def convertCpToNASA(CpObject, H298, S298, fixed=1, weighting=0, tint=1000.0, Tmin=298.0, Tmax=6000.0, contCons=3):
     """Convert an arbitrary heat capacity function into a NASA polynomial thermo instance (using numerical integration)
 
     Takes:  CpObject: an object with method "getHeatCapacity(self,T) that will return Cp in J/mol-K with argument T in K
@@ -629,9 +576,7 @@ def convertCpToNASA(
     rmsUnw = math.sqrt(iseUnw / (Tmax - Tmin))
     rmsStr = "(Unweighted) RMS error = %.3f*R;" % (rmsUnw)
     if weighting == 1:
-        iseWei = Cp_TintOpt_objFun(
-            tint, CpObject, Tmin, Tmax, weighting, contCons
-        )  # the scaled, weighted ISE
+        iseWei = Cp_TintOpt_objFun(tint, CpObject, Tmin, Tmax, weighting, contCons)  # the scaled, weighted ISE
         rmsWei = math.sqrt(iseWei / math.log(Tmax / Tmin))
         rmsStr = "Weighted RMS error = %.3f*R;" % (rmsWei) + rmsStr
     else:
@@ -639,10 +584,7 @@ def convertCpToNASA(
 
     # print a warning if the rms fit is worse that 0.25*R
     if rmsUnw > 0.25 or rmsWei > 0.25:
-        logging.warning(
-            "Poor Cp-to-NASA fit quality: RMS error = %.3f*R"
-            % (rmsWei if weighting == 1 else rmsUnw)
-        )
+        logging.warning("Poor Cp-to-NASA fit quality: RMS error = %.3f*R" % (rmsWei if weighting == 1 else rmsUnw))
 
     # restore to conventional units of K for Tint and units based on K rather than kK in NASA polynomial coefficients
     tint = tint * 1000.0
@@ -722,16 +664,9 @@ def Cp2NASA(CpObject, tmin, tmax, tint, weighting, contCons):
         A[0, 3] = 2.0 * (tint * tint * tint - tmin * tmin * tmin) / 3
         A[0, 4] = (tint * tint * tint * tint - tmin * tmin * tmin * tmin) / 2
         A[1, 4] = 2.0 * (tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin) / 5
-        A[2, 4] = (
-            tint * tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin * tmin
-        ) / 3
+        A[2, 4] = (tint * tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin * tmin) / 3
         A[3, 4] = (
-            2.0
-            * (
-                tint * tint * tint * tint * tint * tint * tint
-                - tmin * tmin * tmin * tmin * tmin * tmin * tmin
-            )
-            / 7
+            2.0 * (tint * tint * tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin * tmin * tmin) / 7
         )
         A[4, 4] = (
             tint * tint * tint * tint * tint * tint * tint * tint
@@ -743,16 +678,9 @@ def Cp2NASA(CpObject, tmin, tmax, tint, weighting, contCons):
         A[0, 2] = 2.0 * (tint * tint * tint - tmin * tmin * tmin) / 3
         A[0, 3] = (tint * tint * tint * tint - tmin * tmin * tmin * tmin) / 2
         A[0, 4] = 2.0 * (tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin) / 5
-        A[1, 4] = (
-            tint * tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin * tmin
-        ) / 3
+        A[1, 4] = (tint * tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin * tmin) / 3
         A[2, 4] = (
-            2.0
-            * (
-                tint * tint * tint * tint * tint * tint * tint
-                - tmin * tmin * tmin * tmin * tmin * tmin * tmin
-            )
-            / 7
+            2.0 * (tint * tint * tint * tint * tint * tint * tint - tmin * tmin * tmin * tmin * tmin * tmin * tmin) / 7
         )
         A[3, 4] = (
             tint * tint * tint * tint * tint * tint * tint * tint
@@ -780,16 +708,9 @@ def Cp2NASA(CpObject, tmin, tmax, tint, weighting, contCons):
         A[5, 8] = 2.0 * (tmax * tmax * tmax - tint * tint * tint) / 3
         A[5, 9] = (tmax * tmax * tmax * tmax - tint * tint * tint * tint) / 2
         A[6, 9] = 2.0 * (tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint) / 5
-        A[7, 9] = (
-            tmax * tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint * tint
-        ) / 3
+        A[7, 9] = (tmax * tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint * tint) / 3
         A[8, 9] = (
-            2.0
-            * (
-                tmax * tmax * tmax * tmax * tmax * tmax * tmax
-                - tint * tint * tint * tint * tint * tint * tint
-            )
-            / 7
+            2.0 * (tmax * tmax * tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint * tint * tint) / 7
         )
         A[9, 9] = (
             tmax * tmax * tmax * tmax * tmax * tmax * tmax * tmax
@@ -801,16 +722,9 @@ def Cp2NASA(CpObject, tmin, tmax, tint, weighting, contCons):
         A[5, 7] = 2.0 * (tmax * tmax * tmax - tint * tint * tint) / 3
         A[5, 8] = (tmax * tmax * tmax * tmax - tint * tint * tint * tint) / 2
         A[5, 9] = 2.0 * (tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint) / 5
-        A[6, 9] = (
-            tmax * tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint * tint
-        ) / 3
+        A[6, 9] = (tmax * tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint * tint) / 3
         A[7, 9] = (
-            2.0
-            * (
-                tmax * tmax * tmax * tmax * tmax * tmax * tmax
-                - tint * tint * tint * tint * tint * tint * tint
-            )
-            / 7
+            2.0 * (tmax * tmax * tmax * tmax * tmax * tmax * tmax - tint * tint * tint * tint * tint * tint * tint) / 7
         )
         A[8, 9] = (
             tmax * tmax * tmax * tmax * tmax * tmax * tmax * tmax
@@ -842,9 +756,7 @@ def Cp2NASA(CpObject, tmin, tmax, tint, weighting, contCons):
         A[7, 10] = -A[2, 10]
         A[8, 10] = -A[3, 10]
         A[9, 10] = -A[4, 10]
-        if (
-            contCons > 1
-        ):  # set non-zero elements in the 12th column for dCp/dT continuity constraint
+        if contCons > 1:  # set non-zero elements in the 12th column for dCp/dT continuity constraint
             A[1, 11] = 1.0
             A[2, 11] = 2 * tint
             A[3, 11] = 3 * A[2, 10]
@@ -853,25 +765,19 @@ def Cp2NASA(CpObject, tmin, tmax, tint, weighting, contCons):
             A[7, 11] = -A[2, 11]
             A[8, 11] = -A[3, 11]
             A[9, 11] = -A[4, 11]
-            if (
-                contCons > 2
-            ):  # set non-zero elements in the 13th column for d2Cp/dT2 continuity constraint
+            if contCons > 2:  # set non-zero elements in the 13th column for d2Cp/dT2 continuity constraint
                 A[2, 12] = 2.0
                 A[3, 12] = 6 * tint
                 A[4, 12] = 12 * A[2, 10]
                 A[7, 12] = -A[2, 12]
                 A[8, 12] = -A[3, 12]
                 A[9, 12] = -A[4, 12]
-                if (
-                    contCons > 3
-                ):  # set non-zero elements in the 14th column for d3Cp/dT3 continuity constraint
+                if contCons > 3:  # set non-zero elements in the 14th column for d3Cp/dT3 continuity constraint
                     A[3, 13] = 6
                     A[4, 13] = 24 * tint
                     A[8, 13] = -A[3, 13]
                     A[9, 13] = -A[4, 13]
-                    if (
-                        contCons > 4
-                    ):  # set non-zero elements in the 15th column for d4Cp/dT4 continuity constraint
+                    if contCons > 4:  # set non-zero elements in the 15th column for d4Cp/dT4 continuity constraint
                         A[4, 14] = 24
                         A[9, 14] = -A[4, 14]
 
@@ -924,12 +830,8 @@ def Cp2NASA(CpObject, tmin, tmax, tint, weighting, contCons):
     # Lagrange multipliers will differ by a factor of two)
     x = linalg.solve(A, b, overwrite_a=1, overwrite_b=1)
 
-    nasa_low = NASAPolynomial(
-        Tmin=0, Tmax=0, coeffs=[x[0], x[1], x[2], x[3], x[4], 0.0, 0.0], comment=""
-    )
-    nasa_high = NASAPolynomial(
-        Tmin=0, Tmax=0, coeffs=[x[5], x[6], x[7], x[8], x[9], 0.0, 0.0], comment=""
-    )
+    nasa_low = NASAPolynomial(Tmin=0, Tmax=0, coeffs=[x[0], x[1], x[2], x[3], x[4], 0.0, 0.0], comment="")
+    nasa_high = NASAPolynomial(Tmin=0, Tmax=0, coeffs=[x[5], x[6], x[7], x[8], x[9], 0.0, 0.0], comment="")
 
     return nasa_low, nasa_high
 
@@ -939,9 +841,7 @@ def Cp2NASA_TintOpt(CpObject, tmin, tmax, weighting, contCons):
     # output: NASA parameters for Cp/R, b1, b2, b3, b4, b5 (low temp parameters) and b6, b7, b8, b9, b10 (high temp parameters), and Tint
     # 1. vary Tint, bounded by tmin and tmax, to minimize TintOpt_objFun
     # cf. http://docs.scipy.org/doc/scipy/reference/tutorial/optimize.html and http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fminbound.html#scipy.optimize.fminbound)
-    tint = optimize.fminbound(
-        Cp_TintOpt_objFun, tmin, tmax, args=(CpObject, tmin, tmax, weighting, contCons)
-    )
+    tint = optimize.fminbound(Cp_TintOpt_objFun, tmin, tmax, args=(CpObject, tmin, tmax, weighting, contCons))
     # note that we have not used any guess when using this minimization routine
     # 2. determine the bi parameters based on the optimized Tint (alternatively, maybe we could have TintOpt_objFun also return these parameters, along with the objective function, which would avoid an extra calculation)
     (nasa1, nasa2) = Cp2NASA(CpObject, tmin, tmax, tint, weighting, contCons)
@@ -1124,9 +1024,7 @@ def Wilhoit_integral_TM1(wilhoit, t):
     else:
         logy = math.log(y)
         logt = math.log(t)
-    result = cpInf * logt - (cpInf - cp0) * (
-        logy + y * (1 + y * (a0 / 2 + y * (a1 / 3 + y * (a2 / 4 + y * a3 / 5))))
-    )
+    result = cpInf * logt - (cpInf - cp0) * (logy + y * (1 + y * (a0 / 2 + y * (a1 / 3 + y * (a2 / 4 + y * a3 / 5)))))
     return result
 
 
@@ -1317,20 +1215,11 @@ def Wilhoit_integral2_T0(wilhoit, t):
         cpInf**2 * t
         - (a3**2 * B**12 * (cp0 - cpInf) ** 2) / (11.0 * (B + t) ** 11)
         + (a3 * (a2 + 5 * a3) * B**11 * (cp0 - cpInf) ** 2) / (5.0 * (B + t) ** 10)
-        - ((a2**2 + 18 * a2 * a3 + a3 * (2 * a1 + 45 * a3)) * B**10 * (cp0 - cpInf) ** 2)
-        / (9.0 * (B + t) ** 9)
-        + (
-            (4 * a2**2 + 36 * a2 * a3 + a1 * (a2 + 8 * a3) + a3 * (a0 + 60 * a3))
-            * B**9
-            * (cp0 - cpInf) ** 2
-        )
+        - ((a2**2 + 18 * a2 * a3 + a3 * (2 * a1 + 45 * a3)) * B**10 * (cp0 - cpInf) ** 2) / (9.0 * (B + t) ** 9)
+        + ((4 * a2**2 + 36 * a2 * a3 + a1 * (a2 + 8 * a3) + a3 * (a0 + 60 * a3)) * B**9 * (cp0 - cpInf) ** 2)
         / (4.0 * (B + t) ** 8)
         - (
-            (
-                a1**2
-                + 14 * a1 * (a2 + 4 * a3)
-                + 2 * (14 * a2**2 + a3 + 84 * a2 * a3 + 105 * a3**2 + a0 * (a2 + 7 * a3))
-            )
+            (a1**2 + 14 * a1 * (a2 + 4 * a3) + 2 * (14 * a2**2 + a3 + 84 * a2 * a3 + 105 * a3**2 + a0 * (a2 + 7 * a3)))
             * B**8
             * (cp0 - cpInf) ** 2
         )
@@ -1524,13 +1413,8 @@ def Wilhoit_integral2_TM1(wilhoit, t):
     result = (
         (a3**2 * B**11 * (cp0 - cpInf) ** 2) / (11.0 * (B + t) ** 11)
         - (a3 * (2 * a2 + 9 * a3) * B**10 * (cp0 - cpInf) ** 2) / (10.0 * (B + t) ** 10)
-        + ((a2**2 + 16 * a2 * a3 + 2 * a3 * (a1 + 18 * a3)) * B**9 * (cp0 - cpInf) ** 2)
-        / (9.0 * (B + t) ** 9)
-        - (
-            (7 * a2**2 + 56 * a2 * a3 + 2 * a1 * (a2 + 7 * a3) + 2 * a3 * (a0 + 42 * a3))
-            * B**8
-            * (cp0 - cpInf) ** 2
-        )
+        + ((a2**2 + 16 * a2 * a3 + 2 * a3 * (a1 + 18 * a3)) * B**9 * (cp0 - cpInf) ** 2) / (9.0 * (B + t) ** 9)
+        - ((7 * a2**2 + 56 * a2 * a3 + 2 * a1 * (a2 + 7 * a3) + 2 * a3 * (a0 + 42 * a3)) * B**8 * (cp0 - cpInf) ** 2)
         / (8.0 * (B + t) ** 8)
         + (
             (
@@ -1696,9 +1580,7 @@ def Wilhoit_integral2_TM1(wilhoit, t):
 
 def NASAPolynomial_integral2_T0(polynomial, T):
     # output: the quantity Integrate[(Cp(NASAPolynomial)/R)^2, t'] evaluated at t'=t
-    cython.declare(
-        c0=cython.double, c1=cython.double, c2=cython.double, c3=cython.double, c4=cython.double
-    )
+    cython.declare(c0=cython.double, c1=cython.double, c2=cython.double, c3=cython.double, c4=cython.double)
     cython.declare(T2=cython.double, T4=cython.double, T8=cython.double)
     c0, c1, c2, c3, c4 = polynomial.c0, polynomial.c1, polynomial.c2, polynomial.c3, polynomial.c4
     T2 = T * T
@@ -1726,9 +1608,7 @@ def NASAPolynomial_integral2_T0(polynomial, T):
 
 def NASAPolynomial_integral2_TM1(polynomial, T):
     # output: the quantity Integrate[(Cp(NASAPolynomial)/R)^2*t^-1, t'] evaluated at t'=t
-    cython.declare(
-        c0=cython.double, c1=cython.double, c2=cython.double, c3=cython.double, c4=cython.double
-    )
+    cython.declare(c0=cython.double, c1=cython.double, c2=cython.double, c3=cython.double, c4=cython.double)
     cython.declare(T2=cython.double, T4=cython.double, logT=cython.double)
     c0, c1, c2, c3, c4 = polynomial.c0, polynomial.c1, polynomial.c2, polynomial.c3, polynomial.c4
     T2 = T * T

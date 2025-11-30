@@ -378,9 +378,7 @@ class Graph:
         for index, vertex in enumerate(self.vertices):
             vertex.sortingLabel = index
 
-    def isIsomorphic(
-        self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None
-    ) -> bool:
+    def isIsomorphic(self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None) -> bool:
         """
         Returns :data:`True` if two graphs are isomorphic and :data:`False`
         otherwise. Uses the VF2 algorithm of Vento and Foggia.
@@ -399,9 +397,7 @@ class Graph:
         res = VF2_isomorphism(self, other, subgraph=False, findAll=True, initialMap=initialMap)
         return bool(res[0]), res[1]
 
-    def isSubgraphIsomorphic(
-        self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None
-    ) -> bool:
+    def isSubgraphIsomorphic(self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None) -> bool:
         """
         Returns :data:`True` if `other` is subgraph isomorphic and :data:`False`
         otherwise. Uses the VF2 algorithm of Vento and Foggia.
@@ -493,9 +489,7 @@ class Graph:
         cycleList = self.__exploreCyclesRecursively(chain, cycleList)
         return cycleList
 
-    def __exploreCyclesRecursively(
-        self, chain: List[Vertex], cycleList: List[List[Vertex]]
-    ) -> List[List[Vertex]]:
+    def __exploreCyclesRecursively(self, chain: List[Vertex], cycleList: List[List[Vertex]]) -> List[List[Vertex]]:
         """
         Finds cycles by spidering through a graph.
         Give it a chain of atoms that are connected, `chain`,
@@ -727,9 +721,7 @@ def VF2_isomorphism(graph1, graph2, subgraph=False, findAll=False, initialMap=No
         return isMatch, map21
 
 
-def __VF2_feasible(
-    graph1, graph2, vertex1, vertex2, map21, map12, terminals1, terminals2, subgraph
-):
+def __VF2_feasible(graph1, graph2, vertex1, vertex2, map21, map12, terminals1, terminals2, subgraph):
     """
     Returns :data:`True` if two vertices `vertex1` and `vertex2` from graphs
     `graph1` and `graph2`, respectively, are feasible matches. `mapping21` and
@@ -958,9 +950,7 @@ def __VF2_match(
 
     for vertex1 in vertices1:
         # propose a pairing
-        if __VF2_feasible(
-            graph1, graph2, vertex1, vertex2, map21, map12, terminals1, terminals2, subgraph
-        ):
+        if __VF2_feasible(graph1, graph2, vertex1, vertex2, map21, map12, terminals1, terminals2, subgraph):
             # Update mapping accordingly
             map21[vertex1] = vertex2
             map12[vertex2] = vertex1

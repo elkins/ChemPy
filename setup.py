@@ -40,9 +40,7 @@ if skip_build:
     if sys.platform == "win32":
         print("Info: Skipping Cython build on Windows. Pure Python modules will be used.")
     else:
-        print(
-            "Info: Skipping Cython build (SKIP_CYTHON_BUILD set). Pure Python modules will be used."
-        )
+        print("Info: Skipping Cython build (SKIP_CYTHON_BUILD set). Pure Python modules will be used.")
 elif not cython_available:
     print("Warning: Cython not available. Pure Python modules will be used.")
 

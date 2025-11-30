@@ -66,8 +66,7 @@ class StatesTest(unittest.TestCase):
         Elist = numpy.arange(0, 100001, dE, numpy.float64)
         rho = states.getDensityOfStates(Elist)
         self.assertAlmostEqual(
-            numpy.sum(rho * numpy.exp(-Elist / 8.314472 / 298.15) * dE)
-            / states.getPartitionFunction(T),
+            numpy.sum(rho * numpy.exp(-Elist / 8.314472 / 298.15) * dE) / states.getPartitionFunction(T),
             1.0,
             2,
         )
@@ -106,8 +105,7 @@ class StatesTest(unittest.TestCase):
         Elist = numpy.arange(0, 100001, dE, numpy.float64)
         rho = states.getDensityOfStates(Elist)
         self.assertAlmostEqual(
-            numpy.sum(rho * numpy.exp(-Elist / 8.314472 / 298.15) * dE)
-            / states.getPartitionFunction(T),
+            numpy.sum(rho * numpy.exp(-Elist / 8.314472 / 298.15) * dE) / states.getPartitionFunction(T),
             1.0,
             2,
         )
@@ -134,17 +132,9 @@ class StatesTest(unittest.TestCase):
         #        pylab.show()
 
         T = 298.15
-        self.assertTrue(
-            0.9
-            < numpy.sum(rho * numpy.exp(-Elist / 8.314472 / T) * dE) / hr.getPartitionFunction(T)
-            < 1.1
-        )
+        self.assertTrue(0.9 < numpy.sum(rho * numpy.exp(-Elist / 8.314472 / T) * dE) / hr.getPartitionFunction(T) < 1.1)
         T = 1000.0
-        self.assertTrue(
-            0.9
-            < numpy.sum(rho * numpy.exp(-Elist / 8.314472 / T) * dE) / hr.getPartitionFunction(T)
-            < 1.1
-        )
+        self.assertTrue(0.9 < numpy.sum(rho * numpy.exp(-Elist / 8.314472 / T) * dE) / hr.getPartitionFunction(T) < 1.1)
 
     def testHinderedRotor1(self):
         """
@@ -168,9 +158,7 @@ class StatesTest(unittest.TestCase):
             * 4184
         )
         hr1 = HinderedRotor(inertia=7.38359 / 6.022e46, barrier=2139.3 * 11.96, symmetry=2)
-        hr2 = HinderedRotor(
-            inertia=7.38359 / 6.022e46, barrier=3.20429 * 4184, symmetry=1, fourier=fourier
-        )
+        hr2 = HinderedRotor(inertia=7.38359 / 6.022e46, barrier=3.20429 * 4184, symmetry=1, fourier=fourier)
         ho = HarmonicOscillator(frequencies=[hr1.getFrequency()])
 
         # Check that it matches the harmonic oscillator model at low T
@@ -205,9 +193,7 @@ class StatesTest(unittest.TestCase):
             * 4184
         )
         hr1 = HinderedRotor(inertia=1.60779 / 6.022e46, barrier=176.4 * 11.96, symmetry=3)
-        hr2 = HinderedRotor(
-            inertia=1.60779 / 6.022e46, barrier=0.233317 * 4184, symmetry=3, fourier=fourier
-        )
+        hr2 = HinderedRotor(inertia=1.60779 / 6.022e46, barrier=0.233317 * 4184, symmetry=3, fourier=fourier)
 
         # Check that the potentials between the two rotors are approximately consistent
         phi = numpy.arange(0, 2 * math.pi, math.pi / 48.0, numpy.float64)

@@ -170,12 +170,8 @@ class Reaction:
         ``False`` if not.
         """
         return (
-            all([spec in self.reactants for spec in reactants])
-            and all([spec in self.products for spec in products])
-        ) or (
-            all([spec in self.products for spec in reactants])
-            and all([spec in self.reactants for spec in products])
-        )
+            all([spec in self.reactants for spec in reactants]) and all([spec in self.products for spec in products])
+        ) or (all([spec in self.products for spec in reactants]) and all([spec in self.reactants for spec in products]))
 
     def getEnthalpyOfReaction(self, T):
         """
@@ -470,9 +466,7 @@ class Reaction:
             dV1=cython.double,
             dV2=cython.double,
         )
-        cython.declare(
-            kappa=cython.double, E_kT=numpy.ndarray, f=numpy.ndarray, integral=cython.double
-        )
+        cython.declare(kappa=cython.double, E_kT=numpy.ndarray, f=numpy.ndarray, integral=cython.double)
         cython.declare(
             i=cython.int,
             tol=cython.double,
@@ -564,9 +558,7 @@ class ReactionModel:
         from scipy import sparse
 
         # Use dictionary-of-keys format to efficiently assemble stoichiometry matrix
-        self.stoichiometry = sparse.dok_matrix(
-            (len(self.species), len(self.reactions)), numpy.float64
-        )
+        self.stoichiometry = sparse.dok_matrix((len(self.species), len(self.reactions)), numpy.float64)
         for rxn in self.reactions:
             j = rxn.index - 1
             # Only need to iterate over the species involved in the reaction,

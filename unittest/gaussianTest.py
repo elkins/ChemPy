@@ -27,9 +27,7 @@ class GaussianTest(unittest.TestCase):
 
         self.assertTrue(len([mode for mode in s.modes if isinstance(mode, Translation)]) == 1)
         self.assertTrue(len([mode for mode in s.modes if isinstance(mode, RigidRotor)]) == 1)
-        self.assertTrue(
-            len([mode for mode in s.modes if isinstance(mode, HarmonicOscillator)]) == 1
-        )
+        self.assertTrue(len([mode for mode in s.modes if isinstance(mode, HarmonicOscillator)]) == 1)
         self.assertTrue(len([mode for mode in s.modes if isinstance(mode, HinderedRotor)]) == 0)
 
         trans = [mode for mode in s.modes if isinstance(mode, Translation)][0]
@@ -55,9 +53,7 @@ class GaussianTest(unittest.TestCase):
 
         self.assertTrue(len([mode for mode in s.modes if isinstance(mode, Translation)]) == 1)
         self.assertTrue(len([mode for mode in s.modes if isinstance(mode, RigidRotor)]) == 1)
-        self.assertTrue(
-            len([mode for mode in s.modes if isinstance(mode, HarmonicOscillator)]) == 1
-        )
+        self.assertTrue(len([mode for mode in s.modes if isinstance(mode, HarmonicOscillator)]) == 1)
         self.assertTrue(len([mode for mode in s.modes if isinstance(mode, HinderedRotor)]) == 0)
 
         trans = [mode for mode in s.modes if isinstance(mode, Translation)][0]

@@ -135,9 +135,7 @@ class ThermoGAModel(ThermoModel):
     =========== =================== ============================================
     """
 
-    def __init__(
-        self, Tdata=None, Cpdata=None, H298=0.0, S298=0.0, Tmin=0.0, Tmax=99999.9, comment=""
-    ):
+    def __init__(self, Tdata=None, Cpdata=None, H298=0.0, S298=0.0, Tmin=0.0, Tmax=99999.9, comment=""):
         ThermoModel.__init__(self, Tmin=Tmin, Tmax=Tmax, comment=comment)
         self.Tdata = Tdata
         self.Cpdata = Cpdata
@@ -174,12 +172,8 @@ class ThermoGAModel(ThermoModel):
         the sum of the two sets of thermodynamic data.
         """
         cython.declare(i=int, new=ThermoGAModel)
-        if len(self.Tdata) != len(other.Tdata) or any(
-            [T1 != T2 for T1, T2 in zip(self.Tdata, other.Tdata)]
-        ):
-            raise Exception(
-                "Cannot add these ThermoGAModel objects due to their having different temperature points."
-            )
+        if len(self.Tdata) != len(other.Tdata) or any([T1 != T2 for T1, T2 in zip(self.Tdata, other.Tdata)]):
+            raise Exception("Cannot add these ThermoGAModel objects due to their having different temperature points.")
         new = ThermoGAModel()
         new.H298 = self.H298 + other.H298
         new.S298 = self.S298 + other.S298
@@ -197,9 +191,7 @@ class ThermoGAModel(ThermoModel):
         """
         Return the constant-pressure heat capacity (Cp) in J/mol*K at temperature `T` in K.
         """
-        cython.declare(
-            Tmin=cython.double, Tmax=cython.double, Cpmin=cython.double, Cpmax=cython.double
-        )
+        cython.declare(Tmin=cython.double, Tmax=cython.double, Cpmin=cython.double, Cpmax=cython.double)
         cython.declare(Cp=cython.double)
         Cp = 0.0
         if not self.isTemperatureValid(T):
@@ -209,9 +201,7 @@ class ThermoGAModel(ThermoModel):
         elif T >= numpy.max(self.Tdata):
             Cp = self.Cpdata[-1]
         else:
-            for Tmin, Tmax, Cpmin, Cpmax in zip(
-                self.Tdata[:-1], self.Tdata[1:], self.Cpdata[:-1], self.Cpdata[1:]
-            ):
+            for Tmin, Tmax, Cpmin, Cpmax in zip(self.Tdata[:-1], self.Tdata[1:], self.Cpdata[:-1], self.Cpdata[1:]):
                 if Tmin <= T and T < Tmax:
                     Cp = (Cpmax - Cpmin) * ((T - Tmin) / (Tmax - Tmin)) + Cpmin
         return Cp
@@ -232,9 +222,7 @@ class ThermoGAModel(ThermoModel):
         H = self.H298
         if not self.isTemperatureValid(T):
             raise ThermoError('Invalid temperature "%g K" for enthalpy estimation.' % T)
-        for Tmin, Tmax, Cpmin, Cpmax in zip(
-            self.Tdata[:-1], self.Tdata[1:], self.Cpdata[:-1], self.Cpdata[1:]
-        ):
+        for Tmin, Tmax, Cpmin, Cpmax in zip(self.Tdata[:-1], self.Tdata[1:], self.Cpdata[:-1], self.Cpdata[1:]):
             if T > Tmin:
                 slope = (Cpmax - Cpmin) / (Tmax - Tmin)
                 intercept = (Cpmin * Tmax - Cpmax * Tmin) / (Tmax - Tmin)
@@ -262,9 +250,7 @@ class ThermoGAModel(ThermoModel):
         S = self.S298
         if not self.isTemperatureValid(T):
             raise ThermoError('Invalid temperature "%g K" for entropy estimation.' % T)
-        for Tmin, Tmax, Cpmin, Cpmax in zip(
-            self.Tdata[:-1], self.Tdata[1:], self.Cpdata[:-1], self.Cpdata[1:]
-        ):
+        for Tmin, Tmax, Cpmin, Cpmax in zip(self.Tdata[:-1], self.Tdata[1:], self.Cpdata[:-1], self.Cpdata[1:]):
             if T > Tmin:
                 slope = (Cpmax - Cpmin) / (Tmax - Tmin)
                 intercept = (Cpmin * Tmax - Cpmax * Tmin) / (Tmax - Tmin)
@@ -458,8 +444,7 @@ class WilhoitModel(ThermoModel):
         return (
             self.S0
             + cpInf * logt
-            - (cpInf - cp0)
-            * (logy + y * (1 + y * (a0 / 2 + y * (a1 / 3 + y * (a2 / 4 + y * a3 / 5)))))
+            - (cpInf - cp0) * (logy + y * (1 + y * (a0 / 2 + y * (a1 / 3 + y * (a2 / 4 + y * a3 / 5)))))
         )
 
     def getFreeEnergy(self, T):
@@ -600,14 +585,7 @@ class NASAPolynomial(ThermoModel):
         T4 = T2 * T2
         # H/RT = a1 + a2 T /2 + a3 T^2 /3 + a4 T^3 /4 + a5 T^4 /5 + a6/T
         return (
-            (
-                self.c0
-                + self.c1 * T / 2
-                + self.c2 * T2 / 3
-                + self.c3 * T2 * T / 4
-                + self.c4 * T4 / 5
-                + self.c5 / T
-            )
+            (self.c0 + self.c1 * T / 2 + self.c2 * T2 / 3 + self.c3 * T2 * T / 4 + self.c4 * T4 / 5 + self.c5 / T)
             * constants.R
             * T
         )
@@ -622,12 +600,7 @@ class NASAPolynomial(ThermoModel):
         T4 = T2 * T2
         # S/R  = a1 lnT + a2 T + a3 T^2 /2 + a4 T^3 /3 + a5 T^4 /4 + a7
         return (
-            self.c0 * math.log(T)
-            + self.c1 * T
-            + self.c2 * T2 / 2
-            + self.c3 * T2 * T / 3
-            + self.c4 * T4 / 4
-            + self.c6
+            self.c0 * math.log(T) + self.c1 * T + self.c2 * T2 / 2 + self.c3 * T2 * T / 3 + self.c4 * T4 / 4 + self.c6
         ) * constants.R
 
     def getFreeEnergy(self, T):
@@ -643,9 +616,7 @@ class NASAPolynomial(ThermoModel):
         """
         import ctml_writer
 
-        return ctml_writer.NASA(
-            [self.Tmin, self.Tmax], [self.c0, self.c1, self.c2, self.c3, self.c4, self.c5, self.c6]
-        )
+        return ctml_writer.NASA([self.Tmin, self.Tmax], [self.c0, self.c1, self.c2, self.c3, self.c4, self.c5, self.c6])
 
 
 ################################################################################

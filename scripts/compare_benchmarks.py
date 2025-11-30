@@ -147,12 +147,8 @@ def compare() -> int:
 
         def emit_text():
             print(f"Showing latest benchmark run: {latest}")
-            print(
-                "Name                                  mean        median      ops        rounds     iterations"
-            )
-            print(
-                "-----------------------------------------------------------------------------------------------"
-            )
+            print("Name                                  mean        median      ops        rounds     iterations")
+            print("-----------------------------------------------------------------------------------------------")
             for name in sorted(latest_map.keys()):
                 bench = latest_map[name]
                 print(
@@ -240,12 +236,8 @@ def compare() -> int:
 
     def emit_text():
         print(f"Comparing benchmarks:\n  latest:  {latest}\n  previous:{previous}\n")
-        print(
-            "Name                                  mean        median      ops        rounds     iterations"
-        )
-        print(
-            "-----------------------------------------------------------------------------------------------"
-        )
+        print("Name                                  mean        median      ops        rounds     iterations")
+        print("-----------------------------------------------------------------------------------------------")
         for name in names:
             latest_bench = latest_map.get(name)
             prev_bench = prev_map.get(name)
@@ -308,8 +300,7 @@ def compare() -> int:
                     "latest": str(latest),
                     "previous": str(previous),
                     "benchmarks": {
-                        name: {"latest": latest_map.get(name), "previous": prev_map.get(name)}
-                        for name in names
+                        name: {"latest": latest_map.get(name), "previous": prev_map.get(name)} for name in names
                     },
                 },
                 indent=2,
