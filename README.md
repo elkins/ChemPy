@@ -128,6 +128,31 @@ make test-fast
 pytest unittest/moleculeTest.py -v
 ```
 
+### Benchmarking
+
+ChemPy includes a small benchmark suite using `pytest-benchmark` to track performance of key hot-paths (SMILES parsing, rotor counting, density-of-states ILT, etc.).
+
+Run locally:
+
+```bash
+pytest unittest/benchmarksTest.py --benchmark-only
+```
+
+Compare two runs (e.g., branch vs. main):
+
+```bash
+# On main
+pytest unittest/benchmarksTest.py --benchmark-only --benchmark-save=main
+
+# On your branch
+pytest unittest/benchmarksTest.py --benchmark-only --benchmark-save=feature
+
+# Compare
+pytest unittest/benchmarksTest.py --benchmark-only --benchmark-compare
+```
+
+CI runs a quick benchmark job on Ubuntu/Python 3.12 and uploads JSON results as an artifact for trend tracking.
+
 ### Code Quality
 
 ```bash
