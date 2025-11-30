@@ -1,10 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import sys
 import unittest
-
-sys.path.append(".")
 
 from chempy.molecule import Molecule
 from chempy.pattern import MoleculePattern

@@ -99,7 +99,8 @@ class Reaction:
     `kinetics`          :class:`KineticsModel`      The kinetics model to use for the reaction
     `reversible`        ``bool``                    ``True`` if the reaction is reversible, ``False`` if not
     `transitionState`   :class:`TransitionState`    The transition state
-    `thirdBody`         ``bool``                    ``True`` if the reaction if the reaction kinetics imply a third body, ``False`` if not
+    `thirdBody`         ``bool``                    ``True`` if the reaction kinetics imply a third body,
+                                                    ``False`` if not
     =================== =========================== ============================
 
     """
@@ -346,8 +347,9 @@ class Reaction:
         """
         if not isinstance(self.kinetics, ArrheniusModel):
             raise ReactionError(
-                "ArrheniusModel kinetics required to use Reaction.generateReverseRateCoefficient(), but %s object encountered."
-                % (self.kinetics.__class__)
+                "ArrheniusModel kinetics required to use "
+                "Reaction.generateReverseRateCoefficient(), but %s "
+                "object encountered." % (self.kinetics.__class__)
             )
 
         cython.declare(klist=numpy.ndarray, i=cython.int, kf=ArrheniusModel, kr=ArrheniusModel)
@@ -365,24 +367,25 @@ class Reaction:
 
     def calculateTSTRateCoefficients(self, Tlist, tunneling=""):
         return numpy.array(
-            [self.calculateTSTRateCoefficient(T, tunneling) for T in Tlist], numpy.float64
+            [self.calculateTSTRateCoefficient(T, tunneling) for T in Tlist],
+            numpy.float64,
         )
 
     def calculateTSTRateCoefficient(self, T, tunneling=""):
-        """
+        r"""
         Evaluate the forward rate coefficient for the reaction with
         corresponding transition state `TS` at temperature `T` in K using
         (canonical) transition state theory. The TST equation is
 
-        .. math:: k(T) = \\kappa(T) \\frac{k_\\mathrm{B} T}{h} \\frac{Q^\\ddagger(T)}{Q^\\mathrm{A}(T) Q^\\mathrm{B}(T)} \\exp \\left( -\\frac{E_0}{k_\\mathrm{B} T} \\right)
+        .. math:: k(T) = \\kappa(T) \\frac{k_\\mathrm{B} T}{h} \\
+            \\frac{Q^\\ddagger(T)}{Q^\\mathrm{A}(T) Q^\\mathrm{B}(T)} \\
+            \exp \\left( -\\frac{E_0}{k_\\mathrm{B} T} \\right)
 
         where :math:`Q^\\ddagger` is the partition function of the transition state,
         :math:`Q^\\mathrm{A}` and :math:`Q^\\mathrm{B}` are the partition function
         of the reactants, :math:`E_0` is the ground-state energy difference from
         the transition state to the reactants, :math:`T` is the absolute
-        temperature, :math:`k_\\mathrm{B}` is the Boltzmann constant, and :math:`h`
-        is the Planck constant. :math:`\\kappa(T)` is an optional tunneling
-        correction.
+                correction.
         """
         cython.declare(E0=cython.double)
         # Determine barrier height
@@ -426,8 +429,10 @@ class Reaction:
         the reaction with corresponding transition state `TS` at the list of
         temperatures `Tlist` in K. The Eckart formula is
 
-        .. math:: \\kappa(T) = e^{\\beta \\Delta V_1} \\int_0^\\infty
-            \\left[ 1 - \\frac{\\cosh (2 \\pi a - 2 \\pi b) + \\cosh (2 \\pi d)}{\\cosh (2 \\pi a + 2 \\pi b) + \\cosh (2 \\pi d)} \\right] e^{- \\beta E} \\ d(\\beta E)
+        .. math:: \\kappa(T) = e^{\\beta \\Delta V_1} \\int_0^\\infty\\
+            \\left[ 1 - \\frac{\\cosh (2 \\pi a - 2 \\pi b) + \\cosh (2 \\pi d)}{\\cosh (2 \\pi a + 2 \\pi b) \\
+            + \\cosh (2 \\pi d)} \\right]\\
+            e^{- \\beta E} \\ d(\\beta E)
 
         where
 
@@ -494,7 +499,6 @@ class Reaction:
         alpha2 = 2 * math.pi * dV2 / constants.Na / (constants.h * constants.c * 100.0 * frequency)
 
         # Integrate to get Eckart correction
-        kappa = 0.0
 
         # First we need to determine the lower and upper bounds at which to
         # truncate the integral
@@ -523,76 +527,7 @@ class Reaction:
                 alpha2,
             ),
         )[0]
-        kappa = integral * math.exp(dV1 / constants.R / T)
-
-        # Return the calculated Eckart correction
-        return kappa
-
-    def __eckartIntegrand(self, E_kT, kT, dV1, alpha1, alpha2):
-        # Evaluate the integrand of the Eckart tunneling correction integral
-        # for the given values
-        #    E_kT = energy scaled by kB * T (dimensionless)
-        #    kT = Boltzmann constant * T [=] J/mol
-        #    dV1 = energy difference between TS and reactants [=] J/mol
-        #    alpha1, alpha2 dimensionless
-
-        cython.declare(
-            xi=cython.double,
-            twopia=cython.double,
-            twopib=cython.double,
-            twopid=cython.double,
-            kappaE=cython.double,
-        )
-        from math import cosh, exp, pi, sqrt
-
-        xi = E_kT * kT / dV1
-        # 2 * pi * a
-        twopia = 2 * sqrt(alpha1 * xi) / (1 / sqrt(alpha1) + 1 / sqrt(alpha2))
-        # 2 * pi * b
-        twopib = 2 * sqrt(abs((xi - 1) * alpha1 + alpha2)) / (1 / sqrt(alpha1) + 1 / sqrt(alpha2))
-        # 2 * pi * d
-        twopid = 2 * sqrt(abs(alpha1 * alpha2 - 4 * pi * pi / 16))
-
-        # We use different approximate versions of the integrand to avoid
-        # domain errors when evaluating cosh(x) for large x
-        # If all of 2*pi*a, 2*pi*b, and 2*pi*d are sufficiently small,
-        # compute as normal
-        if twopia < 200 and twopib < 200 and twopid < 200:
-            kappaE = 1 - (cosh(twopia - twopib) + cosh(twopid)) / (
-                cosh(twopia + twopib) + cosh(twopid)
-            )
-        # If one of the following is true, then we can eliminate most of the
-        # exponential terms after writing out the definition of cosh and
-        # dividing all terms by exp(2*pi*d)
-        elif (
-            twopia - twopib - twopid > 10
-            or twopib - twopia - twopid > 10
-            or twopia + twopib - twopid > 10
-        ):
-            kappaE = (
-                1
-                - exp(-2 * twopia)
-                - exp(-2 * twopib)
-                - exp(-twopia - twopib + twopid)
-                - exp(-twopia - twopib - twopid)
-            )
-        # Otherwise expand each cosh(x) in terms of its exponentials and divide
-        # all terms by exp(2*pi*d) before evaluating
-        else:
-            kappaE = 1 - (
-                exp(twopia - twopib - twopid)
-                + exp(-twopia + twopib - twopid)
-                + 1
-                + exp(-2 * twopid)
-            ) / (
-                exp(twopia + twopib - twopid)
-                + exp(-twopia - twopib - twopid)
-                + 1
-                + exp(-2 * twopid)
-            )
-
-        # Complete and return integrand
-        return exp(-E_kT) * kappaE
+        return integral * math.exp(dV1 / constants.R / T)
 
 
 ################################################################################
@@ -608,7 +543,8 @@ class ReactionModel:
     =============== =========================== ================================
     `species`       :class:`list`               The species involved in the reaction model
     `reactions`     :class:`list`               The reactions comprising the reaction model
-    `stoichiometry` :class:`numpy.ndarray`      The stoichiometric matrix for the reaction model, stored as a sparse matrix
+    `stoichiometry` :class:`numpy.ndarray`      The stoichiometric matrix for the reaction
+                                               model, stored as a sparse matrix
     =============== =========================== ================================
 
     """
@@ -616,16 +552,13 @@ class ReactionModel:
     def __init__(self, species=None, reactions=None):
         self.species = species or []
         self.reactions = reactions or []
-        self.stoichiometry = None
-
-    def generateStoichiometryMatrix(self):
         """
-        Generate the stoichiometry matrix corresponding to the current
-        reaction system. The stoichiometry matrix is defined such that the
-        rows correspond to the `index` attribute of each species object, while
-        the columns correspond to the `index` attribute of each reaction object.
-        The generated matrix is not returned, but is instead stored in the
-        `stoichiometry` attribute for future use.
+        Generate the stoichiometry matrix for the reaction system. The
+        stoichiometry matrix is defined such that the rows correspond to the
+        `index` attribute of each species object, while the columns correspond
+        to the `index` attribute of each reaction object. The generated matrix
+        is not returned, but is instead stored in the `stoichiometry` attribute
+        for future use.
         """
         cython.declare(rxn=Reaction, spec=Species, i=cython.int, j=cython.int, nu=cython.int)
         from scipy import sparse

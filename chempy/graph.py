@@ -901,8 +901,16 @@ def __VF2_match(
     if callDepth == 0:
         if not subgraph:
             assert len(map21) == len(graph1.vertices), (
-                "Calldepth mismatch: callDepth = %g, len(map21) = %g, len(map12) = %g, len(graph1.vertices) = %g, len(graph2.vertices) = %g"
-                % (callDepth, len(map21), len(map12), len(graph1.vertices), len(graph2.vertices))
+                "Calldepth mismatch: callDepth = %g, len(map21) = %g, "
+                "len(map12) = %g, len(graph1.vertices) = %g, "
+                "len(graph2.vertices) = %g"
+                % (
+                    callDepth,
+                    len(map21),
+                    len(map12),
+                    len(graph1.vertices),
+                    len(graph2.vertices),
+                )
             )
             if findAll:
                 map21List.append(map21.copy())
@@ -910,8 +918,16 @@ def __VF2_match(
             return True
         else:
             assert len(map12) == len(graph2.vertices), (
-                "Calldepth mismatch: callDepth = %g, len(map21) = %g, len(map12) = %g, len(graph1.vertices) = %g, len(graph2.vertices) = %g"
-                % (callDepth, len(map21), len(map12), len(graph1.vertices), len(graph2.vertices))
+                "Calldepth mismatch: callDepth = %g, len(map21) = %g, "
+                "len(map12) = %g, len(graph1.vertices) = %g, "
+                "len(graph2.vertices) = %g"
+                % (
+                    callDepth,
+                    len(map21),
+                    len(map12),
+                    len(graph1.vertices),
+                    len(graph2.vertices),
+                )
             )
             if findAll:
                 map21List.append(map21.copy())

@@ -161,11 +161,13 @@ class Geometry:
         # Check that exactly one pivot atom is in the specified top
         if pivots[0] not in top1 and pivots[1] not in top1:
             raise ChemPyError(
-                "No pivot atom included in top; you must specify which pivot atom belongs with the specified top."
+                "No pivot atom included in top; you must specify which "
+                "pivot atom belongs with the specified top."
             )
         elif pivots[0] in top1 and pivots[1] in top1:
             raise ChemPyError(
-                "Both pivot atoms included in top; you must specify only one pivot atom that belongs with the specified top."
+                "Both pivot atoms included in top; you must specify only "
+                "one pivot atom that belongs with the specified top."
             )
 
         # Determine atoms in other top

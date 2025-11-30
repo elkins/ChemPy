@@ -359,9 +359,11 @@ class ChebyshevModel(KineticsModel):
     where :math:`\\alpha_{tp}` is a constant, :math:`\\phi_n(x)` is the
     Chebyshev polynomial of degree :math:`n` evaluated at :math:`x`, and
 
-    .. math:: \\tilde{T} \\equiv \\frac{2T^{-1} - T_\\mathrm{min}^{-1} - T_\\mathrm{max}^{-1}}{T_\\mathrm{max}^{-1} - T_\\mathrm{min}^{-1}}
+    .. math:: \\tilde{T} \\equiv \\frac{2T^{-1} - T_\\mathrm{min}^{-1} - T_\\mathrm{max}^{-1}}
+              {T_\\mathrm{max}^{-1} - T_\\mathrm{min}^{-1}}
 
-    .. math:: \\tilde{P} \\equiv \\frac{2 \\log P - \\log P_\\mathrm{min} - \\log P_\\mathrm{max}}{\\log P_\\mathrm{max} - \\log P_\\mathrm{min}}
+    .. math:: \\tilde{P} \\equiv \\frac{2 \\log P - \\log P_\\mathrm{min} - \\log P_\\mathrm{max}}
+              {\\log P_\\mathrm{max} - \\log P_\\mathrm{min}}
 
     are reduced temperature and reduced pressures designed to map the ranges
     :math:`(T_\\mathrm{min}, T_\\mathrm{max})` and
@@ -372,8 +374,10 @@ class ChebyshevModel(KineticsModel):
     Attribute       Type            Description
     =============== =============== ============================================
     `coeffs`        :class:`list`   Matrix of Chebyshev coefficients
-    `degreeT`       :class:`int`    The number of terms in the inverse temperature direction
-    `degreeP`       :class:`int`    The number of terms in the log pressure direction
+    `degreeT`       :class:`int`    The number of terms in the inverse
+                                    temperature direction
+    `degreeP`       :class:`int`    The number of terms in the log
+                                    pressure direction
     =============== =============== ============================================
 
     """

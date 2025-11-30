@@ -315,7 +315,10 @@ class Bond(Edge):
     =================== =================== ====================================
     Attribute           Type                Description
     =================== =================== ====================================
-    `order`             ``str``             The bond order (``S`` = single, `D`` = double, ``T`` = triple, ``B`` = benzene)
+    `order`             ``str``             The bond order (``S`` = single,
+                                            ``D`` = double,
+                                            ``T`` = triple,
+                                            ``B`` = benzene)
     =================== =================== ====================================
 
     """

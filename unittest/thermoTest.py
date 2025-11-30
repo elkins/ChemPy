@@ -1,12 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 import unittest
 
 import numpy
-
-sys.path.append(".")
 
 import chempy.constants as constants
 from chempy.thermo import WilhoitModel

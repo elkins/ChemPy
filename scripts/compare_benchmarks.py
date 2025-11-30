@@ -178,7 +178,6 @@ def compare() -> int:
                         int(bench["iterations"]),
                     ]
                 )
-                )
         elif args.output == "json":
             print(json.dumps({"run": str(latest), "benchmarks": latest_map}, indent=2))
         else:
@@ -248,25 +247,25 @@ def compare() -> int:
             "-----------------------------------------------------------------------------------------------"
         )
         for name in names:
-            l = latest_map.get(name)
-            p = prev_map.get(name)
-            if not l or not p:
-                state = "added" if l and not p else "removed"
+            latest_bench = latest_map.get(name)
+            prev_bench = prev_map.get(name)
+            if not latest_bench or not prev_bench:
+                state = "added" if latest_bench and not prev_bench else "removed"
                 print(f"{name:35s} {state}")
                 continue
-            mean_delta = _fmt_delta(l["mean"], p["mean"])
-            med_delta = _fmt_delta(l["median"], p["median"])
-            ops_delta = _fmt_delta(l["ops"], p["ops"])
+            mean_delta = _fmt_delta(latest_bench["mean"], prev_bench["mean"])
+            med_delta = _fmt_delta(latest_bench["median"], prev_bench["median"])
+            ops_delta = _fmt_delta(latest_bench["ops"], prev_bench["ops"])
 
             def star(col: str) -> str:
                 return "*" if args.metric == col else ""
 
             print(
                 f"{name:35s} "
-                f"{l['mean']:>10.4f}{star('mean')} ({mean_delta:>8s}) "
-                f"{l['median']:>10.4f}{star('median')} ({med_delta:>8s}) "
-                f"{l['ops']:>10.2f}{star('ops')} ({ops_delta:>8s}) "
-                f"{int(l['rounds']):>8d}        {int(l['iterations']):>10d}"
+                f"{latest_bench['mean']:>10.4f}{star('mean')} ({mean_delta:>8s}) "
+                f"{latest_bench['median']:>10.4f}{star('median')} ({med_delta:>8s}) "
+                f"{latest_bench['ops']:>10.2f}{star('ops')} ({ops_delta:>8s}) "
+                f"{int(latest_bench['rounds']):>8d}        {int(latest_bench['iterations']):>10d}"
             )
 
     if args.output == "csv":

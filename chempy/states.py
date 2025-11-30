@@ -142,7 +142,8 @@ class Translation(Mode):
         Return the value of the partition function at the specified temperatures
         `Tlist` in K. The formula is
 
-        .. math:: q_\\mathrm{trans}(T) = \\left( \\frac{2 \\pi m k_\\mathrm{B} T}{h^2} \\right)^{3/2} \\frac{k_\\mathrm{B} T}{P}
+            .. math:: q_\\mathrm{trans}(T) = \\left( \\frac{2 \\pi m k_\\mathrm{B} T}{h^2} \\right)^{3/2} \\
+                  \\frac{k_\\mathrm{B} T}{P}
 
         where :math:`T` is temperature, :math:`V` is volume, :math:`m` is mass,
         :math:`d` is dimensionality, :math:`k_\\mathrm{B}` is the Boltzmann
@@ -244,16 +245,18 @@ class RigidRotor(Mode):
         Return the value of the partition function at the specified temperatures
         `Tlist` in K. The formula is
 
-        .. math:: q_\\mathrm{rot}(T) = \\frac{8 \\pi^2 I k_\\mathrm{B} T}{\\sigma h^2}
+            .. math:: q_\\mathrm{rot}(T) = \\frac{8 \\pi^2 I k_\\mathrm{B} T}{\\sigma h^2} \\
+                \\sqrt{I_\\mathrm{A} I_\\mathrm{B} I_\\mathrm{C}}
 
         for linear rotors and
 
-        .. math:: q_\\mathrm{rot}(T) = \\frac{\\sqrt{\\pi}}{\\sigma} \\left( \\frac{8 \\pi^2 k_\\mathrm{B} T}{h^2} \\right)^{3/2} \\sqrt{I_\\mathrm{A} I_\\mathrm{B} I_\\mathrm{C}}
+          .. math:: q_\\mathrm{rot}(T) = \\frac{\\sqrt{\\pi}}{\\sigma} \\left( \\frac{8 \\pi^2 k_\\mathrm{B} T}{h^2} \\right)^{3/2}\\
+              \\sqrt{I_\\mathrm{A} I_\\mathrm{B} I_\\mathrm{C}}
 
-        for nonlinear rotors. Above, :math:`T` is temperature, :math:`\\sigma`
-        is the symmetry number, :math:`I` is the moment of inertia,
-        :math:`k_\\mathrm{B}` is the Boltzmann constant, and :math:`h` is the
-        Planck constant.
+        for nonlinear rotors. Above, :math:`T` is temperature,
+        :math:`\\sigma` is the symmetry number, :math:`I` is the moment of
+        inertia, :math:`k_\\mathrm{B}` is the Boltzmann constant,
+        and :math:`h` is the Planck constant.
         """
         cython.declare(theta=cython.double, inertia=cython.double)
         if self.linear:
@@ -345,7 +348,8 @@ class RigidRotor(Mode):
 
         for linear rotors and
 
-        .. math:: \\rho(E) = \\frac{\\sqrt{\\pi}}{\\sigma} \\left( \\frac{8 \\pi^2}{h^2} \\right)^{3/2} \\sqrt{I_\\mathrm{A} I_\\mathrm{B} I_\\mathrm{C}} \\frac{E^{1/2}}{\\frac{1}{2}!}
+          .. math:: \\rho(E) = \\frac{\\sqrt{\\pi}}{\\sigma} \\left( \\frac{8 \\pi^2}{h^2} \\right)^{3/2}\\
+              \\sqrt{I_\\mathrm{A} I_\\mathrm{B} I_\\mathrm{C}} \\frac{E^{1/2}}{\\frac{1}{2}!}
 
         for nonlinear rotors. Above, :math:`E` is energy, :math:`\\sigma`
         is the symmetry number, :math:`I` is the moment of inertia,
@@ -493,7 +497,10 @@ class HinderedRotor(Mode):
 
         Substituting in for the right-hand side partition functions gives
 
-        .. math:: q_\\mathrm{hind}(T) = \\frac{h \\nu}{k_\\mathrm{B} T} \\frac{1}{1 - \\exp \\left(- h \\nu / k_\\mathrm{B} T \\right)} \\left( \\frac{2 \\pi I k_\\mathrm{B} T}{h^2} \\right)^{1/2} \\frac{2 \\pi}{\\sigma} \\exp \\left( -\\frac{V_0}{2 k_\\mathrm{B} T} \\right) I_0 \\left( \\frac{V_0}{2 k_\\mathrm{B} T} \\right)
+          .. math:: q_\\mathrm{hind}(T) = \\frac{h \\nu}{k_\\mathrm{B} T} \\frac{1}{1 - \\exp \\left(- h \\nu / k_\\mathrm{B} T \\right)}\\
+              \\left( \\frac{2 \\pi I k_\\mathrm{B} T}{h^2} \\right)^{1/2}\\
+              \\frac{2 \\pi}{\\sigma} \\exp \\left( -\\frac{V_0}{2 k_\\mathrm{B} T} \\right)\\
+              I_0 \\left( \\frac{V_0}{2 k_\\mathrm{B} T} \\right)
 
         where
 
@@ -543,7 +550,8 @@ class HinderedRotor(Mode):
 
         For the cosine potential, the formula is
 
-        .. math:: \\frac{C_\\mathrm{v}^\\mathrm{hind}(T)}{R} = \\frac{C_\\mathrm{v}^\\mathrm{vib}(T)}{R} -\\frac{1}{2} + \\zeta^2 - \\left[ \\zeta \\frac{I_1(\\zeta)}{I_0(\\zeta)} \\right]^2 - \\zeta \\frac{I_1(\\zeta)}{I_0(\\zeta)}
+          .. math:: \\frac{C_\\mathrm{v}^\\mathrm{hind}(T)}{R} = \\frac{C_\\mathrm{v}^\\mathrm{vib}(T)}{R} -\\frac{1}{2} + \\zeta^2\\
+              - \\left[ \\zeta \\frac{I_1(\\zeta)}{I_0(\\zeta)} \\right]^2 - \\zeta \\frac{I_1(\\zeta)}{I_0(\\zeta)}
 
         where :math:`\\zeta \\equiv V_0 / 2 k_\\mathrm{B} T`,
         :math:`T` is temperature, :math:`V_0` is the barrier height,
@@ -554,7 +562,9 @@ class HinderedRotor(Mode):
         Schrodinger equation to obtain the energy levels of the rotor and
         utilize the expression
 
-        .. math:: \\frac{C_\\mathrm{v}^\\mathrm{hind}(T)}{R} = \\beta^2 \\frac{\\left( \\sum_i E_i^2 e^{-\\beta E_i} \\right) \\left( \\sum_i e^{-\\beta E_i} \\right) - \\left( \\sum_i E_i e^{-\\beta E_i} \\right)^2}{\\left( \\sum_i e^{-\\beta E_i} \\right)^2}
+          .. math:: \\frac{C_\\mathrm{v}^\\mathrm{hind}(T)}{R} = \\beta^2 \\frac{\\left( \\sum_i E_i^2 e^{-\\beta E_i} \\right)\\
+              \\left( \\sum_i e^{-\\beta E_i} \\right) - \\left( \\sum_i E_i e^{-\\beta E_i} \\right)^2}\\
+              {\\left( \\sum_i e^{-\\beta E_i} \\right)^2}
 
         to obtain the heat capacity.
         """
@@ -623,7 +633,8 @@ class HinderedRotor(Mode):
         Schrodinger equation to obtain the energy levels of the rotor and
         utilize the expression
 
-        .. math:: S^\\mathrm{hind}(T) = R \\left( \\ln q_\\mathrm{hind}(T) + \\frac{\\sum_i E_i e^{-\\beta E_i}}{RT \\sum_i e^{-\\beta E_i}} \\right)
+          .. math:: S^\\mathrm{hind}(T) = R \\left( \\ln q_\\mathrm{hind}(T) + \\frac{\\sum_i E_i e^{-\\beta E_i}}{RT\\
+              \\sum_i e^{-\\beta E_i}} \\right)
 
         to obtain the entropy.
         """
@@ -791,7 +802,8 @@ class HarmonicOscillator(Mode):
         Return the contribution to the heat capacity due to vibration
         in J/mol*K at the specified temperatures `Tlist` in K. The formula is
 
-        .. math:: \\frac{C_\\mathrm{v}^\\mathrm{vib}(T)}{R} = \\sum_i \\xi_i^2 \\frac{e^{\\xi_i}}{\\left( 1 - e^{\\xi_i} \\right)^2}
+          .. math:: \\frac{C_\\mathrm{v}^\\mathrm{vib}(T)}{R} = \\sum_i \\xi_i^2\\
+              \\frac{e^{\\xi_i}}{\\left( 1 - e^{\\xi_i} \\right)^2}
 
         where :math:`\\xi_i \\equiv h \\nu_i / k_\\mathrm{B} T`,
         :math:`T` is temperature, :math:`\\nu_i` is the frequency of vibration
@@ -834,7 +846,8 @@ class HarmonicOscillator(Mode):
         Return the contribution to the entropy due to vibration in J/mol*K at
         the specified temperatures `Tlist` in K. The formula is
 
-        .. math:: \\frac{S^\\mathrm{vib}(T)}{R} = \\sum_i \\left[ - \\ln \\left(1 - e^{-\\xi_i} \\right) + \\frac{\\xi_i}{e^{\\xi_i} - 1} \\right]
+          .. math:: \\frac{S^\\mathrm{vib}(T)}{R} = \\sum_i \\left[ - \\ln \\left(1 - e^{-\\xi_i} \\right)\\
+              + \\frac{\\xi_i}{e^{\\xi_i} - 1} \\right]
 
         where :math:`\\xi_i \\equiv h \\nu_i / k_\\mathrm{B} T`,
         :math:`T` is temperature, :math:`\\nu_i` is the frequency of vibration

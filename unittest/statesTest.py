@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import unittest
 import math
+import unittest
+
 import numpy
 
 from chempy.states import HarmonicOscillator, HinderedRotor, RigidRotor, StatesModel, Translation
@@ -174,13 +175,13 @@ class StatesTest(unittest.TestCase):
 
         # Check that it matches the harmonic oscillator model at low T
         Tlist = numpy.arange(10, 41.0, 1.0, numpy.float64)
-        Q1 = hr1.getPartitionFunctions(Tlist)
-        Q2 = hr2.getPartitionFunctions(Tlist)
+        _Q1 = hr1.getPartitionFunctions(Tlist)  # noqa: F841
+        _Q2 = hr2.getPartitionFunctions(Tlist)  # noqa: F841
         Q0 = ho.getPartitionFunctions(Tlist)
         for i in range(len(Tlist)):
-            self.assertAlmostEqual(Q1[i] / Q0[i], 1.0, 2)
+            self.assertAlmostEqual(_Q1[i] / Q0[i], 1.0, 2)
         for i in range(len(Tlist)):
-            self.assertAlmostEqual(Q2[i] / Q0[i], 1.0, 1)
+            self.assertAlmostEqual(_Q2[i] / Q0[i], 1.0, 1)
 
     def testHinderedRotor2(self):
         """
@@ -218,14 +219,14 @@ class StatesTest(unittest.TestCase):
 
         # Check that it matches the harmonic oscillator model at low T
         Tlist = numpy.arange(100.0, 2001.0, 10.0, numpy.float64)
-        Q1 = hr1.getPartitionFunctions(Tlist)
-        Q2 = hr2.getPartitionFunctions(Tlist)
+        _Q1 = hr1.getPartitionFunctions(Tlist)  # noqa: F841
+        _Q2 = hr2.getPartitionFunctions(Tlist)  # noqa: F841
         C1 = hr1.getHeatCapacities(Tlist)
         C2 = hr2.getHeatCapacities(Tlist)
-        H1 = hr1.getEnthalpies(Tlist)
-        H2 = hr2.getEnthalpies(Tlist)
-        S1 = hr1.getEntropies(Tlist)
-        S2 = hr2.getEntropies(Tlist)
+        _H1 = hr1.getEnthalpies(Tlist)  # noqa: F841
+        _H2 = hr2.getEnthalpies(Tlist)  # noqa: F841
+        _S1 = hr1.getEntropies(Tlist)  # noqa: F841
+        _S2 = hr2.getEntropies(Tlist)  # noqa: F841
         for i in range(len(Tlist)):
             self.assertTrue(abs(C2[i] - C1[i]) < 0.2)
 

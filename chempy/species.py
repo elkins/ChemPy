@@ -54,11 +54,12 @@ if TYPE_CHECKING:
 
 
 class LennardJones:
-    """
+    r"""
     A set of Lennard-Jones collision parameters. The Lennard-Jones parameters
     :math:`\\sigma` and :math:`\\epsilon` correspond to the potential
 
-    .. math:: V(r) = 4 \\epsilon \\left[ \\left( \\frac{\\sigma}{r} \\right)^{12} - \\left( \\frac{\\sigma}{r} \\right)^{6} \\right]
+    .. math:: V(r) = 4 \\epsilon \\left[ \\left( \\frac{\\sigma}{r} \\right)^{12}
+              - \\left( \\frac{\\sigma}{r} \\right)^{6} \\right]
 
     where the first term represents repulsion of overlapping orbitals and the
     second represents attraction due to van der Waals forces.
@@ -66,8 +67,10 @@ class LennardJones:
     =============== =============== ============================================
     Attribute       Type            Description
     =============== =============== ============================================
-    `sigma`         ``float``       Distance at which the inter-particle potential is zero (m)
-    `epsilon`       ``float``       Depth of the potential well (J)
+    `sigma`         ``float``       Distance at which the inter-particle
+                                    potential is zero (m)
+    `epsilon`       ``float``       Depth of the potential well
+                                    (J)
     =============== =============== ============================================
 
     """
