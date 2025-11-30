@@ -40,3 +40,11 @@ jobs:
       - name: Run tests
         run: |
           pytest -q --cov=chempy --cov-report=term --cov-report=xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          flags: unit
+          fail_ci_if_error: true
