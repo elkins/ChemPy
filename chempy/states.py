@@ -243,13 +243,18 @@ class RigidRotor(Mode):
         """
         cython.declare(theta=cython.double, inertia=cython.double)
         if self.linear:
-            theta = constants.h * constants.h / (8 * constants.pi * constants.pi * self.inertia[0] * constants.kB)
-            return T / theta / self.symmetry
+            inertia = self.inertia[0] if self.inertia else 0.0
+            if inertia == 0.0:
+                return 0.0
+            theta = constants.kB * T / (self.symmetry * constants.h * constants.h / (8 * constants.pi * constants.pi * inertia))
+            return theta
         else:
-            theta = 1.0
-            for inertia in self.inertia:
-                theta *= constants.h * constants.h / (8 * constants.pi * constants.pi * inertia * constants.kB)
-            return numpy.sqrt(constants.pi * T**len(self.inertia) / theta) / self.symmetry
+            if not self.inertia or any(i == 0.0 for i in self.inertia):
+                return 0.0
+            theta = (constants.kB * T)**1.5 * (8 * constants.pi**2 / constants.h**2)**1.5
+            theta *= (self.inertia[0] * self.inertia[1] * self.inertia[2])**0.5
+            theta *= numpy.sqrt(numpy.pi) / self.symmetry
+            return theta
 
     def getHeatCapacity(self, T):
         """

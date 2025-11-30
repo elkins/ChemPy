@@ -776,32 +776,41 @@ class Molecule(Graph):
     def fromCML(self, cmlstr, implicitH=False):
         """
         Convert a string of CML `cmlstr` to a molecular structure. Uses
-        `OpenBabel <http://openbabel.org/>`_ to perform the conversion.
+        OpenBabel 3.x API to perform the conversion.
         """
-        import pybel
+        import openbabel
+        obConversion = openbabel.OBConversion()
+        obConversion.SetInFormat('cml')
+        obmol = openbabel.OBMol()
         cmlstr = cmlstr.replace('\t', '')
-        mol = pybel.readstring('cml', cmlstr)
-        self.fromOBMol(mol.OBMol, implicitH)
+        obConversion.ReadString(obmol, cmlstr)
+        self.fromOBMol(obmol, implicitH)
         return self
 
     def fromInChI(self, inchistr, implicitH=False):
         """
         Convert an InChI string `inchistr` to a molecular structure. Uses
-        `OpenBabel <http://openbabel.org/>`_ to perform the conversion.
+        OpenBabel 3.x API to perform the conversion.
         """
-        import pybel
-        mol = pybel.readstring('inchi', inchistr)
-        self.fromOBMol(mol.OBMol, implicitH)
+        import openbabel
+        obConversion = openbabel.OBConversion()
+        obConversion.SetInFormat('inchi')
+        obmol = openbabel.OBMol()
+        obConversion.ReadString(obmol, inchistr)
+        self.fromOBMol(obmol, implicitH)
         return self
 
     def fromSMILES(self, smilesstr, implicitH=False):
         """
         Convert a SMILES string `smilesstr` to a molecular structure. Uses
-        `OpenBabel <http://openbabel.org/>`_ to perform the conversion.
+        OpenBabel 3.x API to perform the conversion.
         """
-        import pybel
-        mol = pybel.readstring('smiles', smilesstr)
-        self.fromOBMol(mol.OBMol, implicitH)
+        import openbabel
+        obConversion = openbabel.OBConversion()
+        obConversion.SetInFormat('smi')
+        obmol = openbabel.OBMol()
+        obConversion.ReadString(obmol, smilesstr)
+        self.fromOBMol(obmol, implicitH)
         return self
 
     def fromOBMol(self, obmol, implicitH=False):
@@ -852,13 +861,18 @@ class Molecule(Graph):
                 obatom2 = obmol.GetAtom(j + 1)
                 obbond = obatom.GetBond(obatom2)
                 if obbond is not None:
-                    order = 0
-
-                    # Process bond type
-                    if obbond.IsSingle(): order = 'S'
-                    elif obbond.IsDouble(): order = 'D'
-                    elif obbond.IsTriple(): order = 'T'
-                    elif obbond.IsAromatic(): order = 'B'
+                    order = None
+                    bond_order = obbond.GetBondOrder()
+                    if bond_order == 1:
+                        order = 'S'
+                    elif bond_order == 2:
+                        order = 'D'
+                    elif bond_order == 3:
+                        order = 'T'
+                    elif obbond.IsAromatic():
+                        order = 'B'
+                    else:
+                        order = 'S'  # Default to single if unknown
 
                     bond = Bond(order)
                     atom1 = self.vertices[i]
@@ -1000,7 +1014,7 @@ class Molecule(Graph):
         implicitH = self.implicitHydrogens
         self.makeHydrogensExplicit()
         for atom in self.vertices:
-            bonds = self.edges[atom].values()
+            bonds = list(self.edges[atom].values())
             if len(bonds)==1:
                 continue # ok, next atom
             if len(bonds)>2:
@@ -1054,7 +1068,7 @@ class Molecule(Graph):
 
         # Create temporary structures for each functional group attached to atom
         molecule = self.copy()
-        for atom2 in molecule.bonds[atom].keys(): molecule.removeBond(atom, atom2)
+        for atom2 in list(molecule.bonds[atom].keys()): molecule.removeBond(atom, atom2)
         molecule.removeAtom(atom)
         groups = molecule.split()
 
@@ -1068,11 +1082,11 @@ class Molecule(Graph):
                 elif group1 is group2:
                     groupIsomorphism[group1][group1] = True
         count = [sum([int(groupIsomorphism[group1][group2]) for group2 in groups]) for group1 in groups]
-        for i in range(count.count(2) / 2):
+        for i in range(count.count(2) // 2):
             count.remove(2)
-        for i in range(count.count(3) / 3):
+        for i in range(count.count(3) // 3):
             count.remove(3); count.remove(3)
-        for i in range(count.count(4) / 4):
+        for i in range(count.count(4) // 4):
             count.remove(4); count.remove(4); count.remove(4)
         count.sort(); count.reverse()
         
