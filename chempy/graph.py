@@ -657,7 +657,7 @@ def VF2_isomorphism(graph1, graph2, subgraph=False, findAll=False, initialMap=No
     cython.declare(terminals1=list, terminals2=list, callDepth=cython.int)
     cython.declare(vert=Vertex)
 
-    map21List = list()
+    map21List: list = list()
 
     # Some quick initial checks to avoid using the full algorithm if the
     # graphs are obviously not isomorphic (based on graph size)
@@ -679,7 +679,7 @@ def VF2_isomorphism(graph1, graph2, subgraph=False, findAll=False, initialMap=No
 
     if initialMap is None:
         initialMap = {}
-    map12List = list()
+    map12List: list = list()
 
     # Initialize callDepth with the size of the largest graph
     # Each recursive call to __VF2_match will decrease it by one;

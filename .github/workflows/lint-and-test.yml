@@ -39,4 +39,4 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest -q
+          pytest -q --cov=chempy --cov-report=term --cov-report=xml
