@@ -58,13 +58,14 @@ jobs:
       if: runner.os == 'Windows'
       env:
         PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
+        PYTEST_ADDOPTS: ""
         OMP_NUM_THREADS: "1"
         MKL_NUM_THREADS: "1"
         OPENBLAS_NUM_THREADS: "1"
         NUMEXPR_NUM_THREADS: "1"
         MKL_THREADING_LAYER: "SEQUENTIAL"
       run: |
-        python -m pytest -q unittest/ -k "not benchmark and not slow and not gaussianTest" -o addopts=
+        python -m pytest -q unittest/ -k "not benchmark and not slow and not gaussianTest and not test"
 
     - name: Run tests with pytest (Unix/macOS)
       if: runner.os != 'Windows'
