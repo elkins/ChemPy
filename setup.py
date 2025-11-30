@@ -5,18 +5,30 @@
 Build script for ChemPy - A chemistry toolkit for Python
 
 This script handles compilation of Cython extensions.
-Most configuration is in pyproject.toml.
+Most configuration is in pyproject.toml (PEP 517/518).
+
+Usage:
+    python setup.py build_ext --inplace
+
+Note:
+    Cython extensions are optional but recommended for performance.
+    The package can be used without compilation using pure Python modules.
 """
 
 from setuptools import setup, Extension
-from setuptools.command.build_ext import build_ext
-import Cython.Compiler.Options
 import numpy
 
-# Create annotated HTML files for each of the Cython modules for debugging
-Cython.Compiler.Options.annotate = True
+try:
+    import Cython.Compiler.Options
+    
+    # Create annotated HTML files for each of the Cython modules for debugging
+    Cython.Compiler.Options.annotate = True
+    cython_available = True
+except ImportError:
+    cython_available = False
+    print("Warning: Cython not available. Pure Python modules will be used.")
 
-# Define Cython extensions
+# Define Cython extensions for performance-critical modules
 ext_modules = [
     Extension("chempy.constants", ["chempy/constants.py"]),
     Extension("chempy.element", ["chempy/element.py"]),
@@ -32,8 +44,11 @@ ext_modules = [
     Extension("chempy.ext.thermo_converter", ["chempy/ext/thermo_converter.py"]),
 ]
 
+# Only include extensions if Cython is available
+if not cython_available:
+    ext_modules = []
+
 setup(
     ext_modules=ext_modules,
     include_dirs=[numpy.get_include()],
 )
-

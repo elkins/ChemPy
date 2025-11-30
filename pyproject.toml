@@ -38,10 +38,13 @@ dependencies = [
     "numpy>=1.20.0,<2.0.0",
     "scipy>=1.7.0",
 ]
-homepage = "https://github.com/elkins/ChemPy"
-repository = "https://github.com/elkins/ChemPy.git"
-documentation = "https://chempy.readthedocs.io"
-issues = "https://github.com/elkins/ChemPy/issues"
+
+[project.urls]
+Homepage = "https://github.com/elkins/ChemPy"
+Repository = "https://github.com/elkins/ChemPy.git"
+Documentation = "https://chempy.readthedocs.io"
+"Bug Tracker" = "https://github.com/elkins/ChemPy/issues"
+Changelog = "https://github.com/elkins/ChemPy/blob/master/CHANGELOG.md"
 
 [project.optional-dependencies]
 dev = [
