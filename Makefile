@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-.PHONY: help build clean test lint format type-check docs install install-dev check-all structure
+.PHONY: help build clean test lint format type-check docs install install-dev check-all structure tox
 
 help:
 	@echo "ChemPy development tasks:"
@@ -19,6 +19,7 @@ help:
 	@echo "  make test-unit      - Run unit tests only"
 	@echo "  make test-cov       - Run tests with coverage report"
 	@echo "  make test-fast      - Run tests in parallel"
+	@echo "  make tox            - Run tests across Python versions with tox"
 	@echo ""
 	@echo "Code Quality:"
 	@echo "  make lint           - Lint code with flake8"
@@ -90,4 +91,7 @@ check: lint type-check test
 
 all: clean check build docs
 	@echo "✓ Complete build successful!"
+
+tox:
+	tox
 
