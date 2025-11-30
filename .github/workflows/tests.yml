@@ -31,32 +31,24 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
-    
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip setuptools wheel
         pip install numpy scipy
         pip install -e ".[dev]"
 
-    
-          - name: Install OpenBabel
-            run: pip install openbabel-wheel
-            continue-on-error: true
-    
-    - name: Run tests with pytest (Windows)
-          - name: Run tests with pytest
-            run: |
-              pytest unittest/ --cov=chempy --cov-report=xml -v --tb=short
-        python -m pytest -q unittest/geometryTest.py unittest/graphTest.py unittest/moleculeTest.py unittest/reactionTest.py unittest/statesTest.py unittest/thermoTest.py
+    - name: Install OpenBabel
+      run: pip install openbabel-wheel
+      continue-on-error: true
 
-    - name: Run tests with pytest (Unix/macOS)
-      if: runner.os != 'Windows'
+    - name: Run tests with pytest
       run: |
         pytest unittest/ --cov=chempy --cov-report=xml -v --tb=short
     
