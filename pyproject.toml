@@ -49,16 +49,16 @@ Changelog = "https://github.com/elkins/ChemPy/blob/master/CHANGELOG.md"
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=7.0",
-    "pytest-cov>=4.0",
-    "pytest-xdist>=3.0",
-    "pytest-benchmark[histogram]>=4.0",
-    "black>=23.0",
-    "isort>=5.12",
-    "flake8>=6.0",
-    "pylint>=2.16",
-    "mypy>=1.0",
-    "pre-commit>=3.0",
+    "pytest>=7.0,<9.1",
+    "pytest-cov>=4.0,<5.0",
+    "pytest-xdist>=3.0,<4.0",
+    "pytest-benchmark[histogram]>=4.0,<5.0",
+    "black>=23.0,<25.0",
+    "isort>=5.12,<6.0",
+    "flake8>=6.0,<7.1",
+    "pylint>=2.16,<3.0",
+    "mypy>=1.0,<1.11",
+    "pre-commit>=3.0,<4.0",
 ]
 docs = [
     "sphinx>=6.0",
