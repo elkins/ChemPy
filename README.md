@@ -230,7 +230,7 @@ ChemPy is licensed under the MIT License - see [LICENSE](LICENSE) for details.
 For questions and discussions:
 - Open an [issue](https://github.com/elkins/ChemPy/issues)
 - Read the [documentation](https://chempy.readthedocs.io)
-- Check [existing discussions](https://github.com/elkins/ChemPy/discussions)
+- Browse existing issues or propose enhancements via the Issue Tracker
 
 ## Acknowledgments
 
