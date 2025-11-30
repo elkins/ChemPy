@@ -65,7 +65,14 @@ jobs:
         NUMEXPR_NUM_THREADS: "1"
         MKL_THREADING_LAYER: "SEQUENTIAL"
       run: |
-        python -m pytest -q unittest/ -k "not benchmark and not slow and not gaussianTest and not test"
+        python -m pytest -q \
+          unittest/geometryTest.py \
+          unittest/graphTest.py \
+          unittest/moleculeTest.py \
+          unittest/reactionTest.py \
+          unittest/statesTest.py \
+          unittest/thermoTest.py \
+          -k "not slow"
 
     - name: Run tests with pytest (Unix/macOS)
       if: runner.os != 'Windows'
