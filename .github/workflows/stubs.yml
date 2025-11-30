@@ -1,0 +1,23 @@
+name: Stub Type Check
+
+on:
+  pull_request:
+    branches: [ master, main, develop ]
+
+jobs:
+  mypy-stubs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - name: Install mypy and package
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      - name: Run mypy (strict) on stubs
+        run: |
+          mypy --strict chempy/ext/*.pyi chempy/io/*.pyi

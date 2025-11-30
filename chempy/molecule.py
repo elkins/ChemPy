@@ -782,7 +782,14 @@ class Molecule(Graph):
         Convert a string of CML `cmlstr` to a molecular structure. Uses
         OpenBabel 3.x API to perform the conversion.
         """
-        import openbabel
+        try:
+            import openbabel
+        except ImportError as exc:
+            raise ImportError(
+                "Open Babel is required for SMILES parsing and certain molecule utilities. "
+                "Install it with 'pip install openbabel-wheel' on macOS/Linux. "
+                "Windows support is currently experimental."
+            ) from exc
         obConversion = openbabel.OBConversion()
         obConversion.SetInFormat('cml')
         obmol = openbabel.OBMol()
@@ -796,7 +803,14 @@ class Molecule(Graph):
         Convert an InChI string `inchistr` to a molecular structure. Uses
         OpenBabel 3.x API to perform the conversion.
         """
-        import openbabel
+        try:
+            import openbabel
+        except ImportError as exc:
+            raise ImportError(
+                "Open Babel is required for SMILES parsing and certain molecule utilities. "
+                "Install it with 'pip install openbabel-wheel' on macOS/Linux. "
+                "Windows support is currently experimental."
+            ) from exc
         obConversion = openbabel.OBConversion()
         obConversion.SetInFormat('inchi')
         obmol = openbabel.OBMol()
@@ -809,7 +823,14 @@ class Molecule(Graph):
         Convert a SMILES string `smilesstr` to a molecular structure. Uses
         OpenBabel 3.x API to perform the conversion.
         """
-        import openbabel
+        try:
+            import openbabel
+        except ImportError as exc:
+            raise ImportError(
+                "Open Babel is required for SMILES parsing and certain molecule utilities. "
+                "Install it with 'pip install openbabel-wheel' on macOS/Linux. "
+                "Windows support is currently experimental."
+            ) from exc
         obConversion = openbabel.OBConversion()
         obConversion.SetInFormat('smi')
         obmol = openbabel.OBMol()
