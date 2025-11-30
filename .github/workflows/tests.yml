@@ -44,27 +44,15 @@ jobs:
         pip install numpy scipy
         pip install -e ".[dev]"
 
-    - name: Pin NumPy/SciPy (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        pip install --upgrade "numpy==1.26.*" "scipy==1.11.*"
     
-    - name: Install OpenBabel (Unix)
-      if: runner.os != 'Windows'
-      run: pip install openbabel-wheel
-      continue-on-error: true
+          - name: Install OpenBabel
+            run: pip install openbabel-wheel
+            continue-on-error: true
     
     - name: Run tests with pytest (Windows)
-      if: runner.os == 'Windows'
-      env:
-        PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
-        PYTEST_ADDOPTS: ""
-        OMP_NUM_THREADS: "1"
-        MKL_NUM_THREADS: "1"
-        OPENBLAS_NUM_THREADS: "1"
-        NUMEXPR_NUM_THREADS: "1"
-        MKL_THREADING_LAYER: "SEQUENTIAL"
-      run: |
+          - name: Run tests with pytest
+            run: |
+              pytest unittest/ --cov=chempy --cov-report=xml -v --tb=short
         python -m pytest -q unittest/geometryTest.py unittest/graphTest.py unittest/moleculeTest.py unittest/reactionTest.py unittest/statesTest.py unittest/thermoTest.py
 
     - name: Run tests with pytest (Unix/macOS)
