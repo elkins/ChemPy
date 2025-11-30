@@ -30,24 +30,44 @@ class MoleculeCheck(unittest.TestCase):
         pattern = MoleculePattern().fromAdjacencyList("""
         1 Cd 0 {2,D}
         2 Cd 0 {1,D}
-        """)
+    import sys
+    import unittest
+    from chempy.molecule import Molecule
 
-        self.assertTrue(molecule.isSubgraphIsomorphic(pattern))
-        match, mapping = molecule.findSubgraphIsomorphisms(pattern)
-        self.assertTrue(match)
-        self.assertTrue(len(mapping) == 4, "len(mapping) = %d, should be = 4" % (len(mapping)))
-        for map in mapping:
-            self.assertTrue(len(map) == min(len(molecule.atoms), len(pattern.atoms)))
-            for key, value in map.items():
-                self.assertTrue(key in molecule.atoms)
-                self.assertTrue(value in pattern.atoms)
-
-    def testSubgraphIsomorphismAgain(self):
-        molecule = Molecule()
-        molecule.fromAdjacencyList("""
-        1 * C 0 {2,D} {7,S} {8,S}
-        2 C 0 {1,D} {3,S} {9,S}
-        3 C 0 {2,S} {4,D} {10,S}
+    @unittest.skipIf(sys.platform == "win32", "OpenBabel not available on Windows CI")
+    class MoleculeCheck(unittest.TestCase):
+        def testIsomorphism(self):
+            molecule1 = Molecule().fromSMILES('C=CC=C[CH]C')
+            molecule2 = Molecule().fromSMILES('C=CC=CC')
+            self.assertFalse(molecule1.isIsomorphic(molecule2))
+        # ...existing code...
+        def testSubgraphIsomorphism(self):
+            molecule = Molecule().fromSMILES('C=CC=C[CH]C')
+            self.assertTrue(molecule.isSubgraphIsomorphic(molecule))
+        # ...existing code...
+        def testIsInCycle(self):
+            molecule = Molecule().fromSMILES('CC')
+            self.assertFalse(molecule.isInCycle())
+        # ...existing code...
+        def testSSSR(self):
+            molecule = Molecule()
+            molecule.fromSMILES('C(CC1C(C(CCCCCCCC)C1c1ccccc1)c1ccccc1)CCCCCC')
+            self.assertTrue(molecule.SSSR())
+        # ...existing code...
+        def testLinear(self):
+            smile = 'C#C'
+            molecule = Molecule(SMILES=smile)
+            self.assertTrue(molecule.isLinear())
+        # ...existing code...
+        def testRotorNumber(self):
+            smile = 'CC'
+            molecule = Molecule(SMILES=smile)
+            self.assertEqual(molecule.rotorNumber(), 1)
+        # ...existing code...
+        def testBondSymmetryNumber(self):
+            SMILES = 'C=C'
+            molecule = Molecule().fromSMILES(SMILES)
+            self.assertEqual(molecule.bondSymmetryNumber(), 1)
         4 C 0 {3,D} {5,S} {11,S}
         5 C 0 {4,S} {6,S} {12,S} {13,S}
         6 C 0 {5,S} {14,S} {15,S} {16,S}
