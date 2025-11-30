@@ -8,7 +8,7 @@
 [![Tests](https://github.com/elkins/ChemPy/actions/workflows/tests.yml/badge.svg)](https://github.com/elkins/ChemPy/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/elkins/ChemPy/branch/master/graph/badge.svg)](https://codecov.io/gh/elkins/ChemPy)
 [![PEP 561 Compliant](https://img.shields.io/badge/pep-561-blue.svg)](https://www.python.org/dev/peps/pep-0561/)
-[![Benchmarks](https://github.com/elkins/ChemPy/actions/workflows/benchmarks.yml/badge.svg)](https://github.com/elkins/ChemPy/actions/workflows/benchmarks.yml?query=branch%3Amaster)
+[![Benchmarks](https://github.com/elkins/ChemPy/actions/workflows/benchmarks.yml/badge.svg?branch=master)](https://github.com/elkins/ChemPy/actions/workflows/benchmarks.yml?query=branch%3Amaster)
 
 **ChemPy** is a free, open-source Python toolkit for chemistry, chemical engineering, and materials science applications.
 
