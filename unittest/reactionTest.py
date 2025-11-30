@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+
 import numpy
 
 import chempy.constants as constants

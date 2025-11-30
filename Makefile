@@ -65,10 +65,10 @@ test-fast:
 	pytest unittest/ tests/ -v -n auto
 
 lint:
-	flake8 chempy unittest tests --max-line-length=100 --extend-ignore=E203,W503
+	flake8 chempy unittest tests
 
 format:
-	black chempy unittest tests --line-length=100
+	black chempy unittest tests --line-length=120
 	isort chempy unittest tests
 
 type-check:

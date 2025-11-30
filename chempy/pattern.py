@@ -641,7 +641,13 @@ class AtomPattern(Vertex):
         """
         return (
             "AtomPattern(atomType=%s, radicalElectrons=%s, spinMultiplicity=%s, charge=%s, label='%s')"
-            % (self.atomType, self.radicalElectrons, self.spinMultiplicity, self.charge, self.label)
+            % (
+                self.atomType,
+                self.radicalElectrons,
+                self.spinMultiplicity,
+                self.charge,
+                self.label,
+            )
         )
 
     def copy(self):
