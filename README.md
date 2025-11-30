@@ -24,6 +24,16 @@
 
 ## Features
 
+- Python 3.13 support: Updated and tested on latest Python.
+- Open Babel 3.x integration: Modern molecular format handling.
+- Type hints (PEP 561): Full type annotation coverage with `py.typed`.
+- Test suite: All tests passing; legacy and modern suites maintained.
+- Code quality: `black`, `isort`, `flake8`, and mypy checks.
+- GitHub Actions CI/CD: Automated linting and testing across Python 3.8–3.13.
+- NumPy compatibility: Addressed array-to-scalar deprecations.
+- Modern packaging: PEP 517/518 with `pyproject.toml`.
+
+See `MODERNIZATION_COMPLETE.md` for detailed migration notes.
 
 ## Platform Support
 
@@ -59,34 +69,6 @@ pip install -e ".[dev]"
 make build
 ```
 
-Compare the latest two runs in text
-
-CI:
-
-- GitHub Actions runs mypy on `chempy/graph.py` and `chempy/molecule.py` with `--check-untyped-defs`, executes tests, and uploads `.benchmarks/**/*.json` as artifacts for performance tracking.
-
-```python
-Filter by group or exact names
-
-# Access physical constants
-print(f"Avogadro constant: {constants.avogadro_constant}")
-Regex filter and save to CSV/JSON
-# Query element properties
-h = element.Element.from_atomic_number(1)
-print(f"Hydrogen mass: {h.mass} u")
-
-# Create molecular structures
-mol = molecule.Molecule()  # Create molecule
-- ✅ **Python 3.13 support** - All code updated and tested on latest Python
-- ✅ **Open Babel 3.x integration** - Modern molecular format handling
-- ✅ **Type hints (PEP 561)** - Full type annotation coverage with `py.typed` marker
-- ✅ **Test suite (35 tests)** - 100% passing with zero warnings
-- ✅ **Code quality** - Zero warnings, mypy strict checks, black formatted
-- ✅ **GitHub Actions CI/CD** - Automated testing across Python 3.8-3.13
-- ✅ **NumPy compatibility** - Fixed array-to-scalar deprecation warnings
-- ✅ **Modern packaging** - PEP 517/518 compliant with pyproject.toml
-
-See [MODERNIZATION_COMPLETE.md](MODERNIZATION_COMPLETE.md) for detailed migration notes.
 
 ### Setup Development Environment
 
