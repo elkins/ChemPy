@@ -38,7 +38,7 @@ class MoleculeCheck(unittest.TestCase):
         self.assertTrue(len(mapping) == 4, "len(mapping) = %d, should be = 4" % (len(mapping)))
         for map in mapping:
             self.assertTrue(len(map) == min(len(molecule.atoms), len(pattern.atoms)))
-            for key, value in map.iteritems():
+            for key, value in map.items():
                 self.assertTrue(key in molecule.atoms)
                 self.assertTrue(value in pattern.atoms)
 
@@ -85,7 +85,7 @@ class MoleculeCheck(unittest.TestCase):
         self.assertTrue(len(mapping) == 2,  "len(mapping) = %d, should be = 2" % (len(mapping)))
         for map in mapping:
             self.assertTrue(len(map) == min(len(molecule.atoms), len(pattern.atoms)))
-            for key, value in map.iteritems():
+            for key, value in map.items():
                 self.assertTrue(key in molecule.atoms)
                 self.assertTrue(value in pattern.atoms)
 
@@ -107,7 +107,7 @@ class MoleculeCheck(unittest.TestCase):
         labeled1 = molecule.getLabeledAtoms()
         labeled2 = pattern.getLabeledAtoms()
         initialMap = {}
-        for label,atom1 in labeled1.iteritems():
+        for label,atom1 in labeled1.items():
             initialMap[atom1] = labeled2[label]
         self.assertTrue(molecule.isSubgraphIsomorphic(pattern, initialMap))
 
@@ -116,7 +116,7 @@ class MoleculeCheck(unittest.TestCase):
         self.assertTrue(len(mapping) == 1)
         for map in mapping:
             self.assertTrue(len(map) == min(len(molecule.atoms), len(pattern.atoms)))
-            for key, value in map.iteritems():
+            for key, value in map.items():
                 self.assertTrue(key in molecule.atoms)
                 self.assertTrue(value in pattern.atoms)
 

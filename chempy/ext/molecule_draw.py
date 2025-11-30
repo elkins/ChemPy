@@ -135,7 +135,7 @@ def render(atoms, bonds, coordinates, symbols, cr, offset=(0,0)):
     
     # Draw bonds
     for atom1 in bonds:
-        for atom2, bond in bonds[atom1].iteritems():
+        for atom2, bond in bonds[atom1].items():
             index1 = atoms.index(atom1)
             index2 = atoms.index(atom2)
             if index1 < index2: # So we only draw each bond once
@@ -346,7 +346,7 @@ def renderAtom(symbol, atom, coordinates0, atoms, bonds, x0, y0, cr, heavyFirst=
     elif len(bonds[atom]) == 1:
         # Terminal atom - we require a horizontal arrangement if there are
         # more than just the heavy atom
-        atom1 = bonds[atom].keys()[0]
+        atom1 = list(bonds[atom].keys())[0]
         vector = coordinates0[atoms.index(atom),:] - coordinates0[atoms.index(atom1),:]
         if len(symbol) <= 1:
             angle = math.atan2(vector[1], vector[0])
@@ -1032,7 +1032,7 @@ def generateFunctionalGroupCoordinates(atom0, atom1, atoms, bonds, coordinates, 
         # Iterate through each neighboring atom to this backbone atom
         # If the neighbor is not in the backbone, then we need to determine
         # coordinates for it
-        for atom, bond in bonds[atom1].iteritems():
+        for atom, bond in bonds[atom1].items():
             if atom is not atom0:
                 occupied = True; count = 0
                 # Rotate vector until we find an unoccupied location

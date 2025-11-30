@@ -263,7 +263,7 @@ def getAtomType(atom, bonds):
     
     # Count numbers of each higher-order bond type
     double = 0; doubleO = 0; triple = 0; benzene = 0
-    for atom2, bond12 in bonds.iteritems():
+    for atom2, bond12 in bonds.items():
         if bond12.isDouble():
             if atom2.isOxygen(): doubleO +=1
             else:                double += 1
@@ -919,7 +919,7 @@ def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
     line (assuming it's a label) unless `withLabel` is ``False``.
     """
 
-    from molecule import Atom, Bond
+    from chempy.molecule import Atom, Bond
 
     atoms = []; atomdict = {}; bonds = {}
 
@@ -1032,7 +1032,7 @@ def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
                 raise ChemPyError('Cannot add hydrogens to adjacency list: Unknown valence for atom "%s".' % atom.symbol)
             radical = atom.radicalElectrons
             order = 0
-            for atom2, bond in bonds[atom].iteritems():
+            for atom2, bond in bonds[atom].items():
                 order += orders[bond.order]
             count = valence - radical - int(order)
             for i in range(count):

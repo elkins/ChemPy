@@ -555,7 +555,7 @@ class Molecule(Graph):
         hydrogens = []
         for atom in self.vertices:
             if atom.isHydrogen():
-                neighbor = self.edges[atom].keys()[0]
+                neighbor = list(self.edges[atom].keys())[0]
                 neighbor.implicitHydrogens += 1
                 hydrogens.append(atom)
 
@@ -948,8 +948,8 @@ class Molecule(Graph):
             a.SetAtomicNum(atom.number)
             a.SetFormalCharge(atom.charge)
         orders = {'S': 1, 'D': 2, 'T': 3, 'B': 5}
-        for atom1, bonds in bonds.iteritems():
-            for atom2, bond in bonds.iteritems():
+        for atom1, bonds in bonds.items():
+            for atom2, bond in bonds.items():
                 index1 = atoms.index(atom1)
                 index2 = atoms.index(atom2)
                 if index1 < index2:
@@ -1027,7 +1027,7 @@ class Molecule(Graph):
         """
         count = 0
         for atom1 in self.edges:
-            for atom2, bond in self.edges[atom1].iteritems():
+            for atom2, bond in self.edges[atom1].items():
                 if self.vertices.index(atom1) < self.vertices.index(atom2) and bond.isSingle() and not self.isBondInCycle(atom1, atom2):
                     if len(self.edges[atom1]) + atom1.implicitHydrogens > 1 and len(self.edges[atom2]) + atom2.implicitHydrogens > 1:
                         count += 1
@@ -1436,10 +1436,10 @@ class Molecule(Graph):
 
         # Find all delocalization paths
         paths = []
-        for atom2, bond12 in self.edges[atom1].iteritems():
+        for atom2, bond12 in self.edges[atom1].items():
             # Vinyl bond must be capable of gaining an order
             if bond12.order in ['S', 'D']:
-                for atom3, bond23 in self.getBonds(atom2).iteritems():
+                for atom3, bond23 in self.getBonds(atom2).items():
                     # Allyl bond must be capable of losing an order without breaking
                     if atom1 is not atom3 and bond23.order in ['D', 'T']:
                         paths.append([atom1, atom2, atom3, bond12, bond23])

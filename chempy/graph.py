@@ -293,7 +293,7 @@ class Graph:
         for vertex in verticesToMove:
             new2.addVertex(vertex)
         for v1 in verticesToMove:
-            for v2, edge in new1.edges[v1].iteritems():
+            for v2, edge in new1.edges[v1].items():
                 new2.edges[v1][v2] = edge
 
         # Remove from old graph
@@ -430,7 +430,7 @@ class Graph:
         edge = cython.declare(Edge)
         found = cython.declare(cython.bint)
 
-        for vertex2, edge in self.edges[chain[-1]].iteritems():
+        for vertex2, edge in self.edges[chain[-1]].items():
             if vertex2 is chain[0] and len(chain) > 2:
                 return True
             elif vertex2 not in chain:
@@ -477,7 +477,7 @@ class Graph:
         # chainLabels=[self.keys().index(v) for v in chain]
         # print "found %d so far. Chain=%s"%(len(cycleList),chainLabels)
 
-        for vertex2, edge in self.edges[chain[-1]].iteritems():
+        for vertex2, edge in self.edges[chain[-1]].items():
             # vertex2 will loop through each of the atoms
             # that are bonded to the last atom in the chain.
             if vertex2 is chain[0] and len(chain) > 2:
@@ -522,7 +522,7 @@ class Graph:
         done = False
         while not done:
             verticesToRemove = []
-            for vertex1, value in graph.edges.iteritems():
+            for vertex1, value in graph.edges.items():
                 if len(value) == 1: verticesToRemove.append(vertex1)
             done = len(verticesToRemove) == 0
             # Remove identified vertices from graph
@@ -563,7 +563,7 @@ class Graph:
                 if len(cycles) == 0:
                     # this vertex is no longer in a ring.
                     # remove all its edges
-                    neighbours = graph.edges[rootVertex].keys()[:]
+                    neighbours = list(graph.edges[rootVertex].keys())[:]
                     for vertex2 in neighbours:
                         graph.removeEdge(rootVertex, vertex2)
                     # then remove it
@@ -588,7 +588,7 @@ class Graph:
                     # there are no vertices in this cycle that with only two edges
 
                     # Remove edge between root vertex and any one vertex it is connected to
-                    graph.removeEdge(rootVertex, graph[rootVertex].keys()[0])
+                    graph.removeEdge(rootVertex, list(graph[rootVertex].keys())[0])
                 else:
                     for vertex in verticesToRemove:
                         graph.removeVertex(vertex)
@@ -662,7 +662,7 @@ def VF2_isomorphism(graph1, graph2, subgraph=False, findAll=False, initialMap=No
     #   map21 = map to 2 from 1
     #   map12 = map to 1 from 2
     map21 = initialMap
-    map12 = dict([(v,k) for k,v in initialMap.iteritems()])
+    map12 = dict([(v,k) for k,v in initialMap.items()])
     
     # Generate an initial set of terminals
     terminals1 = __VF2_terminals(graph1, map21)

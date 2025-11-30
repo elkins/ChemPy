@@ -15,8 +15,12 @@ except ImportError:
         """Dummy Cython module for when Cython is not installed."""
         
         @staticmethod
-        def declare(**kwargs):
-            """Dummy declare function - returns None."""
+        def declare(*args, **kwargs):
+            """Dummy declare function - returns None.
+            
+            Accepts any positional and keyword arguments for compatibility
+            with actual Cython declare() usage.
+            """
             return None
         
         @staticmethod
