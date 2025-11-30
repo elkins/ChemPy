@@ -39,6 +39,8 @@ If you are able to help improve Windows compatibility, contributions and fixes a
 - **NumPy** 1.20.0 or later
 - **SciPy** 1.7.0 or later (recommended)
 
+Note: Features such as SMILES parsing and certain rotor-counting utilities depend on Open Babel. On macOS/Linux, install `openbabel-wheel` to enable these features. Windows support for Open Babel is currently experimental.
+
 ### Optional Dependencies
 
 - **Cython** - For building optimized extensions from source
@@ -227,6 +229,13 @@ If you use ChemPy in your research, please cite:
 
 ## License
 
+
+## Troubleshooting CI
+
+- Coverage uploads: Set `CODECOV_TOKEN` in GitHub repository secrets to enable Codecov and silence warnings.
+- Type checking: If mypy reports undefined names in `.pyi` files, ensure referenced modules are imported in the stubs (e.g., add `import chempy`).
+- Lint/format: Run `black`, `isort`, and `flake8` locally to reproduce CI styling errors.
+- Windows: CI does not run unit tests on Windows at present; contributions to restore Windows testing are welcome.
 ChemPy is licensed under the MIT License - see [LICENSE](LICENSE) for details.
 
 ## Related Projects
