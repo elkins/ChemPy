@@ -42,13 +42,10 @@ from chempy.exception import ChemPyError
 
 # Python 2/3 compatibility: intern was moved/removed in Python 3
 import sys
-from typing import List, Optional
+from typing import Callable, List, Optional
 
-try:
-    intern
-except NameError:
-    # Python 3
-    intern = sys.intern
+# Use sys.intern for Python 3 (fallback was already handled in earlier Python)
+_intern: Callable[[str], str] = sys.intern
 
 ################################################################################
 
@@ -76,7 +73,7 @@ class Element:
     
     def __init__(self, number: int, symbol: str, name: str, mass: float) -> None:
         self.number = number
-        self.symbol = intern(symbol)
+        self.symbol = _intern(symbol)
         self.name = name
         self.mass = mass
     

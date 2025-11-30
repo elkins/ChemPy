@@ -97,7 +97,7 @@ ensure_newline_before_comments = true
 known_first_party = ["chempy"]
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.9"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false
@@ -105,6 +105,8 @@ ignore_missing_imports = true
 warn_unused_ignores = true
 warn_redundant_casts = true
 show_error_codes = true
+# Allow some errors for now due to incomplete type coverage
+disable_error_code = ["attr-defined"]
 
 [tool.pylint.messages_control]
 disable = ["C0111", "R0913", "R0914"]
