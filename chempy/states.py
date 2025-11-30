@@ -923,7 +923,7 @@ class StatesModel:
         for i in range(1, len(Elist)):
             E = Elist[i]
             # Find minimum of phi         func x0 arg  xtol  ftol maxi  maxf fullout  disp retall  callback
-            x = scipy.optimize.fmin(self.__phi, x, [Elist[i]], 1e-8, 1e-8, 100, 1000, False, False, False, None)
+            x = scipy.optimize.fmin(self.__phi, x, (Elist[i],), 1e-8, 1e-8, 100, 1000, False, False, False, None)
             x = float(x)
             dx = 1e-4 * x
             # Determine value of density of states using steepest descents approximation

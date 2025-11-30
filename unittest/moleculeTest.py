@@ -73,8 +73,8 @@ class MoleculeCheck(unittest.TestCase):
 
         molecule.makeHydrogensExplicit()
 
-        labeled1 = molecule.getLabeledAtoms().values()[0]
-        labeled2 = pattern.getLabeledAtoms().values()[0]
+        labeled1 = list(molecule.getLabeledAtoms().values())[0]
+        labeled2 = list(pattern.getLabeledAtoms().values())[0]
 
         initialMap = {labeled1: labeled2}
         self.assertTrue(molecule.isSubgraphIsomorphic(pattern, initialMap))
