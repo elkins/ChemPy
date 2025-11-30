@@ -38,7 +38,15 @@ jobs:
       run: pip install openbabel-wheel
       continue-on-error: true
     
-    - name: Run tests with pytest
+    - name: Run tests with pytest (Windows)
+      if: runner.os == 'Windows'
+      env:
+        PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
+      run: |
+        pytest unittest/ -k "not benchmark" --cov=chempy --cov-report=xml -v --tb=short -p no:xdist -p no:benchmark
+
+    - name: Run tests with pytest (Unix/macOS)
+      if: runner.os != 'Windows'
       run: |
         pytest unittest/ --cov=chempy --cov-report=xml -v --tb=short
     
