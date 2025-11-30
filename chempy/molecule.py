@@ -35,6 +35,10 @@ Both :class:`Atom` and :class:`Bond` objects store semantic information that
 describe the corresponding atom or bond.
 """
 
+import warnings
+# Suppress Open Babel deprecation warning about "import openbabel"
+warnings.filterwarnings('ignore', message='.*"import openbabel".*deprecated.*')
+
 from chempy._cython_compat import cython
 
 from chempy import element as elements

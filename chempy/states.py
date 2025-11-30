@@ -893,7 +893,11 @@ class StatesModel:
         return numpy.array([self.getEntropy(T) for T in Tlist], numpy.float64)
 
     def __phi(self, beta, E):
-        beta = float(beta)
+        # Convert numpy arrays to scalars safely
+        if isinstance(beta, numpy.ndarray):
+            beta = float(beta.flat[0]) if beta.size > 0 else float(beta)
+        else:
+            beta = float(beta)
         cython.declare(T=numpy.ndarray, Q=cython.double)
         Q = self.getPartitionFunction(1.0 / (constants.R * beta))
         return math.log(Q) + beta * float(E)
@@ -929,7 +933,8 @@ class StatesModel:
             E = Elist[i]
             # Find minimum of phi         func x0 arg  xtol  ftol maxi  maxf fullout  disp retall  callback
             x = scipy.optimize.fmin(self.__phi, x, (Elist[i],), 1e-8, 1e-8, 100, 1000, False, False, False, None)
-            x = float(x)
+            # scipy.optimize.fmin returns array, extract scalar safely
+            x = float(x[0]) if isinstance(x, numpy.ndarray) else float(x)
             dx = 1e-4 * x
             # Determine value of density of states using steepest descents approximation
             d2fdx2 = (self.__phi(x+dx, E) - 2 * self.__phi(x, E) + self.__phi(x-dx, E)) / (dx**2)

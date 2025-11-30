@@ -123,6 +123,14 @@ markers = [
     "integration: marks tests as integration tests",
     "unit: marks tests as unit tests",
 ]
+filterwarnings = [
+    # Suppress Open Babel deprecation warnings (external library issue)
+    "ignore:\"import openbabel\" is deprecated.*:UserWarning",
+    # Suppress SWIG wrapper deprecation warnings (external library issue)
+    "ignore:.*SwigPyPacked.*:DeprecationWarning",
+    "ignore:.*SwigPyObject.*:DeprecationWarning",
+    "ignore:.*swigvarlink.*:DeprecationWarning",
+]
 
 [tool.coverage.run]
 branch = true
