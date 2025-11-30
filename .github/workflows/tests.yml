@@ -31,8 +31,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip setuptools wheel
         pip install numpy scipy
-        pip install openbabel-wheel
         pip install -e ".[dev]"
+    
+    - name: Install OpenBabel (Unix)
+      if: runner.os != 'Windows'
+      run: pip install openbabel-wheel
+      continue-on-error: true
     
     - name: Run tests with pytest
       run: |
