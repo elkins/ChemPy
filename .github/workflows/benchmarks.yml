@@ -1,7 +1,6 @@
 name: Benchmarks
 
 on:
-  workflow_dispatch:
   push:
     branches: [ master ]
     paths:
@@ -9,12 +8,6 @@ on:
       - 'unittest/benchmarksTest.py'
       - 'pyproject.toml'
       - '.github/workflows/benchmarks.yml'
-  pull_request:
-    branches: [ master ]
-    paths:
-      - 'chempy/**'
-      - 'unittest/benchmarksTest.py'
-      - 'pyproject.toml'
 
 jobs:
   benchmark:
@@ -31,9 +24,9 @@ jobs:
         python -m pip install --upgrade pip setuptools wheel
         pip install numpy scipy openbabel-wheel
         pip install -e ".[dev]"
-    - name: Run benchmarks (autosave)
+    - name: Run benchmarks (autosave, quiet)
       run: |
-        pytest unittest/benchmarksTest.py --benchmark-only --benchmark-min-rounds=1 --benchmark-autosave -q
+        pytest -q unittest/benchmarksTest.py --benchmark-only --benchmark-min-rounds=1 --benchmark-autosave
     - name: Upload benchmark artifacts
       uses: actions/upload-artifact@v4
       with:
