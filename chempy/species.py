@@ -40,6 +40,16 @@ In ChemPy, a chemical species is called a Species object and is represented in
 memory as an instance of the :class:`Species` class.
 """
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, List, Optional
+
+if TYPE_CHECKING:
+    from chempy.molecule import Molecule
+    from chempy.geometry import Geometry
+    from chempy.thermo import ThermoModel
+    from chempy.states import StatesModel
+
 ################################################################################
 
 class LennardJones:
@@ -55,13 +65,23 @@ class LennardJones:
     =============== =============== ============================================
     Attribute       Type            Description
     =============== =============== ============================================
-    `sigma`         ``double``      Distance at which the inter-particle potential is zero
-    `epsilon`       ``double``      Depth of the potential well in J
+    `sigma`         ``float``       Distance at which the inter-particle potential is zero (m)
+    `epsilon`       ``float``       Depth of the potential well (J)
     =============== =============== ============================================
 
     """
 
-    def __init__(self, sigma=0.0, epsilon=0.0):
+    sigma: float
+    epsilon: float
+
+    def __init__(self, sigma: float = 0.0, epsilon: float = 0.0) -> None:
+        """
+        Initialize a Lennard-Jones collision parameters object.
+        
+        Args:
+            sigma: Distance at which potential is zero (m). Defaults to 0.0.
+            epsilon: Depth of the potential well (J). Defaults to 0.0.
+        """
         self.sigma = sigma
         self.epsilon = epsilon
 
@@ -77,18 +97,56 @@ class Species:
     `index`             :class:`int`            A unique nonnegative integer index
     `label`             :class:`str`            A descriptive string label
     `thermo`            :class:`ThermoModel`    The thermodynamics model for the species
-    `states`            :class:`StatesModel`    The molecular degrees of freedom model for the species
-    `molecule`          ``list``                The :class:`Molecule` objects describing the molecular structure
+    `states`            :class:`StatesModel`    The molecular degrees of freedom model
+    `molecule`          ``list``                The :class:`Molecule` objects
     `geometry`          :class:`Geometry`       The 3D geometry of the molecule
-    `E0`                ``double``              The ground-state energy in J/mol
-    `lennardJones`      :class:`LennardJones`   A set of Lennard-Jones collision parameters
-    `molecularWeight`   ``double``              The molecular weight of the species in kg/mol
-    `reactive`          ``bool``                ``True`` if the species participates in reactions, ``False`` if not
+    `E0`                ``float``               The ground-state energy (J/mol)
+    `lennardJones`      :class:`LennardJones`   Lennard-Jones collision parameters
+    `molecularWeight`   ``float``               The molecular weight (kg/mol)
+    `reactive`          ``bool``                ``True`` if reactive, ``False`` otherwise
     =================== ======================= ================================
 
     """
 
-    def __init__(self, index=-1, label='', thermo=None, states=None, molecule=None, geometry=None, E0=0.0, lennardJones=None, molecularWeight=0.0, reactive=True):
+    index: int
+    label: str
+    thermo: Optional[ThermoModel]
+    states: Optional[StatesModel]
+    molecule: List[Molecule]
+    geometry: Optional[Geometry]
+    E0: float
+    lennardJones: Optional[LennardJones]
+    molecularWeight: float
+    reactive: bool
+
+    def __init__(
+        self,
+        index: int = -1,
+        label: str = '',
+        thermo: Optional[ThermoModel] = None,
+        states: Optional[StatesModel] = None,
+        molecule: Optional[List[Molecule]] = None,
+        geometry: Optional[Geometry] = None,
+        E0: float = 0.0,
+        lennardJones: Optional[LennardJones] = None,
+        molecularWeight: float = 0.0,
+        reactive: bool = True
+    ) -> None:
+        """
+        Initialize a chemical species.
+        
+        Args:
+            index: Unique index for this species. Defaults to -1.
+            label: Descriptive label. Defaults to ''.
+            thermo: Thermodynamics model. Defaults to None.
+            states: Molecular states model. Defaults to None.
+            molecule: List of Molecule objects. Defaults to empty list.
+            geometry: Molecular geometry. Defaults to None.
+            E0: Ground-state energy (J/mol). Defaults to 0.0.
+            lennardJones: Lennard-Jones parameters. Defaults to None.
+            molecularWeight: Molecular weight (kg/mol). Defaults to 0.0.
+            reactive: Whether species is reactive. Defaults to True.
+        """
         self.index = index
         self.label = label
         self.thermo = thermo

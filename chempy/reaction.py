@@ -38,15 +38,22 @@ In ChemPy, a chemical reaction is called a Reaction object and is represented in
 memory as an instance of the :class:`Reaction` class.
 """
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, List, Optional
+
 from chempy._cython_compat import cython
 import math
 import numpy
 
 from chempy import constants
 from chempy.exception import ChemPyError
-
 from chempy.species import Species
 from chempy.kinetics import ArrheniusModel
+
+if TYPE_CHECKING:
+    from chempy.kinetics import KineticsModel
+    from chempy.states import TransitionState
 
 ################################################################################
 
@@ -56,11 +63,15 @@ class ReactionError(Exception):
     objects. In addition to a string `message` describing the exceptional
     behavior, this class stores the `reaction` that caused the behavior.
     """
-    def __init__(self, reaction, message=''):
+    
+    reaction: Reaction
+    message: str
+    
+    def __init__(self, reaction: Reaction, message: str = '') -> None:
         self.reaction = reaction
         self.message = message
 
-    def __str__(self):
+    def __str__(self) -> str:
         string = "Reaction: "+str(self.reaction) + '\n'
         for reactant in self.reaction.reactants:
             string += reactant.toAdjacencyList() + '\n'
@@ -89,22 +100,51 @@ class Reaction:
     
     """
     
-    def __init__(self, index=-1, reactants=None, products=None, kinetics=None, reversible=True, transitionState=None, thirdBody=False):
+    index: int
+    reactants: List[Species]
+    products: List[Species]
+    kinetics: Optional[KineticsModel]
+    reversible: bool
+    transitionState: Optional[TransitionState]
+    thirdBody: bool
+    
+    def __init__(
+        self,
+        index: int = -1,
+        reactants: Optional[List[Species]] = None,
+        products: Optional[List[Species]] = None,
+        kinetics: Optional[KineticsModel] = None,
+        reversible: bool = True,
+        transitionState: Optional[TransitionState] = None,
+        thirdBody: bool = False
+    ) -> None:
+        """
+        Initialize a chemical reaction.
+        
+        Args:
+            index: Unique integer index for this reaction. Defaults to -1.
+            reactants: List of reactant Species. Defaults to None.
+            products: List of product Species. Defaults to None.
+            kinetics: Kinetics model for the reaction. Defaults to None.
+            reversible: Whether the reaction is reversible. Defaults to True.
+            transitionState: Transition state information. Defaults to None.
+            thirdBody: Whether a third body is involved. Defaults to False.
+        """
         self.index = index
-        self.reactants = reactants
-        self.products = products
+        self.reactants = reactants or []
+        self.products = products or []
         self.kinetics = kinetics
         self.reversible = reversible
         self.transitionState = transitionState
         self.thirdBody = thirdBody
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         Return a string representation of the reaction, suitable for console output.
         """
         return "<Reaction %i '%s'>" % (self.index, str(self))
     
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Return a string representation of the reaction, in the form 'A + B <=> C + D'.
         """
@@ -112,7 +152,7 @@ class Reaction:
         if not self.reversible: arrow = ' -> '
         return arrow.join([' + '.join([str(s) for s in self.reactants]), ' + '.join([str(s) for s in self.products])])
 
-    def hasTemplate(self, reactants, products):
+    def hasTemplate(self, reactants: List[Species], products: List[Species]) -> bool:
         """
         Return ``True`` if the reaction matches the template of `reactants`
         and `products`, which are both lists of :class:`Species` objects, or

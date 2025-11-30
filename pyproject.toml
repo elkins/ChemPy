@@ -1,5 +1,6 @@
 [build-system]
-requires = ["setuptools>=64.0", "wheel", "numpy", "cython"]
+# Flexible build requirements that gracefully degrade when Cython is unavailable
+requires = ["setuptools>=64.0", "wheel", "numpy>=1.20.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
