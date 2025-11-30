@@ -1,9 +1,17 @@
 import pytest
+import sys
 
 from chempy.molecule import Molecule
 from chempy.states import StatesModel, Translation, RigidRotor, HarmonicOscillator
 
+# Skip SMILES tests on Windows where OpenBabel may not be available
+skip_on_windows = pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="OpenBabel not available on Windows"
+)
 
+
+@skip_on_windows
 @pytest.mark.benchmark(group="molecule")
 def test_bench_molecule_from_smiles_benzene(benchmark):
     def build():
@@ -16,6 +24,7 @@ def test_bench_molecule_from_smiles_benzene(benchmark):
     benchmark(build)
 
 
+@skip_on_windows
 @pytest.mark.benchmark(group="molecule")
 def test_bench_molecule_from_smiles_ethane_rotors(benchmark):
     def build():
