@@ -33,7 +33,7 @@ This module contains an implementation of a graph data structure (the
 efficient isomorphism functions.
 """
 
-import cython
+from chempy._cython_compat import cython
 import logging
 
 ################################################################################

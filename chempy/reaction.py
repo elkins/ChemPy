@@ -38,15 +38,15 @@ In ChemPy, a chemical reaction is called a Reaction object and is represented in
 memory as an instance of the :class:`Reaction` class.
 """
 
-import cython
+from chempy._cython_compat import cython
 import math
 import numpy
 
-import constants
-from exception import ChemPyError
+from chempy import constants
+from chempy.exception import ChemPyError
 
-from species import Species
-from kinetics import ArrheniusModel
+from chempy.species import Species
+from chempy.kinetics import ArrheniusModel
 
 ################################################################################
 

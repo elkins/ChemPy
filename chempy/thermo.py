@@ -36,10 +36,10 @@ All such models derive from the :class:`ThermoModel` base class.
 
 import math
 import numpy
-import cython
+from chempy._cython_compat import cython
 
-import constants
-from exception import InvalidThermoModelError
+from chempy import constants
+from chempy.exception import InvalidThermoModelError
 
 ################################################################################
 

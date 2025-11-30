@@ -35,13 +35,13 @@ Both :class:`Atom` and :class:`Bond` objects store semantic information that
 describe the corresponding atom or bond.
 """
 
-import cython
+from chempy._cython_compat import cython
 
-import element as elements
-from graph import Vertex, Edge, Graph
-from exception import ChemPyError
-from pattern import AtomPattern, BondPattern, MoleculePattern, AtomType
-from pattern import getAtomType, fromAdjacencyList, toAdjacencyList
+from chempy import element as elements
+from chempy.graph import Vertex, Edge, Graph
+from chempy.exception import ChemPyError
+from chempy.pattern import AtomPattern, BondPattern, MoleculePattern, AtomType
+from chempy.pattern import getAtomType, fromAdjacencyList, toAdjacencyList
 
 ################################################################################
 
@@ -1351,7 +1351,7 @@ class Molecule(Graph):
             else:
                 symmetryNumber *= max(maxEquivalentGroups, maxEquivalentBonds)
 
-            print len(ring), maxEquivalentGroups, maxEquivalentBonds, symmetryNumber
+            print(len(ring), maxEquivalentGroups, maxEquivalentBonds, symmetryNumber)
 
 
         return symmetryNumber

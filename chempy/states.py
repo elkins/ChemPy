@@ -92,11 +92,11 @@ freedom can be stored in a :class:`StatesModel` object.
 ################################################################################
 
 import math
-import cython
+from chempy._cython_compat import cython
 import numpy
 
-import constants
-from exception import InvalidStatesModelError
+from chempy import constants
+from chempy.exception import InvalidStatesModelError
 
 ################################################################################
 

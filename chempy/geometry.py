@@ -34,10 +34,10 @@ moments of inertia.
 """
 
 import numpy
-import cython
+from chempy._cython_compat import cython
 
-import constants
-from exception import ChemPyError
+from chempy import constants
+from chempy.exception import ChemPyError
 
 ################################################################################
 

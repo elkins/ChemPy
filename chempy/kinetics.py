@@ -37,10 +37,10 @@ All such models derive from the :class:`KineticsModel` base class.
 import math
 import numpy
 import numpy.linalg
-import cython
+from chempy._cython_compat import cython
 
-import constants
-from exception import InvalidKineticsModelError
+from chempy import constants
+from chempy.exception import InvalidKineticsModelError
 
 ################################################################################
 

@@ -109,10 +109,10 @@ We define the following reaction recipe actions:
 
 """
 
-import cython
+from chempy._cython_compat import cython
 
-from graph import Vertex, Edge, Graph
-from exception import ChemPyError
+from chempy.graph import Vertex, Edge, Graph
+from chempy.exception import ChemPyError
 
 ################################################################################
 

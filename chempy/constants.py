@@ -39,7 +39,7 @@ The constants available are listed below. All values were taken from
 """
 
 import math
-import cython
+from chempy._cython_compat import cython
 
 ################################################################################
 

@@ -267,7 +267,7 @@ class MoleculeCheck(unittest.TestCase):
         molecule = Molecule(SMILES='[H]')
         self.assertTrue(len(molecule.atoms) == 1)
         H = molecule.atoms[0]
-        print repr(H)
+        print(repr(H))
         self.assertTrue(H.isHydrogen())
         self.assertTrue(H.radicalElectrons == 1)
 

@@ -40,7 +40,7 @@ given in the :mod:`chempy.thermo` module. The two primary functions are:
 import math
 import numpy
 import logging
-import cython
+from chempy._cython_compat import cython
 from scipy import zeros, linalg, optimize, integrate
 
 import chempy.constants as constants

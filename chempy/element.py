@@ -37,9 +37,9 @@ module-level variables, using each element's symbol as its variable name. These
 should be used in most cases to conserve memory.
 """
 
-import cython
+from chempy._cython_compat import cython
 
-from exception import ChemPyError
+from chempy.exception import ChemPyError
 
 ################################################################################
 
