@@ -39,24 +39,26 @@ The constants available are listed below. All values were taken from
 """
 
 import math
+from typing import Final
+
 from chempy._cython_compat import cython
 
 ################################################################################
 
-#: The Avogadro constant
-Na = 6.02214179e23
+#: The Avogadro constant (particles/mol)
+Na: Final[float] = 6.02214179e23
 
-#: The Boltzmann constant
-kB = 1.3806504e-23
+#: The Boltzmann constant (J/K)
+kB: Final[float] = 1.3806504e-23
 
-#: The gas law constant
-R = 8.314472
+#: The gas law constant (J/(mol·K))
+R: Final[float] = 8.314472
 
-#: The Planck constant
-h = 6.62606896e-34
+#: The Planck constant (J·s)
+h: Final[float] = 6.62606896e-34
 
-#: The speed of light in a vacuum
-c = 299792458
+#: The speed of light in a vacuum (m/s)
+c: Final[int] = 299792458
 
-#: pi
-pi = float(math.pi)
+#: pi (dimensionless)
+pi: Final[float] = float(math.pi)

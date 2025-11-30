@@ -38,8 +38,17 @@ should be used in most cases to conserve memory.
 """
 
 from chempy._cython_compat import cython
-
 from chempy.exception import ChemPyError
+
+# Python 2/3 compatibility: intern was moved/removed in Python 3
+import sys
+from typing import List, Optional
+
+try:
+    intern
+except NameError:
+    # Python 3
+    intern = sys.intern
 
 ################################################################################
 
@@ -60,19 +69,24 @@ class Element:
     share. Ideally there is only one instance of this class for each element.
     """
     
-    def __init__(self, number, symbol, name, mass):
+    number: int
+    symbol: str
+    name: str
+    mass: float
+    
+    def __init__(self, number: int, symbol: str, name: str, mass: float) -> None:
         self.number = number
         self.symbol = intern(symbol)
         self.name = name
         self.mass = mass
     
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Return a human-readable string representation of the object.
         """
         return self.symbol
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         Return a representation that can be used to reconstruct the object.
         """
@@ -80,11 +94,21 @@ class Element:
     
 ################################################################################
 
-def getElement(number=0, symbol=''):
+def getElement(number: int = 0, symbol: str = '') -> Element:
     """
     Return the :class:`Element` object with attributes defined by the given
     parameters. Only the parameters explicitly given will be used, so you can
     search by atomic `number` or by `symbol` independently.
+    
+    Args:
+        number: Atomic number to search for (0 to match any).
+        symbol: Element symbol to search for ('' to match any).
+    
+    Returns:
+        Element: The matching Element object.
+    
+    Raises:
+        ChemPyError: If no element matches the given criteria.
     """
     cython.declare(element=Element)
     for element in elementList:
@@ -229,7 +253,7 @@ Rg = Element(111, 'Rg', 'roentgenium'   , 0.272)
 Cn = Element(112, 'Cn', 'copernicum'    , 0.285)
 
 # A list of the elements, sorted by increasing atomic number
-elementList = [
+elementList: List[Element] = [
     H, He,
     Li, Be, B, C, N, O, F, Ne,
     Na, Mg, Al, Si, P, S, Cl, Ar,

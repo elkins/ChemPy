@@ -5,8 +5,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
-[![GitHub Tests](https://github.com/elkins/ChemPy/workflows/Tests/badge.svg)](https://github.com/elkins/ChemPy/actions)
+[![Tests](https://github.com/elkins/ChemPy/actions/workflows/tests.yml/badge.svg)](https://github.com/elkins/ChemPy/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/elkins/ChemPy/branch/master/graph/badge.svg)](https://codecov.io/gh/elkins/ChemPy)
+[![PEP 561 Compliant](https://img.shields.io/badge/pep-561-blue.svg)](https://www.python.org/dev/peps/pep-0561/)
 
 **ChemPy** is a free, open-source Python toolkit for chemistry, chemical engineering, and materials science applications.
 
@@ -15,8 +16,9 @@
 - 📖 **[Documentation](https://chempy.readthedocs.io)** - Full documentation and API reference
 - 🐛 **[Issue Tracker](https://github.com/elkins/ChemPy/issues)** - Report bugs and request features
 - 📝 **[Contributing](CONTRIBUTING.md)** - How to contribute
-- 📋 **[Changelog](CHANGELOG.md)** - Version history
-- 🔐 **[Security](SECURITY.md)** - Security policy
+- 📋 **[Changelog](CHANGELOG.md)** - Version history and releases
+- 🔐 **[Security](SECURITY.md)** - Security policy and reporting
+- 👨‍💻 **[Development](DEVELOPMENT.md)** - Development setup and guidelines
 
 ## Features
 
@@ -25,24 +27,25 @@
 - Thermodynamic calculations
 - Graph-based molecular analysis
 - Pattern matching for molecular structures
-- Optimized performance with Cython extensions
-- Full type hint support with PEP 561 compliance
-- Comprehensive test coverage
+- Optimized performance with optional Cython extensions
+- **Full type hint support with PEP 561 compliance**
+- **Comprehensive test coverage with pytest**
 - Modern Python packaging (PEP 517/518)
+- GitHub Actions CI/CD with matrix testing (Python 3.8-3.13)
 
 ## Installation
 
 ### Requirements
 
-- **Python** 3.8 or later
+- **Python** 3.8 or later (3.12 or 3.13 recommended)
 - **NumPy** 1.20.0 or later
 - **SciPy** 1.7.0 or later (recommended)
-- **Cython** (for building from source)
 
 ### Optional Dependencies
 
-- **OpenBabel** 2.2.0 or later (additional molecular formats)
-- **Cairo** 1.8.0 or later (graphics support)
+- **Cython** - For building optimized extensions from source
+- **OpenBabel** 2.2.0 or later - Additional molecular formats support
+- **Cairo** 1.8.0 or later - Graphics and molecular drawing
 
 ### Quick Start
 
