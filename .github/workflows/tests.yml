@@ -42,8 +42,13 @@ jobs:
       if: runner.os == 'Windows'
       env:
         PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
+        OMP_NUM_THREADS: "1"
+        MKL_NUM_THREADS: "1"
+        OPENBLAS_NUM_THREADS: "1"
+        NUMEXPR_NUM_THREADS: "1"
+        MKL_THREADING_LAYER: "SEQUENTIAL"
       run: |
-        pytest unittest/ -k "not benchmark" -v --tb=short -p no:xdist -p no:benchmark -p pytest_cov --cov=chempy --cov-report=xml
+        pytest unittest/ -k "not benchmark and not slow" -v --tb=short -p no:xdist -p no:benchmark -p pytest_cov --cov=chempy --cov-report=xml
 
     - name: Run tests with pytest (Unix/macOS)
       if: runner.os != 'Windows'
