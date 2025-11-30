@@ -8,6 +8,7 @@ include STRUCTURE.md
 include MODERNIZATION.md
 include MODERNIZATION_STRUCTURE.md
 recursive-include chempy *.pxd *.pyx *.py
+recursive-include chempy *.pyi
 recursive-include docs *.py
 recursive-include tests *.py
 recursive-include unittest *.py
