@@ -1186,17 +1186,17 @@ class Molecule(Graph):
         If an end has 2 groups that are different then it breaks the symmetry 
         and the symmetry for that axis is 1, no matter what's at the other end::
         
-            A\               A\         /A
+            A\\               A\\         /A
               T=C=C=C=C-A      T=C=C=C=T
-            B/               A/         \B
+            B/               A/         \\B
                   s=1             s=1
         
         If you have one or more ends with 2 groups, and neither end breaks the 
         symmetry, then you have an axis symmetry number of 2::
         
-            A\         /B      A\         
+            A\\         /B      A\\         
               C=C=C=C=C          C=C=C=C-B
-            A/         \B      A/         
+            A/         \\B      A/         
                   s=2                s=2
         """
 

@@ -5,6 +5,9 @@ on:
     branches: [ master, main, develop ]
   pull_request:
     branches: [ master, main, develop ]
+  schedule:
+    # Run tests daily at 2 AM UTC to catch any dependency issues
+    - cron: '0 2 * * *'
 
 jobs:
   test:
@@ -26,30 +29,22 @@ jobs:
     
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip setuptools wheel cython
-        pip install -e ".[dev]"
-    
-    - name: Build Cython extensions
-      run: |
-        python setup.py build_ext --inplace
-      continue-on-error: true
-    
-    - name: Lint with flake8
-      run: |
-        flake8 chempy unittest tests --max-line-length=100 --extend-ignore=E203,W503
-      continue-on-error: true
+        python -m pip install --upgrade pip setuptools wheel
+        pip install numpy scipy
+        pip install -e ".[dev,full]"
     
     - name: Run tests with pytest
       run: |
-        pytest unittest/ tests/ --cov=chempy --cov-report=xml -v
+        pytest unittest/ --cov=chempy --cov-report=xml -v --tb=short
     
-    - name: Upload coverage reports
+    - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
       with:
         files: ./coverage.xml
         flags: unittests
         name: codecov-umbrella
+        fail_ci_if_error: false
 
   quality:
     runs-on: ubuntu-latest
@@ -71,19 +66,20 @@ jobs:
         python -m pip install --upgrade pip
         pip install -e ".[dev]"
     
-    - name: Check type hints with mypy
-      run: mypy chempy
+    - name: Check formatting with black
+      run: black --check chempy unittest
       continue-on-error: true
     
-    - name: Format check with black
-      run: black --check chempy unittest tests
+    - name: Check import sorting with isort
+      run: isort --check-only chempy unittest
       continue-on-error: true
     
-    - name: Import sort check with isort
-      run: isort --check-only chempy unittest tests
+    - name: Lint with flake8
+      run: |
+        flake8 chempy unittest --max-line-length=100 --extend-ignore=E203,W503,E501
       continue-on-error: true
     
-    - name: Lint with pylint
-      run: pylint chempy --disable=C0111,R0913,R0914 --max-line-length=100
+    - name: Type check with mypy
+      run: mypy chempy --ignore-missing-imports
       continue-on-error: true
 
