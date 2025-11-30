@@ -110,11 +110,11 @@ We define the following reaction recipe actions:
 """
 
 from chempy._cython_compat import cython
-
-from chempy.graph import Vertex, Edge, Graph
 from chempy.exception import ChemPyError
+from chempy.graph import Edge, Graph, Vertex
 
 ################################################################################
+
 
 class AtomType:
     """
@@ -144,7 +144,9 @@ class AtomType:
     def __repr__(self):
         return '<AtomType "%s">' % self.label
 
-    def setActions(self, incrementBond, decrementBond, formBond, breakBond, incrementRadical, decrementRadical):
+    def setActions(
+        self, incrementBond, decrementBond, formBond, breakBond, incrementRadical, decrementRadical
+    ):
         self.incrementBond = incrementBond
         self.decrementBond = decrementBond
         self.formBond = formBond
@@ -168,87 +170,335 @@ class AtomType:
         return self is other or self in other.specific
 
 
-
 atomTypes = {}
-atomTypes['R']    = AtomType(label='R', generic=[], specific=[
-    'R!H',
-    'C','Cs','Cd','Cdd','Ct','CO','Cb','Cbf',
-    'H',
-    'O','Os','Od','Oa',
-    'Si','Sis','Sid','Sidd','Sit','SiO','Sib','Sibf',
-    'S','Ss','Sd','Sa']
+atomTypes["R"] = AtomType(
+    label="R",
+    generic=[],
+    specific=[
+        "R!H",
+        "C",
+        "Cs",
+        "Cd",
+        "Cdd",
+        "Ct",
+        "CO",
+        "Cb",
+        "Cbf",
+        "H",
+        "O",
+        "Os",
+        "Od",
+        "Oa",
+        "Si",
+        "Sis",
+        "Sid",
+        "Sidd",
+        "Sit",
+        "SiO",
+        "Sib",
+        "Sibf",
+        "S",
+        "Ss",
+        "Sd",
+        "Sa",
+    ],
 )
-atomTypes['R!H']  = AtomType(label='R!H', generic=['R'], specific=[
-    'C','Cs','Cd','Cdd','Ct','CO','Cb','Cbf',
-    'O','Os','Od','Oa',
-    'Si','Sis','Sid','Sidd','Sit','SiO','Sib','Sibf',
-    'S','Ss','Sd','Sa']
+atomTypes["R!H"] = AtomType(
+    label="R!H",
+    generic=["R"],
+    specific=[
+        "C",
+        "Cs",
+        "Cd",
+        "Cdd",
+        "Ct",
+        "CO",
+        "Cb",
+        "Cbf",
+        "O",
+        "Os",
+        "Od",
+        "Oa",
+        "Si",
+        "Sis",
+        "Sid",
+        "Sidd",
+        "Sit",
+        "SiO",
+        "Sib",
+        "Sibf",
+        "S",
+        "Ss",
+        "Sd",
+        "Sa",
+    ],
 )
-atomTypes['C']    = AtomType('C', generic=['R','R!H'], specific=['Cs','Cd','Cdd','Ct','CO','Cb','Cbf'])
-atomTypes['Cs']   = AtomType('Cs', generic=['R','R!H', 'C'], specific=[])
-atomTypes['Cd']   = AtomType('Cd', generic=['R','R!H', 'C'], specific=[])
-atomTypes['Cdd']  = AtomType('Cdd', generic=['R','R!H', 'C'], specific=[])
-atomTypes['Ct']   = AtomType('Ct', generic=['R','R!H', 'C'], specific=[])
-atomTypes['CO']   = AtomType('CO', generic=['R','R!H', 'C'], specific=[])
-atomTypes['Cb']   = AtomType('Cb', generic=['R','R!H', 'C'], specific=[])
-atomTypes['Cbf']  = AtomType('Cbf', generic=['R','R!H', 'C'], specific=[])
-atomTypes['H']    = AtomType('H', generic=['R','R!H'], specific=[])
-atomTypes['O']    = AtomType('O', generic=['R','R!H'], specific=['Os','Od','Oa'])
-atomTypes['Os']   = AtomType('Os', generic=['R','R!H','O'], specific=[])
-atomTypes['Od']   = AtomType('Od', generic=['R','R!H','O'], specific=[])
-atomTypes['Oa']   = AtomType('Oa', generic=['R','R!H','O'], specific=[])
-atomTypes['Si']   = AtomType('Si', generic=['R','R!H'], specific=['Sis','Sid','Sidd','Sit','SiO','Sib','Sibf'])
-atomTypes['Sis']  = AtomType('Sis', generic=['R','R!H','Si'], specific=[])
-atomTypes['Sid']  = AtomType('Sid', generic=['R','R!H','Si'], specific=[])
-atomTypes['Sidd'] = AtomType('Sidd', generic=['R','R!H','Si'], specific=[])
-atomTypes['Sit']  = AtomType('Sit', generic=['R','R!H','Si'], specific=[])
-atomTypes['SiO']  = AtomType('SiO', generic=['R','R!H','Si'], specific=[])
-atomTypes['Sib']  = AtomType('Sib', generic=['R','R!H','Si'], specific=[])
-atomTypes['Sibf'] = AtomType('Sibf', generic=['R','R!H','Si'], specific=[])
-atomTypes['S']    = AtomType('S', generic=['R','R!H'], specific=['Ss','Sd','Sa'])
-atomTypes['Ss']   = AtomType('Ss', generic=['R','R!H','S'], specific=[])
-atomTypes['Sd']   = AtomType('Sd', generic=['R','R!H','S'], specific=[])
-atomTypes['Sa']   = AtomType('Sa', generic=['R','R!H','S'], specific=[])
+atomTypes["C"] = AtomType(
+    "C", generic=["R", "R!H"], specific=["Cs", "Cd", "Cdd", "Ct", "CO", "Cb", "Cbf"]
+)
+atomTypes["Cs"] = AtomType("Cs", generic=["R", "R!H", "C"], specific=[])
+atomTypes["Cd"] = AtomType("Cd", generic=["R", "R!H", "C"], specific=[])
+atomTypes["Cdd"] = AtomType("Cdd", generic=["R", "R!H", "C"], specific=[])
+atomTypes["Ct"] = AtomType("Ct", generic=["R", "R!H", "C"], specific=[])
+atomTypes["CO"] = AtomType("CO", generic=["R", "R!H", "C"], specific=[])
+atomTypes["Cb"] = AtomType("Cb", generic=["R", "R!H", "C"], specific=[])
+atomTypes["Cbf"] = AtomType("Cbf", generic=["R", "R!H", "C"], specific=[])
+atomTypes["H"] = AtomType("H", generic=["R", "R!H"], specific=[])
+atomTypes["O"] = AtomType("O", generic=["R", "R!H"], specific=["Os", "Od", "Oa"])
+atomTypes["Os"] = AtomType("Os", generic=["R", "R!H", "O"], specific=[])
+atomTypes["Od"] = AtomType("Od", generic=["R", "R!H", "O"], specific=[])
+atomTypes["Oa"] = AtomType("Oa", generic=["R", "R!H", "O"], specific=[])
+atomTypes["Si"] = AtomType(
+    "Si", generic=["R", "R!H"], specific=["Sis", "Sid", "Sidd", "Sit", "SiO", "Sib", "Sibf"]
+)
+atomTypes["Sis"] = AtomType("Sis", generic=["R", "R!H", "Si"], specific=[])
+atomTypes["Sid"] = AtomType("Sid", generic=["R", "R!H", "Si"], specific=[])
+atomTypes["Sidd"] = AtomType("Sidd", generic=["R", "R!H", "Si"], specific=[])
+atomTypes["Sit"] = AtomType("Sit", generic=["R", "R!H", "Si"], specific=[])
+atomTypes["SiO"] = AtomType("SiO", generic=["R", "R!H", "Si"], specific=[])
+atomTypes["Sib"] = AtomType("Sib", generic=["R", "R!H", "Si"], specific=[])
+atomTypes["Sibf"] = AtomType("Sibf", generic=["R", "R!H", "Si"], specific=[])
+atomTypes["S"] = AtomType("S", generic=["R", "R!H"], specific=["Ss", "Sd", "Sa"])
+atomTypes["Ss"] = AtomType("Ss", generic=["R", "R!H", "S"], specific=[])
+atomTypes["Sd"] = AtomType("Sd", generic=["R", "R!H", "S"], specific=[])
+atomTypes["Sa"] = AtomType("Sa", generic=["R", "R!H", "S"], specific=[])
 
-atomTypes['R'   ].setActions(incrementBond=['R'],            decrementBond=['R'],         formBond=['R'],     breakBond=['R'],     incrementRadical=['R'],     decrementRadical=['R'])
-atomTypes['R!H' ].setActions(incrementBond=['R!H'],          decrementBond=['R!H'],       formBond=['R!H'],   breakBond=['R!H'],   incrementRadical=['R!H'],   decrementRadical=['R!H'])
+atomTypes["R"].setActions(
+    incrementBond=["R"],
+    decrementBond=["R"],
+    formBond=["R"],
+    breakBond=["R"],
+    incrementRadical=["R"],
+    decrementRadical=["R"],
+)
+atomTypes["R!H"].setActions(
+    incrementBond=["R!H"],
+    decrementBond=["R!H"],
+    formBond=["R!H"],
+    breakBond=["R!H"],
+    incrementRadical=["R!H"],
+    decrementRadical=["R!H"],
+)
 
-atomTypes['C'   ].setActions(incrementBond=['C'],            decrementBond=['C'],         formBond=['C'],     breakBond=['C'],     incrementRadical=['C'],     decrementRadical=['C'])
-atomTypes['Cs'  ].setActions(incrementBond=['Cd','CO'],      decrementBond=[],            formBond=['Cs'],    breakBond=['Cs'],    incrementRadical=['Cs'],    decrementRadical=['Cs'])
-atomTypes['Cd'  ].setActions(incrementBond=['Cdd','Ct'],     decrementBond=['Cs'],        formBond=['Cd'],    breakBond=['Cd'],    incrementRadical=['Cd'],    decrementRadical=['Cd'])
-atomTypes['Cdd' ].setActions(incrementBond=[],               decrementBond=['Cd','CO'],   formBond=[],        breakBond=[],        incrementRadical=[],        decrementRadical=[])
-atomTypes['Ct'  ].setActions(incrementBond=[],               decrementBond=['Cd'],        formBond=['Ct'],    breakBond=['Ct'],    incrementRadical=['Ct'],    decrementRadical=['Ct'])
-atomTypes['CO'  ].setActions(incrementBond=['Cdd'],          decrementBond=['Cs'],        formBond=['CO'],    breakBond=['CO'],    incrementRadical=['CO'],    decrementRadical=['CO'])
-atomTypes['Cb'  ].setActions(incrementBond=[],               decrementBond=[],            formBond=['Cb'],    breakBond=['Cb'],    incrementRadical=['Cb'],    decrementRadical=['Cb'])
-atomTypes['Cbf' ].setActions(incrementBond=[],               decrementBond=[],            formBond=[],        breakBond=[],        incrementRadical=[],        decrementRadical=[])
+atomTypes["C"].setActions(
+    incrementBond=["C"],
+    decrementBond=["C"],
+    formBond=["C"],
+    breakBond=["C"],
+    incrementRadical=["C"],
+    decrementRadical=["C"],
+)
+atomTypes["Cs"].setActions(
+    incrementBond=["Cd", "CO"],
+    decrementBond=[],
+    formBond=["Cs"],
+    breakBond=["Cs"],
+    incrementRadical=["Cs"],
+    decrementRadical=["Cs"],
+)
+atomTypes["Cd"].setActions(
+    incrementBond=["Cdd", "Ct"],
+    decrementBond=["Cs"],
+    formBond=["Cd"],
+    breakBond=["Cd"],
+    incrementRadical=["Cd"],
+    decrementRadical=["Cd"],
+)
+atomTypes["Cdd"].setActions(
+    incrementBond=[],
+    decrementBond=["Cd", "CO"],
+    formBond=[],
+    breakBond=[],
+    incrementRadical=[],
+    decrementRadical=[],
+)
+atomTypes["Ct"].setActions(
+    incrementBond=[],
+    decrementBond=["Cd"],
+    formBond=["Ct"],
+    breakBond=["Ct"],
+    incrementRadical=["Ct"],
+    decrementRadical=["Ct"],
+)
+atomTypes["CO"].setActions(
+    incrementBond=["Cdd"],
+    decrementBond=["Cs"],
+    formBond=["CO"],
+    breakBond=["CO"],
+    incrementRadical=["CO"],
+    decrementRadical=["CO"],
+)
+atomTypes["Cb"].setActions(
+    incrementBond=[],
+    decrementBond=[],
+    formBond=["Cb"],
+    breakBond=["Cb"],
+    incrementRadical=["Cb"],
+    decrementRadical=["Cb"],
+)
+atomTypes["Cbf"].setActions(
+    incrementBond=[],
+    decrementBond=[],
+    formBond=[],
+    breakBond=[],
+    incrementRadical=[],
+    decrementRadical=[],
+)
 
-atomTypes['H'   ].setActions(incrementBond=[],               decrementBond=[],            formBond=['H'],     breakBond=['H'],     incrementRadical=['H'],     decrementRadical=['H'])
+atomTypes["H"].setActions(
+    incrementBond=[],
+    decrementBond=[],
+    formBond=["H"],
+    breakBond=["H"],
+    incrementRadical=["H"],
+    decrementRadical=["H"],
+)
 
-atomTypes['O'   ].setActions(incrementBond=['O'],            decrementBond=['O'],         formBond=['O'],     breakBond=['O'],     incrementRadical=['O'],     decrementRadical=['O'])
-atomTypes['Os'  ].setActions(incrementBond=['Od'],           decrementBond=[],            formBond=['Os'],    breakBond=['Os'],    incrementRadical=['Os'],    decrementRadical=['Os'])
-atomTypes['Od'  ].setActions(incrementBond=[],               decrementBond=['Os'],        formBond=[],        breakBond=[],        incrementRadical=[],        decrementRadical=[])
-atomTypes['Oa'  ].setActions(incrementBond=[],               decrementBond=[],            formBond=[],        breakBond=[],        incrementRadical=[],        decrementRadical=[])
+atomTypes["O"].setActions(
+    incrementBond=["O"],
+    decrementBond=["O"],
+    formBond=["O"],
+    breakBond=["O"],
+    incrementRadical=["O"],
+    decrementRadical=["O"],
+)
+atomTypes["Os"].setActions(
+    incrementBond=["Od"],
+    decrementBond=[],
+    formBond=["Os"],
+    breakBond=["Os"],
+    incrementRadical=["Os"],
+    decrementRadical=["Os"],
+)
+atomTypes["Od"].setActions(
+    incrementBond=[],
+    decrementBond=["Os"],
+    formBond=[],
+    breakBond=[],
+    incrementRadical=[],
+    decrementRadical=[],
+)
+atomTypes["Oa"].setActions(
+    incrementBond=[],
+    decrementBond=[],
+    formBond=[],
+    breakBond=[],
+    incrementRadical=[],
+    decrementRadical=[],
+)
 
-atomTypes['Si'   ].setActions(incrementBond=['Si'],          decrementBond=['Si'],        formBond=['Si'],    breakBond=['Si'],    incrementRadical=['Si'],    decrementRadical=['Si'])
-atomTypes['Sis'  ].setActions(incrementBond=['Sid','SiO'],   decrementBond=[],            formBond=['Sis'],   breakBond=['Sis'],   incrementRadical=['Sis'],   decrementRadical=['Sis'])
-atomTypes['Sid'  ].setActions(incrementBond=['Sidd','Sit'],  decrementBond=['Sis'],       formBond=['Sid'],   breakBond=['Sid'],   incrementRadical=['Sid'],   decrementRadical=['Sid'])
-atomTypes['Sidd' ].setActions(incrementBond=[],              decrementBond=['Sid','SiO'], formBond=[],        breakBond=[],        incrementRadical=[],        decrementRadical=[])
-atomTypes['Sit'  ].setActions(incrementBond=[],              decrementBond=['Sid'],       formBond=['Sit'],   breakBond=['Sit'],   incrementRadical=['Sit'],   decrementRadical=['Sit'])
-atomTypes['SiO'  ].setActions(incrementBond=['Sidd'],        decrementBond=['Sis'],       formBond=['SiO'],   breakBond=['SiO'],   incrementRadical=['SiO'],   decrementRadical=['SiO'])
-atomTypes['Sib'  ].setActions(incrementBond=[],              decrementBond=[],            formBond=['Sib'],   breakBond=['Sib'],   incrementRadical=['Sib'],   decrementRadical=['Sib'])
-atomTypes['Sibf' ].setActions(incrementBond=[],              decrementBond=[],            formBond=[],        breakBond=[],        incrementRadical=[],        decrementRadical=[])
+atomTypes["Si"].setActions(
+    incrementBond=["Si"],
+    decrementBond=["Si"],
+    formBond=["Si"],
+    breakBond=["Si"],
+    incrementRadical=["Si"],
+    decrementRadical=["Si"],
+)
+atomTypes["Sis"].setActions(
+    incrementBond=["Sid", "SiO"],
+    decrementBond=[],
+    formBond=["Sis"],
+    breakBond=["Sis"],
+    incrementRadical=["Sis"],
+    decrementRadical=["Sis"],
+)
+atomTypes["Sid"].setActions(
+    incrementBond=["Sidd", "Sit"],
+    decrementBond=["Sis"],
+    formBond=["Sid"],
+    breakBond=["Sid"],
+    incrementRadical=["Sid"],
+    decrementRadical=["Sid"],
+)
+atomTypes["Sidd"].setActions(
+    incrementBond=[],
+    decrementBond=["Sid", "SiO"],
+    formBond=[],
+    breakBond=[],
+    incrementRadical=[],
+    decrementRadical=[],
+)
+atomTypes["Sit"].setActions(
+    incrementBond=[],
+    decrementBond=["Sid"],
+    formBond=["Sit"],
+    breakBond=["Sit"],
+    incrementRadical=["Sit"],
+    decrementRadical=["Sit"],
+)
+atomTypes["SiO"].setActions(
+    incrementBond=["Sidd"],
+    decrementBond=["Sis"],
+    formBond=["SiO"],
+    breakBond=["SiO"],
+    incrementRadical=["SiO"],
+    decrementRadical=["SiO"],
+)
+atomTypes["Sib"].setActions(
+    incrementBond=[],
+    decrementBond=[],
+    formBond=["Sib"],
+    breakBond=["Sib"],
+    incrementRadical=["Sib"],
+    decrementRadical=["Sib"],
+)
+atomTypes["Sibf"].setActions(
+    incrementBond=[],
+    decrementBond=[],
+    formBond=[],
+    breakBond=[],
+    incrementRadical=[],
+    decrementRadical=[],
+)
 
-atomTypes['S'   ].setActions(incrementBond=['S'],            decrementBond=['S'],         formBond=['S'],     breakBond=['S'],     incrementRadical=['S'],     decrementRadical=['S'])
-atomTypes['Ss'  ].setActions(incrementBond=['Sd'],           decrementBond=[],            formBond=['Ss'],    breakBond=['Ss'],    incrementRadical=['Ss'],    decrementRadical=['Ss'])
-atomTypes['Sd'  ].setActions(incrementBond=[],               decrementBond=['Ss'],        formBond=[],        breakBond=[],        incrementRadical=[],        decrementRadical=[])
-atomTypes['Sa'  ].setActions(incrementBond=[],               decrementBond=[],            formBond=[],        breakBond=[],        incrementRadical=[],        decrementRadical=[])
+atomTypes["S"].setActions(
+    incrementBond=["S"],
+    decrementBond=["S"],
+    formBond=["S"],
+    breakBond=["S"],
+    incrementRadical=["S"],
+    decrementRadical=["S"],
+)
+atomTypes["Ss"].setActions(
+    incrementBond=["Sd"],
+    decrementBond=[],
+    formBond=["Ss"],
+    breakBond=["Ss"],
+    incrementRadical=["Ss"],
+    decrementRadical=["Ss"],
+)
+atomTypes["Sd"].setActions(
+    incrementBond=[],
+    decrementBond=["Ss"],
+    formBond=[],
+    breakBond=[],
+    incrementRadical=[],
+    decrementRadical=[],
+)
+atomTypes["Sa"].setActions(
+    incrementBond=[],
+    decrementBond=[],
+    formBond=[],
+    breakBond=[],
+    incrementRadical=[],
+    decrementRadical=[],
+)
 
 for atomType in atomTypes.values():
-    for items in [atomType.generic, atomType.specific,
-      atomType.incrementBond, atomType.decrementBond, atomType.formBond,
-      atomType.breakBond, atomType.incrementRadical, atomType.decrementRadical]:
+    for items in [
+        atomType.generic,
+        atomType.specific,
+        atomType.incrementBond,
+        atomType.decrementBond,
+        atomType.formBond,
+        atomType.breakBond,
+        atomType.incrementRadical,
+        atomType.decrementRadical,
+    ]:
         for index in range(len(items)):
             items[index] = atomTypes[items[index]]
+
 
 def getAtomType(atom, bonds):
     """
@@ -257,56 +507,87 @@ def getAtomType(atom, bonds):
     """
 
     cython.declare(atomType=str)
-    cython.declare(double=cython.double, double0=cython.double, triple=cython.double, benzene=cython.double)
-    
-    atomType = ''
-    
+    cython.declare(
+        double=cython.double, double0=cython.double, triple=cython.double, benzene=cython.double
+    )
+
+    atomType = ""
+
     # Count numbers of each higher-order bond type
-    double = 0; doubleO = 0; triple = 0; benzene = 0
+    double = 0
+    doubleO = 0
+    triple = 0
+    benzene = 0
     for atom2, bond12 in bonds.items():
         if bond12.isDouble():
-            if atom2.isOxygen(): doubleO +=1
-            else:                double += 1
-        elif bond12.isTriple(): triple += 1
-        elif bond12.isBenzene(): benzene += 1
+            if atom2.isOxygen():
+                doubleO += 1
+            else:
+                double += 1
+        elif bond12.isTriple():
+            triple += 1
+        elif bond12.isBenzene():
+            benzene += 1
 
     # Use element and counts to determine proper atom type
-    if atom.symbol == 'C':
-        if   double == 0 and doubleO == 0 and triple == 0 and benzene == 0: atomType = 'Cs'
-        elif double == 1 and doubleO == 0 and triple == 0 and benzene == 0: atomType = 'Cd'
-        elif double + doubleO == 2        and triple == 0 and benzene == 0: atomType = 'Cdd'
-        elif double == 0 and doubleO == 0 and triple == 1 and benzene == 0: atomType = 'Ct'
-        elif double == 0 and doubleO == 1 and triple == 0 and benzene == 0: atomType = 'CO'
-        elif double == 0 and doubleO == 0 and triple == 0 and benzene == 2: atomType = 'Cb'
-        elif double == 0 and doubleO == 0 and triple == 0 and benzene == 3: atomType = 'Cbf'
-    elif atom.symbol == 'H':
-        atomType = 'H'
-    elif atom.symbol == 'O':
-        if   double + doubleO == 0 and triple == 0 and benzene == 0: atomType = 'Os'
-        elif double + doubleO == 1 and triple == 0 and benzene == 0: atomType = 'Od'
-        elif len(bonds) == 0:                                        atomType = 'Oa'
-    elif atom.symbol == 'Si':
-        if   double == 0 and doubleO == 0 and triple == 0 and benzene == 0: atomType = 'Sis'
-        elif double == 1 and doubleO == 0 and triple == 0 and benzene == 0: atomType = 'Sid'
-        elif double + doubleO == 2        and triple == 0 and benzene == 0: atomType = 'Sidd'
-        elif double == 0 and doubleO == 0 and triple == 1 and benzene == 0: atomType = 'Sit'
-        elif double == 0 and doubleO == 1 and triple == 0 and benzene == 0: atomType = 'SiO'
-        elif double == 0 and doubleO == 0 and triple == 0 and benzene == 2: atomType = 'Sib'
-        elif double == 0 and doubleO == 0 and triple == 0 and benzene == 3: atomType = 'Sibf'
-    elif atom.symbol == 'S':
-        if   double + doubleO == 0 and triple == 0 and benzene == 0: atomType = 'Ss'
-        elif double + doubleO == 1 and triple == 0 and benzene == 0: atomType = 'Sd'
-        elif len(bonds) == 0:                                        atomType = 'Sa'
-    elif atom.symbol == 'N' or atom.symbol == 'Ar' or atom.symbol == 'He' or atom.symbol == 'Ne':
+    if atom.symbol == "C":
+        if double == 0 and doubleO == 0 and triple == 0 and benzene == 0:
+            atomType = "Cs"
+        elif double == 1 and doubleO == 0 and triple == 0 and benzene == 0:
+            atomType = "Cd"
+        elif double + doubleO == 2 and triple == 0 and benzene == 0:
+            atomType = "Cdd"
+        elif double == 0 and doubleO == 0 and triple == 1 and benzene == 0:
+            atomType = "Ct"
+        elif double == 0 and doubleO == 1 and triple == 0 and benzene == 0:
+            atomType = "CO"
+        elif double == 0 and doubleO == 0 and triple == 0 and benzene == 2:
+            atomType = "Cb"
+        elif double == 0 and doubleO == 0 and triple == 0 and benzene == 3:
+            atomType = "Cbf"
+    elif atom.symbol == "H":
+        atomType = "H"
+    elif atom.symbol == "O":
+        if double + doubleO == 0 and triple == 0 and benzene == 0:
+            atomType = "Os"
+        elif double + doubleO == 1 and triple == 0 and benzene == 0:
+            atomType = "Od"
+        elif len(bonds) == 0:
+            atomType = "Oa"
+    elif atom.symbol == "Si":
+        if double == 0 and doubleO == 0 and triple == 0 and benzene == 0:
+            atomType = "Sis"
+        elif double == 1 and doubleO == 0 and triple == 0 and benzene == 0:
+            atomType = "Sid"
+        elif double + doubleO == 2 and triple == 0 and benzene == 0:
+            atomType = "Sidd"
+        elif double == 0 and doubleO == 0 and triple == 1 and benzene == 0:
+            atomType = "Sit"
+        elif double == 0 and doubleO == 1 and triple == 0 and benzene == 0:
+            atomType = "SiO"
+        elif double == 0 and doubleO == 0 and triple == 0 and benzene == 2:
+            atomType = "Sib"
+        elif double == 0 and doubleO == 0 and triple == 0 and benzene == 3:
+            atomType = "Sibf"
+    elif atom.symbol == "S":
+        if double + doubleO == 0 and triple == 0 and benzene == 0:
+            atomType = "Ss"
+        elif double + doubleO == 1 and triple == 0 and benzene == 0:
+            atomType = "Sd"
+        elif len(bonds) == 0:
+            atomType = "Sa"
+    elif atom.symbol == "N" or atom.symbol == "Ar" or atom.symbol == "He" or atom.symbol == "Ne":
         return None
 
     # Raise exception if we could not identify the proper atom type
-    if atomType == '':
-        raise ChemPyError('Unable to determine atom type for atom %s.' % atom)
+    if atomType == "":
+        raise ChemPyError("Unable to determine atom type for atom %s." % atom)
 
     return atomTypes[atomType]
 
+
 ################################################################################
+
 
 class AtomPattern(Vertex):
     """
@@ -332,7 +613,9 @@ class AtomPattern(Vertex):
     cannot store implicit hydrogen atoms.
     """
 
-    def __init__(self, atomType=None, radicalElectrons=None, spinMultiplicity=None, charge=None, label=''):
+    def __init__(
+        self, atomType=None, radicalElectrons=None, spinMultiplicity=None, charge=None, label=""
+    ):
         Vertex.__init__(self)
         self.atomType = atomType or []
         for index in range(len(self.atomType)):
@@ -353,14 +636,23 @@ class AtomPattern(Vertex):
         """
         Return a representation that can be used to reconstruct the object.
         """
-        return "AtomPattern(atomType=%s, radicalElectrons=%s, spinMultiplicity=%s, charge=%s, label='%s')" % (self.atomType, self.radicalElectrons, self.spinMultiplicity, self.charge, self.label)
+        return (
+            "AtomPattern(atomType=%s, radicalElectrons=%s, spinMultiplicity=%s, charge=%s, label='%s')"
+            % (self.atomType, self.radicalElectrons, self.spinMultiplicity, self.charge, self.label)
+        )
 
     def copy(self):
         """
         Return a deep copy of the :class:`AtomPattern` object. Modifying the
         attributes of the copy will not affect the original.
         """
-        return AtomPattern(self.atomType[:], self.radicalElectrons[:], self.spinMultiplicity[:], self.charge[:], self.label)
+        return AtomPattern(
+            self.atomType[:],
+            self.radicalElectrons[:],
+            self.spinMultiplicity[:],
+            self.charge[:],
+            self.label,
+        )
 
     def __changeBond(self, order):
         """
@@ -375,9 +667,15 @@ class AtomPattern(Vertex):
             elif order == -1:
                 atomType.extend(atom.decrementBond)
             else:
-                raise ChemPyError('Unable to update AtomPattern due to CHANGE_BOND action: Invalid order "%g".' % order)
+                raise ChemPyError(
+                    'Unable to update AtomPattern due to CHANGE_BOND action: Invalid order "%g".'
+                    % order
+                )
         if len(atomType) == 0:
-            raise ChemPyError('Unable to update AtomPattern due to CHANGE_BOND action: Unknown atom type produced from set "%s".' % (self.atomType))
+            raise ChemPyError(
+                'Unable to update AtomPattern due to CHANGE_BOND action: Unknown atom type produced from set "%s".'
+                % (self.atomType)
+            )
         # Set the new atom types, removing any duplicates
         self.atomType = list(set(atomType))
 
@@ -387,13 +685,18 @@ class AtomPattern(Vertex):
         where `order` specifies the order of the forming bond, and should be
         'S' (since we only allow forming of single bonds).
         """
-        if order != 'S':
-            raise ChemPyError('Unable to update AtomPattern due to FORM_BOND action: Invalid order "%s".' % order)
+        if order != "S":
+            raise ChemPyError(
+                'Unable to update AtomPattern due to FORM_BOND action: Invalid order "%s".' % order
+            )
         atomType = []
         for atom in self.atomType:
             atomType.extend(atom.formBond)
         if len(atomType) == 0:
-            raise ChemPyError('Unable to update AtomPattern due to FORM_BOND action: Unknown atom type produced from set "%s".' % (self.atomType))
+            raise ChemPyError(
+                'Unable to update AtomPattern due to FORM_BOND action: Unknown atom type produced from set "%s".'
+                % (self.atomType)
+            )
         # Set the new atom types, removing any duplicates
         self.atomType = list(set(atomType))
 
@@ -403,13 +706,18 @@ class AtomPattern(Vertex):
         where `order` specifies the order of the breaking bond, and should be
         'S' (since we only allow breaking of single bonds).
         """
-        if order != 'S':
-            raise ChemPyError('Unable to update AtomPattern due to BREAK_BOND action: Invalid order "%s".' % order)
+        if order != "S":
+            raise ChemPyError(
+                'Unable to update AtomPattern due to BREAK_BOND action: Invalid order "%s".' % order
+            )
         atomType = []
         for atom in self.atomType:
             atomType.extend(atom.breakBond)
         if len(atomType) == 0:
-            raise ChemPyError('Unable to update AtomPattern due to BREAK_BOND action: Unknown atom type produced from set "%s".' % (self.atomType))
+            raise ChemPyError(
+                'Unable to update AtomPattern due to BREAK_BOND action: Unknown atom type produced from set "%s".'
+                % (self.atomType)
+            )
         # Set the new atom types, removing any duplicates
         self.atomType = list(set(atomType))
 
@@ -436,7 +744,10 @@ class AtomPattern(Vertex):
         spinMultiplicity = []
         for electron, spin in zip(self.radicalElectrons, self.spinMultiplicity):
             if electron - radical < 0:
-                raise ChemPyError('Unable to update AtomPattern due to LOSE_RADICAL action: Invalid radical electron set "%s".' % (self.radicalElectrons))
+                raise ChemPyError(
+                    'Unable to update AtomPattern due to LOSE_RADICAL action: Invalid radical electron set "%s".'
+                    % (self.radicalElectrons)
+                )
             radicalElectrons.append(electron - radical)
             if spin - radical < 0:
                 spinMultiplicity.append(spin - radical + 2)
@@ -453,15 +764,15 @@ class AtomPattern(Vertex):
         required parameters. The available actions can be found
         :ref:`here <reaction-recipe-actions>`.
         """
-        if action[0].upper() == 'CHANGE_BOND':
+        if action[0].upper() == "CHANGE_BOND":
             self.__changeBond(action[2])
-        elif action[0].upper() == 'FORM_BOND':
+        elif action[0].upper() == "FORM_BOND":
             self.__formBond(action[2])
-        elif action[0].upper() == 'BREAK_BOND':
+        elif action[0].upper() == "BREAK_BOND":
             self.__breakBond(action[2])
-        elif action[0].upper() == 'GAIN_RADICAL':
+        elif action[0].upper() == "GAIN_RADICAL":
             self.__gainRadical(action[2])
-        elif action[0].upper() == 'LOSE_RADICAL':
+        elif action[0].upper() == "LOSE_RADICAL":
             self.__loseRadical(action[2])
         else:
             raise ChemPyError('Unable to update AtomPattern: Invalid action %s".' % (action))
@@ -484,23 +795,27 @@ class AtomPattern(Vertex):
         # Each atom type in self must have an equivalent in other (and vice versa)
         for atomType1 in self.atomType:
             for atomType2 in other.atomType:
-                if atomType1.equivalent(atomType2): break
+                if atomType1.equivalent(atomType2):
+                    break
             else:
                 return False
         for atomType1 in other.atomType:
             for atomType2 in self.atomType:
-                if atomType1.equivalent(atomType2): break
+                if atomType1.equivalent(atomType2):
+                    break
             else:
                 return False
         # Each free radical electron state in self must have an equivalent in other (and vice versa)
         for radical1, spin1 in zip(self.radicalElectrons, self.spinMultiplicity):
             for radical2, spin2 in zip(other.radicalElectrons, other.spinMultiplicity):
-                if radical1 == radical2 and spin1 == spin2: break
+                if radical1 == radical2 and spin1 == spin2:
+                    break
             else:
                 return False
         for radical1, spin1 in zip(other.radicalElectrons, other.spinMultiplicity):
             for radical2, spin2 in zip(self.radicalElectrons, self.spinMultiplicity):
-                if radical1 == radical2 and spin1 == spin2: break
+                if radical1 == radical2 and spin1 == spin2:
+                    break
             else:
                 return False
         # Otherwise the two atom patterns are equivalent
@@ -521,21 +836,29 @@ class AtomPattern(Vertex):
 
         # Compare two atom patterns for equivalence
         # Each atom type in self must have an equivalent in other (and vice versa)
-        for atomType1 in self.atomType: # all these must match
-            for atomType2 in other.atomType: # can match any of these
-                if atomType1.isSpecificCaseOf(atomType2): break
+        for atomType1 in self.atomType:  # all these must match
+            for atomType2 in other.atomType:  # can match any of these
+                if atomType1.isSpecificCaseOf(atomType2):
+                    break
             else:
                 return False
         # Each free radical electron state in self must have an equivalent in other (and vice versa)
-        for radical1, spin1 in zip(self.radicalElectrons, self.spinMultiplicity): # all these must match
-            for radical2, spin2 in zip(other.radicalElectrons, other.spinMultiplicity): # can match any of these
-                if radical1 == radical2 and spin1 == spin2: break
+        for radical1, spin1 in zip(
+            self.radicalElectrons, self.spinMultiplicity
+        ):  # all these must match
+            for radical2, spin2 in zip(
+                other.radicalElectrons, other.spinMultiplicity
+            ):  # can match any of these
+                if radical1 == radical2 and spin1 == spin2:
+                    break
             else:
                 return False
         # Otherwise self is in fact a specific case of other
         return True
 
+
 ################################################################################
+
 
 class BondPattern(Edge):
     """
@@ -585,17 +908,30 @@ class BondPattern(Edge):
         newOrder = []
         for bond in self.order:
             if order == 1:
-                if bond == 'S':         newOrder.append('D')
-                elif bond == 'D':       newOrder.append('T')
+                if bond == "S":
+                    newOrder.append("D")
+                elif bond == "D":
+                    newOrder.append("T")
                 else:
-                    raise ChemPyError('Unable to update BondPattern due to CHANGE_BOND action: Invalid bond order "%s" in set %s".' % (bond, self.order))
+                    raise ChemPyError(
+                        'Unable to update BondPattern due to CHANGE_BOND action: Invalid bond order "%s" in set %s".'
+                        % (bond, self.order)
+                    )
             elif order == -1:
-                if bond == 'D':         newOrder.append('S')
-                elif bond == 'T':       newOrder.append('D')
+                if bond == "D":
+                    newOrder.append("S")
+                elif bond == "T":
+                    newOrder.append("D")
                 else:
-                    raise ChemPyError('Unable to update BondPattern due to CHANGE_BOND action: Invalid bond order "%s" in set %s".' % (bond, self.order))
+                    raise ChemPyError(
+                        'Unable to update BondPattern due to CHANGE_BOND action: Invalid bond order "%s" in set %s".'
+                        % (bond, self.order)
+                    )
             else:
-                raise ChemPyError('Unable to update BondPattern due to CHANGE_BOND action: Invalid order "%g".' % order)
+                raise ChemPyError(
+                    'Unable to update BondPattern due to CHANGE_BOND action: Invalid order "%g".'
+                    % order
+                )
         # Set the new bond orders, removing any duplicates
         self.order = list(set(newOrder))
 
@@ -606,7 +942,7 @@ class BondPattern(Edge):
         required parameters. The available actions can be found
         :ref:`here <reaction-recipe-actions>`.
         """
-        if action[0].upper() == 'CHANGE_BOND':
+        if action[0].upper() == "CHANGE_BOND":
             self.__changeBond(action[2])
         else:
             raise ChemPyError('Unable to update BondPattern: Invalid action %s".' % (action))
@@ -628,12 +964,14 @@ class BondPattern(Edge):
         # Each atom type in self must have an equivalent in other (and vice versa)
         for order1 in self.order:
             for order2 in other.order:
-                if order1 == order2: break
+                if order1 == order2:
+                    break
             else:
                 return False
         for order1 in other.order:
             for order2 in self.order:
-                if order1 == order2: break
+                if order1 == order2:
+                    break
             else:
                 return False
         # Otherwise the two bond patterns are equivalent
@@ -654,34 +992,45 @@ class BondPattern(Edge):
 
         # Compare two bond patterns for equivalence
         # Each atom type in self must have an equivalent in other
-        for order1 in self.order: # all these must match
-            for order2 in other.order: # can match any of these
-                if order1 == order2: break
+        for order1 in self.order:  # all these must match
+            for order2 in other.order:  # can match any of these
+                if order1 == order2:
+                    break
             else:
                 return False
         # Otherwise self is in fact a specific case of other
         return True
 
+
 ################################################################################
+
 
 class MoleculePattern(Graph):
     """
     A representation of a molecular substructure pattern using a graph data
     type, extending the :class:`Graph` class. The `atoms` and `bonds` attributes
-    are aliases for the `vertices` and `edges` attributes, and store 
+    are aliases for the `vertices` and `edges` attributes, and store
     :class:`AtomPattern` and :class:`BondPattern` objects, respectively.
     Corresponding alias methods have also been provided.
     """
 
     def __init__(self, atoms=None, bonds=None):
         Graph.__init__(self, atoms, bonds)
-    
-    def __getAtoms(self): return self.vertices
-    def __setAtoms(self, atoms): self.vertices = atoms
+
+    def __getAtoms(self):
+        return self.vertices
+
+    def __setAtoms(self, atoms):
+        self.vertices = atoms
+
     atoms = property(__getAtoms, __setAtoms)
 
-    def __getBonds(self): return self.edges
-    def __setBonds(self, bonds): self.edges = bonds
+    def __getBonds(self):
+        return self.edges
+
+    def __setBonds(self, bonds):
+        self.edges = bonds
+
     bonds = property(__getBonds, __setBonds)
 
     def addAtom(self, atom):
@@ -785,7 +1134,7 @@ class MoleculePattern(Graph):
         Remove the labels from all atoms in the molecular pattern.
         """
         for atom in self.vertices:
-            atom.label = ''
+            atom.label = ""
 
     def containsLabeledAtom(self, label):
         """
@@ -793,7 +1142,8 @@ class MoleculePattern(Graph):
         `label` and ``False`` otherwise.
         """
         for atom in self.vertices:
-            if atom.label == label: return True
+            if atom.label == label:
+                return True
         return False
 
     def getLabeledAtom(self, label):
@@ -801,7 +1151,8 @@ class MoleculePattern(Graph):
         Return the atoms in the pattern that are labeled.
         """
         for atom in self.vertices:
-            if atom.label == label: return atom
+            if atom.label == label:
+                return atom
         return None
 
     def getLabeledAtoms(self):
@@ -812,7 +1163,7 @@ class MoleculePattern(Graph):
         """
         labeled = {}
         for atom in self.vertices:
-            if atom.label != '':
+            if atom.label != "":
                 if atom.label in labeled:
                     labeled[atom.label] = [labeled[atom.label]]
                     labeled[atom.label].append(atom)
@@ -826,15 +1177,17 @@ class MoleculePattern(Graph):
         Skips the first line (assuming it's a label) unless `withLabel` is
         ``False``.
         """
-        self.vertices, self.edges = fromAdjacencyList(adjlist, pattern=True, addH=False, withLabel=withLabel)
+        self.vertices, self.edges = fromAdjacencyList(
+            adjlist, pattern=True, addH=False, withLabel=withLabel
+        )
         self.updateConnectivityValues()
         return self
 
-    def toAdjacencyList(self, label=''):
+    def toAdjacencyList(self, label=""):
         """
         Convert the molecular structure to a string adjacency list.
         """
-        return toAdjacencyList(self, label='', pattern=True)
+        return toAdjacencyList(self, label="", pattern=True)
 
     def isIsomorphic(self, other, initialMap=None):
         """
@@ -847,7 +1200,10 @@ class MoleculePattern(Graph):
         # It only makes sense to compare a MoleculePattern to a MoleculePattern for full
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, MoleculePattern):
-            raise TypeError('Got a %s object for parameter "other", when a MoleculePattern object is required.' % other.__class__)
+            raise TypeError(
+                'Got a %s object for parameter "other", when a MoleculePattern object is required.'
+                % other.__class__
+            )
         # Do the isomorphism comparison
         return Graph.isIsomorphic(self, other, initialMap)
 
@@ -864,7 +1220,10 @@ class MoleculePattern(Graph):
         # It only makes sense to compare a MoleculePattern to a MoleculePattern for full
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, MoleculePattern):
-            raise TypeError('Got a %s object for parameter "other", when a MoleculePattern object is required.' % other.__class__)
+            raise TypeError(
+                'Got a %s object for parameter "other", when a MoleculePattern object is required.'
+                % other.__class__
+            )
         # Do the isomorphism comparison
         return Graph.findIsomorphism(self, other, initialMap)
 
@@ -879,7 +1238,10 @@ class MoleculePattern(Graph):
         # It only makes sense to compare a MoleculePattern to a MoleculePattern for subgraph
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, MoleculePattern):
-            raise TypeError('Got a %s object for parameter "other", when a MoleculePattern object is required.' % other.__class__)
+            raise TypeError(
+                'Got a %s object for parameter "other", when a MoleculePattern object is required.'
+                % other.__class__
+            )
         # Do the isomorphism comparison
         return Graph.isSubgraphIsomorphic(self, other, initialMap)
 
@@ -897,18 +1259,25 @@ class MoleculePattern(Graph):
         # It only makes sense to compare a MoleculePattern to a MoleculePattern for subgraph
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, MoleculePattern):
-            raise TypeError('Got a %s object for parameter "other", when a MoleculePattern object is required.' % other.__class__)
+            raise TypeError(
+                'Got a %s object for parameter "other", when a MoleculePattern object is required.'
+                % other.__class__
+            )
         # Do the isomorphism comparison
         return Graph.findSubgraphIsomorphisms(self, other, initialMap)
 
+
 ################################################################################
+
 
 class InvalidAdjacencyListError(Exception):
     """
     An exception used to indicate that an RMG-style adjacency list is invalid.
     Pass a string giving specifics about the particular exceptional behavior.
     """
+
     pass
+
 
 def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
     """
@@ -921,64 +1290,81 @@ def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
 
     from chempy.molecule import Atom, Bond
 
-    atoms = []; atomdict = {}; bonds = {}
+    atoms = []
+    atomdict = {}
+    bonds = {}
 
     lines = adjlist.splitlines()
     # Skip the first line if it contains a label
-    if withLabel: label = lines.pop(0)
+    if withLabel:
+        label = lines.pop(0)
     # Iterate over the remaining lines, generating Atom or AtomPattern objects
     for line in lines:
 
         data = line.split()
 
         # Skip if blank line
-        if len(data) == 0: continue
+        if len(data) == 0:
+            continue
 
         # First item is index for atom
         # Sometimes these have a trailing period (as if in a numbered list),
         # so remove it just in case
-        aid = int(data[0].strip('.'))
+        aid = int(data[0].strip("."))
 
         # If second item starts with '*', then atom is labeled
-        label = ''; index = 1
-        if data[1][0] == '*':
-            label = data[1]; index = 2
+        label = ""
+        index = 1
+        if data[1][0] == "*":
+            label = data[1]
+            index = 2
 
         # Next is the element or functional group element
         # A list can be specified with the {,} syntax
         atomType = data[index]
-        if atomType[0] == '{':
-            atomType = atomType[1:-1].split(',')
+        if atomType[0] == "{":
+            atomType = atomType[1:-1].split(",")
         else:
             atomType = [atomType]
 
         # Next is the electron state
-        radicalElectrons = []; spinMultiplicity = []
-        elecState = data[index+1].upper()
-        if elecState[0] == '{':
-            elecState = elecState[1:-1].split(',')
+        radicalElectrons = []
+        spinMultiplicity = []
+        elecState = data[index + 1].upper()
+        if elecState[0] == "{":
+            elecState = elecState[1:-1].split(",")
         else:
             elecState = [elecState]
         for e in elecState:
-            if e == '0':
-                radicalElectrons.append(0); spinMultiplicity.append(1)
-            elif e == '1':
-                radicalElectrons.append(1); spinMultiplicity.append(2)
-            elif e == '2':
-                radicalElectrons.append(2); spinMultiplicity.append(1)
-                radicalElectrons.append(2); spinMultiplicity.append(3)
-            elif e == '2S':
-                radicalElectrons.append(2); spinMultiplicity.append(1)
-            elif e == '2T':
-                radicalElectrons.append(2); spinMultiplicity.append(3)
-            elif e == '3':
-                radicalElectrons.append(3); spinMultiplicity.append(4)
-            elif e == '4':
-                radicalElectrons.append(4); spinMultiplicity.append(5)
+            if e == "0":
+                radicalElectrons.append(0)
+                spinMultiplicity.append(1)
+            elif e == "1":
+                radicalElectrons.append(1)
+                spinMultiplicity.append(2)
+            elif e == "2":
+                radicalElectrons.append(2)
+                spinMultiplicity.append(1)
+                radicalElectrons.append(2)
+                spinMultiplicity.append(3)
+            elif e == "2S":
+                radicalElectrons.append(2)
+                spinMultiplicity.append(1)
+            elif e == "2T":
+                radicalElectrons.append(2)
+                spinMultiplicity.append(3)
+            elif e == "3":
+                radicalElectrons.append(3)
+                spinMultiplicity.append(4)
+            elif e == "4":
+                radicalElectrons.append(4)
+                spinMultiplicity.append(5)
 
         # Create a new atom based on the above information
         if pattern:
-            atom = AtomPattern(atomType, radicalElectrons, spinMultiplicity, [0 for e in radicalElectrons], label)
+            atom = AtomPattern(
+                atomType, radicalElectrons, spinMultiplicity, [0 for e in radicalElectrons], label
+            )
         else:
             atom = Atom(atomType[0], radicalElectrons[0], spinMultiplicity[0], 0, 0, label)
 
@@ -988,17 +1374,17 @@ def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
 
         # Process list of bonds
         bonds[atom] = {}
-        for datum in data[index+2:]:
+        for datum in data[index + 2 :]:
 
             # Sometimes commas are used to delimit bonds in the bond list,
             # so strip them just in case
-            datum = datum.strip(',')
+            datum = datum.strip(",")
 
-            aid2, comma, order = datum[1:-1].partition(',')
+            aid2, comma, order = datum[1:-1].partition(",")
             aid2 = int(aid2)
 
-            if order[0] == '{':
-                order = order[1:-1].split(',')
+            if order[0] == "{":
+                order = order[1:-1].split(",")
             else:
                 order = [order]
 
@@ -1022,22 +1408,25 @@ def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
 
     # Add explicit hydrogen atoms to complete structure if desired
     if addH and not pattern:
-        valences = {'H': 1, 'C': 4, 'O': 2}
-        orders = {'S': 1, 'D': 2, 'T': 3, 'B': 1.5}
+        valences = {"H": 1, "C": 4, "O": 2}
+        orders = {"S": 1, "D": 2, "T": 3, "B": 1.5}
         newAtoms = []
         for atom in atoms:
             try:
                 valence = valences[atom.symbol]
             except KeyError:
-                raise ChemPyError('Cannot add hydrogens to adjacency list: Unknown valence for atom "%s".' % atom.symbol)
+                raise ChemPyError(
+                    'Cannot add hydrogens to adjacency list: Unknown valence for atom "%s".'
+                    % atom.symbol
+                )
             radical = atom.radicalElectrons
             order = 0
             for atom2, bond in bonds[atom].items():
                 order += orders[bond.order]
             count = valence - radical - int(order)
             for i in range(count):
-                a = Atom('H', 0, 1, 0, 0, '')
-                b = Bond('S')
+                a = Atom("H", 0, 1, 0, 0, "")
+                b = Bond("S")
                 newAtoms.append(a)
                 bonds[atom][a] = b
                 bonds[a] = {atom: b}
@@ -1045,7 +1434,8 @@ def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
 
     return atoms, bonds
 
-def toAdjacencyList(molecule, label='', pattern=False, removeH=False):
+
+def toAdjacencyList(molecule, label="", pattern=False, removeH=False):
     """
     Convert the `molecule` object to an adjacency list. `pattern` specifies
     whether the graph object is a complete molecule (if ``False``) or a
@@ -1057,19 +1447,21 @@ def toAdjacencyList(molecule, label='', pattern=False, removeH=False):
     accurate.
     """
 
-    adjlist = ''
+    adjlist = ""
 
-    if label != '': adjlist += label + '\n'
+    if label != "":
+        adjlist += label + "\n"
 
-    molecule.updateConnectivityValues() # so we can sort by them
+    molecule.updateConnectivityValues()  # so we can sort by them
     atoms = molecule.atoms
     bonds = molecule.bonds
 
     for i, atom in enumerate(atoms):
-        if removeH and atom.isHydrogen() and atom.label=='': continue
+        if removeH and atom.isHydrogen() and atom.label == "":
+            continue
 
         # Atom number
-        adjlist += '%-2d ' % (i+1)
+        adjlist += "%-2d " % (i + 1)
 
         # Atom label
         adjlist += "%-2s " % (atom.label)
@@ -1077,52 +1469,68 @@ def toAdjacencyList(molecule, label='', pattern=False, removeH=False):
         if pattern:
             # Atom type(s)
             if len(atom.atomType) == 1:
-                adjlist += atom.atomType[0].label + ' '
+                adjlist += atom.atomType[0].label + " "
             else:
-                adjlist += '{%s} ' % (','.join([a.label for a in atom.atomType]))
+                adjlist += "{%s} " % (",".join([a.label for a in atom.atomType]))
             # Electron state(s)
-            if len(atom.radicalElectrons) > 1: adjlist += '{'
+            if len(atom.radicalElectrons) > 1:
+                adjlist += "{"
             for radical, spin in zip(atom.radicalElectrons, atom.spinMultiplicity):
-                if radical == 0: adjlist += '0'
-                elif radical == 1: adjlist += '1'
-                elif radical == 2 and spin == 1: adjlist += '2S'
-                elif radical == 2 and spin == 3: adjlist += '2T'
-                elif radical == 3: adjlist += '3'
-                elif radical == 4: adjlist += '4'
-                if len(atom.radicalElectrons) > 1: adjlist += ','
-            if len(atom.radicalElectrons) > 1: adjlist = adjlist[0:-1] + '}'
+                if radical == 0:
+                    adjlist += "0"
+                elif radical == 1:
+                    adjlist += "1"
+                elif radical == 2 and spin == 1:
+                    adjlist += "2S"
+                elif radical == 2 and spin == 3:
+                    adjlist += "2T"
+                elif radical == 3:
+                    adjlist += "3"
+                elif radical == 4:
+                    adjlist += "4"
+                if len(atom.radicalElectrons) > 1:
+                    adjlist += ","
+            if len(atom.radicalElectrons) > 1:
+                adjlist = adjlist[0:-1] + "}"
         else:
             # Atom type
             adjlist += "%-5s " % atom.symbol
             # Electron state(s)
-            if atom.radicalElectrons == 0: adjlist += '0'
-            elif atom.radicalElectrons == 1: adjlist += '1'
-            elif atom.radicalElectrons == 2 and atom.spinMultiplicity == 1: adjlist += '2S'
-            elif atom.radicalElectrons == 2 and atom.spinMultiplicity == 3: adjlist += '2T'
-            elif atom.radicalElectrons == 3: adjlist += '3'
-            elif atom.radicalElectrons == 4: adjlist += '4'
-        
+            if atom.radicalElectrons == 0:
+                adjlist += "0"
+            elif atom.radicalElectrons == 1:
+                adjlist += "1"
+            elif atom.radicalElectrons == 2 and atom.spinMultiplicity == 1:
+                adjlist += "2S"
+            elif atom.radicalElectrons == 2 and atom.spinMultiplicity == 3:
+                adjlist += "2T"
+            elif atom.radicalElectrons == 3:
+                adjlist += "3"
+            elif atom.radicalElectrons == 4:
+                adjlist += "4"
+
         # Bonds list
         atoms2 = bonds[atom].keys()
         # sort them the same way as the atoms
-        #atoms2.sort(key=atoms.index)
+        # atoms2.sort(key=atoms.index)
 
         for atom2 in atoms2:
-            if removeH and atom2.isHydrogen(): continue
+            if removeH and atom2.isHydrogen():
+                continue
             bond = bonds[atom][atom2]
-            adjlist += ' {' + str(atoms.index(atom2)+1) + ','
+            adjlist += " {" + str(atoms.index(atom2) + 1) + ","
 
             # Bond type(s)
             if pattern:
                 if len(bond.order) == 1:
                     adjlist += bond.order[0]
                 else:
-                    adjlist += '{%s}' % (','.join(bond.order))
+                    adjlist += "{%s}" % (",".join(bond.order))
             else:
                 adjlist += bond.order
-            adjlist += '}'
+            adjlist += "}"
 
         # Each atom begins on a new line
-        adjlist += '\n'
+        adjlist += "\n"
 
     return adjlist

@@ -1,7 +1,8 @@
 from __future__ import annotations
-from typing import Optional
-from chempy.thermo import ThermoGAModel, WilhoitModel, NASAModel
 
+from typing import Optional
+
+from chempy.thermo import NASAModel, ThermoGAModel, WilhoitModel
 
 def convertGAtoWilhoit(
     GAthermo: ThermoGAModel,
@@ -11,8 +12,6 @@ def convertGAtoWilhoit(
     B0: float = ...,
     constantB: bool = ...,
 ) -> WilhoitModel: ...
-
-
 def convertWilhoitToNASA(
     wilhoit: WilhoitModel,
     Tmin: float,
@@ -22,8 +21,6 @@ def convertWilhoitToNASA(
     weighting: bool = ...,
     continuity: int = ...,
 ) -> NASAModel: ...
-
-
 def convertCpToNASA(
     CpObject: object,
     H298: float,

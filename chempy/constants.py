@@ -41,8 +41,6 @@ The constants available are listed below. All values were taken from
 import math
 from typing import Final
 
-from chempy._cython_compat import cython
-
 ################################################################################
 
 #: The Avogadro constant (particles/mol)

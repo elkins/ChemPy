@@ -18,4 +18,3 @@ ChemPy Exceptions
 
 .. autoclass:: chempy.exception.InvalidStatesModelError
     :members:
-

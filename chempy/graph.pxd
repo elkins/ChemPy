@@ -108,7 +108,7 @@ cdef class Graph:
 
 ################################################################################
 
-cpdef VF2_isomorphism(Graph graph1, Graph graph2, bint subgraph=?, 
+cpdef VF2_isomorphism(Graph graph1, Graph graph2, bint subgraph=?,
     bint findAll=?, dict initialMap=?)
 
 cpdef bint __VF2_feasible(Graph graph1, Graph graph2, Vertex vertex1,

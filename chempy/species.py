@@ -30,9 +30,9 @@
 """
 This module contains classes and functions for working with chemical species.
 
-From the `IUPAC Compendium of Chemical Terminology 
-<http://dx.doi.org/10.1351/goldbook>`_, a chemical species is "an 
-ensemble of chemically identical molecular entities that can explore the same 
+From the `IUPAC Compendium of Chemical Terminology
+<http://dx.doi.org/10.1351/goldbook>`_, a chemical species is "an
+ensemble of chemically identical molecular entities that can explore the same
 set of molecular energy levels on the time scale of the experiment". This
 definition is purposefully vague to allow the user flexibility in application.
 
@@ -45,12 +45,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, List, Optional
 
 if TYPE_CHECKING:
-    from chempy.molecule import Molecule
     from chempy.geometry import Geometry
-    from chempy.thermo import ThermoModel
+    from chempy.molecule import Molecule
     from chempy.states import StatesModel
+    from chempy.thermo import ThermoModel
 
 ################################################################################
+
 
 class LennardJones:
     """
@@ -77,7 +78,7 @@ class LennardJones:
     def __init__(self, sigma: float = 0.0, epsilon: float = 0.0) -> None:
         """
         Initialize a Lennard-Jones collision parameters object.
-        
+
         Args:
             sigma: Distance at which potential is zero (m). Defaults to 0.0.
             epsilon: Depth of the potential well (J). Defaults to 0.0.
@@ -85,7 +86,9 @@ class LennardJones:
         self.sigma = sigma
         self.epsilon = epsilon
 
+
 ################################################################################
+
 
 class Species:
     """
@@ -122,7 +125,7 @@ class Species:
     def __init__(
         self,
         index: int = -1,
-        label: str = '',
+        label: str = "",
         thermo: Optional[ThermoModel] = None,
         states: Optional[StatesModel] = None,
         molecule: Optional[List[Molecule]] = None,
@@ -130,11 +133,11 @@ class Species:
         E0: float = 0.0,
         lennardJones: Optional[LennardJones] = None,
         molecularWeight: float = 0.0,
-        reactive: bool = True
+        reactive: bool = True,
     ) -> None:
         """
         Initialize a chemical species.
-        
+
         Args:
             index: Unique index for this species. Defaults to -1.
             label: Descriptive label. Defaults to ''.
@@ -168,8 +171,10 @@ class Species:
         """
         Return a string representation of the species, in the form 'label(id)'.
         """
-        if self.index == -1: return '%s' % (self.label)
-        else: return '%s(%i)' % (self.label, self.index)
+        if self.index == -1:
+            return "%s" % (self.label)
+        else:
+            return "%s(%i)" % (self.label, self.index)
 
     def generateResonanceIsomers(self):
         """
@@ -193,14 +198,17 @@ class Species:
                     # Append to isomer list if unique
                     found = False
                     for isom in self.molecule:
-                        if isom.isIsomorphic(newIsomer): found = True
+                        if isom.isIsomorphic(newIsomer):
+                            found = True
                     if not found:
                         self.molecule.append(newIsomer)
                         newIsomer.updateAtomTypes()
                 # Move to next resonance isomer
                 index += 1
 
+
 ################################################################################
+
 
 class TransitionState:
     """
@@ -220,7 +228,7 @@ class TransitionState:
 
     """
 
-    def __init__(self, label='', states=None, geometry=None, E0=0.0, frequency=0.0, degeneracy=1):
+    def __init__(self, label="", states=None, geometry=None, E0=0.0, frequency=0.0, degeneracy=1):
         self.label = label
         self.states = states
         self.geometry = geometry
@@ -233,4 +241,3 @@ class TransitionState:
         Return a string representation of the species, suitable for console output.
         """
         return "<TransitionState '%s'>" % (self.label)
-

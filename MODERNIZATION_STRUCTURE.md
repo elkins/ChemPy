@@ -6,7 +6,7 @@ The ChemPy project has been modernized to follow current Python best practices a
 
 ## Key Structural Changes
 
-### 1. **Package Layout** 
+### 1. **Package Layout**
 - ✅ Main package remains at `chempy/`
 - ✅ Added `tests/` directory for test suite (modern pytest convention)
 - ✅ Added `docs/` directory for documentation

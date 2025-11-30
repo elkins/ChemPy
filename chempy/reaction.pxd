@@ -24,15 +24,14 @@
 #
 ################################################################################
 
-from species cimport Species, TransitionState
-from kinetics cimport KineticsModel, ArrheniusModel
-
 cimport numpy
+from kinetics cimport ArrheniusModel, KineticsModel
+from species cimport Species, TransitionState
 
 ################################################################################
 
 cdef class Reaction:
-    
+
     cdef public int index
     cdef public list reactants
     cdef public list products
@@ -68,9 +67,9 @@ cdef class Reaction:
     cpdef numpy.ndarray calculateTSTRateCoefficients(self, numpy.ndarray Tlist, str tunneling=?)
 
     cpdef double calculateTSTRateCoefficient(self, double T, str tunneling=?)
-    
+
     cpdef double calculateWignerTunnelingCorrection(self, double T)
-    
+
     cpdef double calculateEckartTunnelingCorrection(self, double T)
 
     cpdef double __eckartIntegrand(self, double E_kT, double kT, double dV1, double alpha1, double alpha2)

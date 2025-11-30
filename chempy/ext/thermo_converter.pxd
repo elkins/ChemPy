@@ -27,7 +27,8 @@
 #
 ################################################################################
 
-from chempy.thermo cimport ThermoGAModel, WilhoitModel, NASAPolynomial, NASAModel
+from chempy.thermo cimport NASAModel, NASAPolynomial, ThermoGAModel, WilhoitModel
+
 
 cdef extern from "math.h":
     double log(double)

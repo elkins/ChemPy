@@ -29,11 +29,11 @@ cimport numpy
 ################################################################################
 
 cdef class ThermoModel:
-    
+
     cdef public double Tmin
     cdef public double Tmax
     cdef public str comment
-    
+
     cpdef bint isTemperatureValid(ThermoModel self, double T) except -2
 
 #    cpdef double getHeatCapacity(self, double T)
@@ -51,14 +51,14 @@ cdef class ThermoModel:
     cpdef numpy.ndarray getEntropies(self, numpy.ndarray Tlist)
 
     cpdef numpy.ndarray getFreeEnergies(self, numpy.ndarray Tlist)
-    
+
 ################################################################################
 
 cdef class ThermoGAModel(ThermoModel):
 
     cdef public numpy.ndarray Tdata, Cpdata
     cdef public double H298, S298
-    
+
     cpdef double getHeatCapacity(self, double T)
 
     cpdef double getEnthalpy(self, double T)
@@ -70,7 +70,7 @@ cdef class ThermoGAModel(ThermoModel):
 ################################################################################
 
 cdef class WilhoitModel(ThermoModel):
-    
+
     cdef public double cp0
     cdef public double cpInf
     cdef public double B
@@ -80,7 +80,7 @@ cdef class WilhoitModel(ThermoModel):
     cdef public double a3
     cdef public double H0
     cdef public double S0
-    
+
     cpdef double getHeatCapacity(self, double T)
 
     cpdef double getEnthalpy(self, double T)
@@ -88,22 +88,22 @@ cdef class WilhoitModel(ThermoModel):
     cpdef double getEntropy(self, double T)
 
     cpdef double getFreeEnergy(self, double T)
-    
-    cpdef double __residual(self, double B, numpy.ndarray Tlist, numpy.ndarray Cplist, 
+
+    cpdef double __residual(self, double B, numpy.ndarray Tlist, numpy.ndarray Cplist,
         bint linear, int nFreq, int nRotors, double H298, double S298)
-    
+
     cpdef WilhoitModel fitToData(self, numpy.ndarray Tlist, numpy.ndarray Cplist,
         bint linear, int nFreq, int nRotors, double H298, double S298, double B0=?)
-    
+
     cpdef WilhoitModel fitToDataForConstantB(self, numpy.ndarray Tlist, numpy.ndarray Cplist,
         bint linear, int nFreq, int nRotors, double B, double H298, double S298)
-    
+
 ################################################################################
 
 cdef class NASAPolynomial(ThermoModel):
-    
+
     cdef public double c0, c1, c2, c3, c4, c5, c6
-    
+
     cpdef double getHeatCapacity(self, double T)
 
     cpdef double getEnthalpy(self, double T)
@@ -111,13 +111,13 @@ cdef class NASAPolynomial(ThermoModel):
     cpdef double getEntropy(self, double T)
 
     cpdef double getFreeEnergy(self, double T)
-    
+
 ################################################################################
 
 cdef class NASAModel(ThermoModel):
-    
+
     cdef public list polynomials
-    
+
     cpdef double getHeatCapacity(self, double T)
 
     cpdef double getEnthalpy(self, double T)
@@ -125,5 +125,5 @@ cdef class NASAModel(ThermoModel):
     cpdef double getEntropy(self, double T)
 
     cpdef double getFreeEnergy(self, double T)
-    
+
     cpdef NASAPolynomial __selectPolynomialForTemperature(self, double T)

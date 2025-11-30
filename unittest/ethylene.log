@@ -4,10 +4,10 @@
  Initial command:
  /home/g03/l1.exe /home/g03scratch/cfgold/Gau-21466.inp -scrdir=/home/g03scratch/cfgold/
  Entering Link 1 = /home/g03/l1.exe PID=     21467.
-  
+
  Copyright (c) 1988,1990,1992,1993,1995,1998,2003, Gaussian, Inc.
                   All Rights Reserved.
-  
+
  This is the Gaussian(R) 03 program.  It is based on the
  the Gaussian(R) 98 system (copyright 1998, Gaussian, Inc.),
  the Gaussian(R) 94 system (copyright 1995, Gaussian, Inc.),
@@ -18,41 +18,41 @@
  University), and the Gaussian 82(TM) system (copyright 1983,
  Carnegie Mellon University). Gaussian is a federally registered
  trademark of Gaussian, Inc.
-  
+
  This software contains proprietary and confidential information,
  including trade secrets, belonging to Gaussian, Inc.
-  
+
  This software is provided under written license and may be
  used, copied, transmitted, or stored only in accord with that
  written license.
-  
+
  The following legend is applicable only to US Government
  contracts under DFARS:
-  
+
                     RESTRICTED RIGHTS LEGEND
-  
+
  Use, duplication or disclosure by the US Government is subject
  to restrictions as set forth in subparagraph (c)(1)(ii) of the
  Rights in Technical Data and Computer Software clause at DFARS
  252.227-7013.
-  
+
  Gaussian, Inc.
  Carnegie Office Park, Building 6, Pittsburgh, PA 15106 USA
-  
+
  The following legend is applicable only to US Government
  contracts under FAR:
-  
+
                     RESTRICTED RIGHTS LEGEND
-  
+
  Use, reproduction and disclosure by the US Government is subject
  to restrictions as set forth in subparagraph (c) of the
  Commercial Computer Software - Restricted Rights clause at FAR
  52.227-19.
-  
+
  Gaussian, Inc.
  Carnegie Office Park, Building 6, Pittsburgh, PA 15106 USA
-  
-  
+
+
  ---------------------------------------------------------------
  Warning -- This program may not be used in any manner that
  competes with the business of Gaussian, Inc. or will provide
@@ -65,32 +65,32 @@
  licensee that it is not a competitor of Gaussian, Inc. and that
  it will not use this program in any manner prohibited above.
  ---------------------------------------------------------------
-  
+
 
  Cite this work as:
  Gaussian 03, Revision B.05,
- M. J. Frisch, G. W. Trucks, H. B. Schlegel, G. E. Scuseria, 
- M. A. Robb, J. R. Cheeseman, J. A. Montgomery, Jr., T. Vreven, 
- K. N. Kudin, J. C. Burant, J. M. Millam, S. S. Iyengar, J. Tomasi, 
- V. Barone, B. Mennucci, M. Cossi, G. Scalmani, N. Rega, 
- G. A. Petersson, H. Nakatsuji, M. Hada, M. Ehara, K. Toyota, 
- R. Fukuda, J. Hasegawa, M. Ishida, T. Nakajima, Y. Honda, O. Kitao, 
- H. Nakai, M. Klene, X. Li, J. E. Knox, H. P. Hratchian, J. B. Cross, 
- C. Adamo, J. Jaramillo, R. Gomperts, R. E. Stratmann, O. Yazyev, 
- A. J. Austin, R. Cammi, C. Pomelli, J. W. Ochterski, P. Y. Ayala, 
- K. Morokuma, G. A. Voth, P. Salvador, J. J. Dannenberg, 
- V. G. Zakrzewski, S. Dapprich, A. D. Daniels, M. C. Strain, 
- O. Farkas, D. K. Malick, A. D. Rabuck, K. Raghavachari, 
- J. B. Foresman, J. V. Ortiz, Q. Cui, A. G. Baboul, S. Clifford, 
- J. Cioslowski, B. B. Stefanov, G. Liu, A. Liashenko, P. Piskorz, 
- I. Komaromi, R. L. Martin, D. J. Fox, T. Keith, M. A. Al-Laham, 
- C. Y. Peng, A. Nanayakkara, M. Challacombe, P. M. W. Gill, 
- B. Johnson, W. Chen, M. W. Wong, C. Gonzalez, and J. A. Pople, 
+ M. J. Frisch, G. W. Trucks, H. B. Schlegel, G. E. Scuseria,
+ M. A. Robb, J. R. Cheeseman, J. A. Montgomery, Jr., T. Vreven,
+ K. N. Kudin, J. C. Burant, J. M. Millam, S. S. Iyengar, J. Tomasi,
+ V. Barone, B. Mennucci, M. Cossi, G. Scalmani, N. Rega,
+ G. A. Petersson, H. Nakatsuji, M. Hada, M. Ehara, K. Toyota,
+ R. Fukuda, J. Hasegawa, M. Ishida, T. Nakajima, Y. Honda, O. Kitao,
+ H. Nakai, M. Klene, X. Li, J. E. Knox, H. P. Hratchian, J. B. Cross,
+ C. Adamo, J. Jaramillo, R. Gomperts, R. E. Stratmann, O. Yazyev,
+ A. J. Austin, R. Cammi, C. Pomelli, J. W. Ochterski, P. Y. Ayala,
+ K. Morokuma, G. A. Voth, P. Salvador, J. J. Dannenberg,
+ V. G. Zakrzewski, S. Dapprich, A. D. Daniels, M. C. Strain,
+ O. Farkas, D. K. Malick, A. D. Rabuck, K. Raghavachari,
+ J. B. Foresman, J. V. Ortiz, Q. Cui, A. G. Baboul, S. Clifford,
+ J. Cioslowski, B. B. Stefanov, G. Liu, A. Liashenko, P. Piskorz,
+ I. Komaromi, R. L. Martin, D. J. Fox, T. Keith, M. A. Al-Laham,
+ C. Y. Peng, A. Nanayakkara, M. Challacombe, P. M. W. Gill,
+ B. Johnson, W. Chen, M. W. Wong, C. Gonzalez, and J. A. Pople,
  Gaussian, Inc., Pittsburgh PA, 2003.
- 
+
  **********************************************
  Gaussian 03:  x86-Linux-G03RevB.05 24-Oct-2003
-                   9-Feb-2007 
+                   9-Feb-2007
  **********************************************
  %chk=test.chk
  %mem=600MB
@@ -129,19 +129,19 @@
  H                    4    B4       1    A3       2    D2       0
  H                    4    B5       1    A4       2    D3       0
        Variables:
-  B1                    1.08348                  
-  B2                    1.08348                  
-  B3                    1.32478                  
-  B4                    1.08348                  
-  B5                    1.08348                  
-  A1                  116.14251                  
-  A2                  121.92872                  
-  A3                  121.67138                  
-  A4                  121.67141                  
-  D1                  180.                       
-  D2                 -180.                       
-  D3                    0.                       
- 
+  B1                    1.08348
+  B2                    1.08348
+  B3                    1.32478
+  B4                    1.08348
+  B5                    1.08348
+  A1                  116.14251
+  A2                  121.92872
+  A3                  121.67138
+  A4                  121.67141
+  D1                  180.
+  D2                 -180.
+  D3                    0.
+
 
  GradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGrad
  Berny optimization.
@@ -172,7 +172,7 @@
  Number of steps in this run= 100 maximum allowed number of steps= 100.
  GradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGrad
 
-                          Input orientation:                          
+                          Input orientation:
  ---------------------------------------------------------------------
  Center     Atomic     Atomic              Coordinates (Angstroms)
  Number     Number      Type              X           Y           Z
@@ -371,14 +371,14 @@
     D3        0.00000   0.00000   0.00000   0.00000   0.00000   0.00000
     D4        3.14159   0.00000   0.00000   0.00000   0.00000   3.14159
          Item               Value     Threshold  Converged?
- Maximum Force            0.002659     0.000450     NO 
- RMS     Force            0.000911     0.000300     NO 
- Maximum Displacement     0.005201     0.001800     NO 
- RMS     Displacement     0.002659     0.001200     NO 
+ Maximum Force            0.002659     0.000450     NO
+ RMS     Force            0.000911     0.000300     NO
+ Maximum Displacement     0.005201     0.001800     NO
+ RMS     Displacement     0.002659     0.001200     NO
  Predicted change in Energy=-1.453504D-05
  GradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGrad
 
-                          Input orientation:                          
+                          Input orientation:
  ---------------------------------------------------------------------
  Center     Atomic     Atomic              Coordinates (Angstroms)
  Number     Number      Type              X           Y           Z
@@ -537,7 +537,7 @@
  --------------------------------------------------------------------------------
  GradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGrad
 
-                          Input orientation:                          
+                          Input orientation:
  ---------------------------------------------------------------------
  Center     Atomic     Atomic              Coordinates (Angstroms)
  Number     Number      Type              X           Y           Z
@@ -727,7 +727,7 @@
  Number of steps in this run=   2 maximum allowed number of steps=   2.
  GradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGrad
 
-                          Input orientation:                          
+                          Input orientation:
  ---------------------------------------------------------------------
  Center     Atomic     Atomic              Coordinates (Angstroms)
  Number     Number      Type              X           Y           Z
@@ -974,7 +974,7 @@
  Vibrational temperatures:   1200.65  1400.37  1403.33  1535.35  1781.86
           (Kelvin)           1984.72  2118.29  2433.45  4491.21  4512.99
                              4593.21  4634.24
- 
+
  Zero-point correction=                           0.050811 (Hartree/Particle)
  Thermal correction to Energy=                    0.053852
  Thermal correction to Enthalpy=                  0.054797
@@ -983,7 +983,7 @@
  Sum of electronic and thermal Energies=               -78.560127
  Sum of electronic and thermal Enthalpies=             -78.559183
  Sum of electronic and thermal Free Energies=          -78.585346
- 
+
                      E (Thermal)             CV                S
                       KCal/Mol        Cal/Mol-Kelvin    Cal/Mol-Kelvin
  Total                   33.793              8.094             55.064
@@ -1179,7 +1179,7 @@
  H,0,-1.1209923537,0.,-1.7857810345
  H,0,-2.0970215489,0.,-0.2194913106
  Recover connectivity data from disk.
-                          Input orientation:                          
+                          Input orientation:
  ---------------------------------------------------------------------
  Center     Atomic     Atomic              Coordinates (Angstroms)
  Number     Number      Type              X           Y           Z
@@ -1251,7 +1251,7 @@
  E3=       -0.21487781D-01        EUMP3=      -0.78313955890D+02
  E4(DQ)=   -0.23056722D-02        UMP4(DQ)=   -0.78316261562D+02
  E4(SDQ)=  -0.47615958D-02        UMP4(SDQ)=  -0.78318717485D+02
- DE(Corr)= -0.27425629     E(CORR)=     -78.308670201    
+ DE(Corr)= -0.27425629     E(CORR)=     -78.308670201
  NORM(A)=   0.10553939D+01
  Iteration Nr.   2
  **********************
@@ -1406,7 +1406,7 @@
  H,0,-1.1209923537,0.,-1.7857810345
  H,0,-2.0970215489,0.,-0.2194913106
  Recover connectivity data from disk.
-                          Input orientation:                          
+                          Input orientation:
  ---------------------------------------------------------------------
  Center     Atomic     Atomic              Coordinates (Angstroms)
  Number     Number      Type              X           Y           Z
@@ -1587,7 +1587,7 @@
  H,0,-1.1209923537,0.,-1.7857810345
  H,0,-2.0970215489,0.,-0.2194913106
  Recover connectivity data from disk.
-                          Input orientation:                          
+                          Input orientation:
  ---------------------------------------------------------------------
  Center     Atomic     Atomic              Coordinates (Angstroms)
  Number     Number      Type              X           Y           Z
@@ -1663,7 +1663,7 @@
  G. A. Petersson and M. A. Al-Laham, JCP 94, 6081 (1991)
  G. A. Petersson, T. Tensfeldt, and J. A. Montgomery, JCP 94, 6091 (1991)
  J. A. Montgomery, J. W. Ochterski, and G. A. Petersson, JCP 101, 5900 (1994)
- 
+
  Minimum Number of PNO for Extrapolation =  10
  Absolute Overlaps: IRadAn =     99590
  LocTrn: ILocal=3 LocCor=F DoCore=F.

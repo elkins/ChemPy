@@ -31,8 +31,8 @@
 This module contains exception classes for ChemPy-related exceptions. All such
 exceptions should be placed within this module rather than scattered amongst
 the others; this allows any ChemPy module that imports this one to see all of
-the available ChemPy exceptions. Also, since this module contains only 
-exception objecets, it is not among those that are compiled via Cython for 
+the available ChemPy exceptions. Also, since this module contains only
+exception objecets, it is not among those that are compiled via Cython for
 speed.
 
 All ChemPy exceptions derive from the base class :class:`ChemPyError`. This
@@ -41,6 +41,7 @@ discouraged.
 """
 
 ################################################################################
+
 
 class ChemPyError(Exception):
     """
@@ -51,29 +52,36 @@ class ChemPyError(Exception):
 
     def __init__(self, msg):
         self.msg = msg
-    
+
     def __str__(self):
-        return self.msg	
+        return self.msg
+
 
 ################################################################################
+
 
 class InvalidThermoModelError(ChemPyError):
     """
     An exception used when working with a thermodynamics model to indicate that
     something went wrong while doing so.
     """
+
     pass
+
 
 class InvalidKineticsModelError(ChemPyError):
     """
     An exception used when working with a kinetics model to indicate that
     something went wrong while doing so.
     """
+
     pass
+
 
 class InvalidStatesModelError(ChemPyError):
     """
     An exception used when working with a states model to indicate that
     something went wrong while doing so.
     """
+
     pass

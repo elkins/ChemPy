@@ -15,31 +15,34 @@ Note:
     The package can be used without compilation using pure Python modules.
 """
 
-from setuptools import setup, Extension
-import numpy
 import os
 import sys
 
+import numpy
+from setuptools import Extension, setup
+
 # Check if Cython compilation should be skipped (e.g., on Windows CI)
 skip_build = (
-    os.environ.get('SKIP_CYTHON_BUILD', '').lower() in ('1', 'true', 'yes')
-    or sys.platform == 'win32'  # Skip on Windows due to compilation issues
+    os.environ.get("SKIP_CYTHON_BUILD", "").lower() in ("1", "true", "yes")
+    or sys.platform == "win32"  # Skip on Windows due to compilation issues
 )
 
 try:
     import Cython.Compiler.Options
-    
+
     # Create annotated HTML files for each of the Cython modules for debugging
     Cython.Compiler.Options.annotate = True
     cython_available = True and not skip_build
 except ImportError:
     cython_available = False
-    
+
 if skip_build:
-    if sys.platform == 'win32':
+    if sys.platform == "win32":
         print("Info: Skipping Cython build on Windows. Pure Python modules will be used.")
     else:
-        print("Info: Skipping Cython build (SKIP_CYTHON_BUILD set). Pure Python modules will be used.")
+        print(
+            "Info: Skipping Cython build (SKIP_CYTHON_BUILD set). Pure Python modules will be used."
+        )
 elif not cython_available:
     print("Warning: Cython not available. Pure Python modules will be used.")
 

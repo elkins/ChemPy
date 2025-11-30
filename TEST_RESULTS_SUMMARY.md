@@ -146,7 +146,7 @@ conda install -c conda-forge openbabel pybel-force-field
    - Reference: `unittest/ethylene.log` and `unittest/oxygen.log` test data exist
 
 ### Medium Priority (Investigation Needed)
-3. **Review Hindered Rotor Calculations**: 
+3. **Review Hindered Rotor Calculations**:
    - testHinderedRotor1: ~0.62% difference in partition functions
    - testHinderedRotor2: Potential energy discrepancy
    - May require comparison against reference implementations

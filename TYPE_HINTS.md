@@ -47,12 +47,12 @@ if TYPE_CHECKING:
 ```python
 class Element:
     """A chemical element."""
-    
+
     number: int
     symbol: str
     name: str
     mass: float
-    
+
     def __init__(self, number: int, symbol: str, name: str, mass: float) -> None:
         """Initialize an Element."""
         self.number = number
@@ -67,14 +67,14 @@ class Element:
 def getElement(number: int = 0, symbol: str = '') -> Optional[Element]:
     """
     Get an Element by atomic number or symbol.
-    
+
     Args:
         number: Atomic number (0 to match any).
         symbol: Element symbol ('' to match any).
-    
+
     Returns:
         Element: The matching element, or None if not found.
-    
+
     Raises:
         ChemPyError: If no element matches the criteria.
     """
@@ -140,7 +140,7 @@ if TYPE_CHECKING:
 
 class Reaction:
     molecules: List[Molecule]
-    
+
     def __init__(self, molecules: Optional[List[Molecule]] = None):
         self.molecules = molecules or []
 ```
@@ -152,10 +152,10 @@ from typing import Final, ClassVar
 
 class Constants:
     """Physical constants."""
-    
+
     # Immutable constant
     NA: Final[float] = 6.02214179e23
-    
+
     # Class variable shared by all instances
     unit_system: ClassVar[str] = "SI"
 ```
@@ -257,7 +257,7 @@ def analyze(
 ) -> Tuple[List[Dict[str, Any]], float]:
     """
     Analyze molecules at given temperature.
-    
+
     Returns:
         Tuple of (analysis results list, average energy)
         where each result is a dict with keys: 'id', 'energy', 'stable'

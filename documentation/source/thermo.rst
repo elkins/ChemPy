@@ -15,10 +15,9 @@ Thermodynamics Models
 
 .. autoclass:: chempy.thermo.NASAModel
     :members:
-    
+
 Other Classes
 =============
 
 .. autoclass:: chempy.thermo.NASAPolynomial
     :members:
-

@@ -259,4 +259,3 @@ ChemPy was originally developed by Joshua W. Allen and is maintained by the open
 ---
 
 Made with ❤️ for the chemistry community
-

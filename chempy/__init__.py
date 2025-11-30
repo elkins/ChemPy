@@ -51,16 +51,17 @@ __all__ = [
     "exception",
 ]
 
+
 # Lazy imports for better startup time
 def __getattr__(name: str):
     """Lazy import of submodules."""
     if name in __all__:
         import importlib
+
         return importlib.import_module(f".{name}", __name__)
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
 
 def __dir__():
     """Return list of public attributes."""
     return sorted(__all__ + ["__version__", "__author__", "__author_email__", "__license__"])
-
-

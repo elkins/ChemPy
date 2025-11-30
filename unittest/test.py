@@ -3,13 +3,13 @@
 
 import unittest
 
-from gaussianTest import *
-from geometryTest import *
-from graphTest import *
-from moleculeTest import *
-from reactionTest import *
-from statesTest import *
-from thermoTest import *
+from gaussianTest import *  # noqa: F403,F401
+from geometryTest import *  # noqa: F403,F401
+from graphTest import *  # noqa: F403,F401
+from moleculeTest import *  # noqa: F403,F401
+from reactionTest import *  # noqa: F403,F401
+from statesTest import *  # noqa: F403,F401
+from thermoTest import *  # noqa: F403,F401
 
 if __name__ == "__main__":
-	unittest.main(testRunner=unittest.TextTestRunner(verbosity=2))
+    unittest.main(testRunner=unittest.TextTestRunner(verbosity=2))

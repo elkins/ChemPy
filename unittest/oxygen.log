@@ -4,10 +4,10 @@
  Initial command:
  /home/g03/l1.exe /scratch/cfgold/Gau-24875.inp -scrdir=/scratch/cfgold/
  Entering Link 1 = /home/g03/l1.exe PID=     24877.
-  
+
  Copyright (c) 1988,1990,1992,1993,1995,1998,2003,2004, Gaussian, Inc.
                   All Rights Reserved.
-  
+
  This is the Gaussian(R) 03 program.  It is based on the
  the Gaussian(R) 98 system (copyright 1998, Gaussian, Inc.),
  the Gaussian(R) 94 system (copyright 1995, Gaussian, Inc.),
@@ -18,28 +18,28 @@
  University), and the Gaussian 82(TM) system (copyright 1983,
  Carnegie Mellon University). Gaussian is a federally registered
  trademark of Gaussian, Inc.
-  
+
  This software contains proprietary and confidential information,
  including trade secrets, belonging to Gaussian, Inc.
-  
+
  This software is provided under written license and may be
  used, copied, transmitted, or stored only in accord with that
  written license.
-  
+
  The following legend is applicable only to US Government
  contracts under FAR:
-  
+
                     RESTRICTED RIGHTS LEGEND
-  
+
  Use, reproduction and disclosure by the US Government is
  subject to restrictions as set forth in subparagraphs (a)
  and (c) of the Commercial Computer Software - Restricted
  Rights clause in FAR 52.227-19.
-  
+
  Gaussian, Inc.
  340 Quinnipiac St., Bldg. 40, Wallingford CT 06492
-  
-  
+
+
  ---------------------------------------------------------------
  Warning -- This program may not be used in any manner that
  competes with the business of Gaussian, Inc. or will provide
@@ -52,32 +52,32 @@
  licensee that it is not a competitor of Gaussian, Inc. and that
  it will not use this program in any manner prohibited above.
  ---------------------------------------------------------------
-  
+
 
  Cite this work as:
  Gaussian 03, Revision D.01,
- M. J. Frisch, G. W. Trucks, H. B. Schlegel, G. E. Scuseria, 
- M. A. Robb, J. R. Cheeseman, J. A. Montgomery, Jr., T. Vreven, 
- K. N. Kudin, J. C. Burant, J. M. Millam, S. S. Iyengar, J. Tomasi, 
- V. Barone, B. Mennucci, M. Cossi, G. Scalmani, N. Rega, 
- G. A. Petersson, H. Nakatsuji, M. Hada, M. Ehara, K. Toyota, 
- R. Fukuda, J. Hasegawa, M. Ishida, T. Nakajima, Y. Honda, O. Kitao, 
- H. Nakai, M. Klene, X. Li, J. E. Knox, H. P. Hratchian, J. B. Cross, 
- V. Bakken, C. Adamo, J. Jaramillo, R. Gomperts, R. E. Stratmann, 
- O. Yazyev, A. J. Austin, R. Cammi, C. Pomelli, J. W. Ochterski, 
- P. Y. Ayala, K. Morokuma, G. A. Voth, P. Salvador, J. J. Dannenberg, 
- V. G. Zakrzewski, S. Dapprich, A. D. Daniels, M. C. Strain, 
- O. Farkas, D. K. Malick, A. D. Rabuck, K. Raghavachari, 
- J. B. Foresman, J. V. Ortiz, Q. Cui, A. G. Baboul, S. Clifford, 
- J. Cioslowski, B. B. Stefanov, G. Liu, A. Liashenko, P. Piskorz, 
- I. Komaromi, R. L. Martin, D. J. Fox, T. Keith, M. A. Al-Laham, 
- C. Y. Peng, A. Nanayakkara, M. Challacombe, P. M. W. Gill, 
- B. Johnson, W. Chen, M. W. Wong, C. Gonzalez, and J. A. Pople, 
+ M. J. Frisch, G. W. Trucks, H. B. Schlegel, G. E. Scuseria,
+ M. A. Robb, J. R. Cheeseman, J. A. Montgomery, Jr., T. Vreven,
+ K. N. Kudin, J. C. Burant, J. M. Millam, S. S. Iyengar, J. Tomasi,
+ V. Barone, B. Mennucci, M. Cossi, G. Scalmani, N. Rega,
+ G. A. Petersson, H. Nakatsuji, M. Hada, M. Ehara, K. Toyota,
+ R. Fukuda, J. Hasegawa, M. Ishida, T. Nakajima, Y. Honda, O. Kitao,
+ H. Nakai, M. Klene, X. Li, J. E. Knox, H. P. Hratchian, J. B. Cross,
+ V. Bakken, C. Adamo, J. Jaramillo, R. Gomperts, R. E. Stratmann,
+ O. Yazyev, A. J. Austin, R. Cammi, C. Pomelli, J. W. Ochterski,
+ P. Y. Ayala, K. Morokuma, G. A. Voth, P. Salvador, J. J. Dannenberg,
+ V. G. Zakrzewski, S. Dapprich, A. D. Daniels, M. C. Strain,
+ O. Farkas, D. K. Malick, A. D. Rabuck, K. Raghavachari,
+ J. B. Foresman, J. V. Ortiz, Q. Cui, A. G. Baboul, S. Clifford,
+ J. Cioslowski, B. B. Stefanov, G. Liu, A. Liashenko, P. Piskorz,
+ I. Komaromi, R. L. Martin, D. J. Fox, T. Keith, M. A. Al-Laham,
+ C. Y. Peng, A. Nanayakkara, M. Challacombe, P. M. W. Gill,
+ B. Johnson, W. Chen, M. W. Wong, C. Gonzalez, and J. A. Pople,
  Gaussian, Inc., Wallingford CT, 2004.
- 
+
  ******************************************
  Gaussian 03:  AM64L-G03RevD.01 13-Oct-2005
-                 4-Aug-2009 
+                 4-Aug-2009
  ******************************************
  %chk=O2.chk
  %mem=800MB
@@ -120,8 +120,8 @@
  O
  O                    1    B1
        Variables:
-  B1                    1.20563                  
- 
+  B1                    1.20563
+
                     Isotopes and Nuclear Properties:
  (Nuclear quadrupole moments (NQMom) in fm**2, nuclear magnetic moments (NMagM)
   in nuclear magnetons)
@@ -153,7 +153,7 @@
 
  Leave Link  103 at Tue Aug  4 14:46:53 2009, MaxMem=  104857600 cpu:       0.2
  (Enter /home/g03/l202.exe)
-                          Input orientation:                          
+                          Input orientation:
  ---------------------------------------------------------------------
  Center     Atomic     Atomic              Coordinates (Angstroms)
  Number     Number      Type              X           Y           Z
@@ -235,7 +235,7 @@
  ExpMin= 8.45D-02 ExpMax= 8.59D+03 ExpMxC= 1.30D+03 IAcc=2 IRadAn=         4 AccDes= 0.00D+00
  HarFok:  IExCor= 402 AccDes= 0.00D+00 IRadAn=         4 IDoV=1
  ScaDFX=  1.000000  1.000000  1.000000  1.000000
- Harris En= -150.343333139362    
+ Harris En= -150.343333139362
  <S**2> of initial guess= 2.0000
  Leave Link  401 at Tue Aug  4 14:46:57 2009, MaxMem=  104857600 cpu:       0.4
  (Enter /home/g03/l502.exe)
@@ -256,7 +256,7 @@
  Integral accuracy reduced to 1.0D-05 until final iterations.
 
  Cycle   1  Pass 0  IDiag  1:
- E= -150.365658441700    
+ E= -150.365658441700
  DIIS: error= 2.40D-02 at cycle   1 NSaved=   1.
  NSaved= 1 IEnMin= 1 EnMin= -150.365658441700     IErMin= 1 ErrMin= 2.40D-02
  ErrMax= 2.40D-02 EMaxC= 1.00D-01 BMatC= 8.53D-02 BMatP= 8.53D-02
@@ -573,11 +573,11 @@
               Baa    -2.5447   184.131    65.703    61.420  0.0000  0.0000  1.0000
      1 O(17)  Bbb     1.2723   -92.066   -32.851   -30.710 -0.4636  0.8861  0.0000
               Bcc     1.2723   -92.066   -32.851   -30.710  0.8861  0.4636  0.0000
- 
+
               Baa    -2.5447   184.131    65.703    61.420  0.0000  0.0000  1.0000
      2 O(17)  Bbb     1.2723   -92.066   -32.851   -30.710  0.0000  1.0000  0.0000
               Bcc     1.2723   -92.066   -32.851   -30.710  1.0000  0.0000  0.0000
- 
+
 
  ---------------------------------------------------------------------------------
 
@@ -726,7 +726,7 @@
     2          8           0.000000000    0.000000000   -0.001505718
  -------------------------------------------------------------------
  Cartesian Forces:  Max     0.001505718 RMS     0.000869327
- Force constants in Cartesian coordinates: 
+ Force constants in Cartesian coordinates:
                 1             2             3             4             5
       1  0.760245D-03
       2  0.000000D+00  0.760245D-03
@@ -739,7 +739,7 @@
  Cartesian forces in FCRed:
  I=    1 X=   2.031744539585D-13 Y=  -5.730778569734D-14 Z=   1.505717901749D-03
  I=    2 X=  -2.031744539585D-13 Y=   5.730778569734D-14 Z=  -1.505717901756D-03
- Cartesian force constants in FCRed: 
+ Cartesian force constants in FCRed:
                 1             2             3             4             5
       1  0.760245D-03
       2  0.000000D+00  0.760245D-03
@@ -749,13 +749,13 @@
       6  0.000000D+00  0.000000D+00 -0.806348D+00  0.000000D+00  0.000000D+00
                 6
       6  0.806348D+00
- Internal forces: 
+ Internal forces:
                1
       1-0.150572D-02
- Internal force constants: 
+ Internal force constants:
                 1
       1  0.806348D+00
- Force constants in internal coordinates: 
+ Force constants in internal coordinates:
                 1
       1  0.806348D+00
  Final forces over variables, Energy=-1.50378486D+02:
@@ -782,16 +782,16 @@
                                  (Linear)    (Quad)   (Total)
     R1        2.27831  -0.00151   0.00000  -0.00187  -0.00187   2.27644
          Item               Value     Threshold  Converged?
- Maximum Force            0.001506     0.000450     NO 
- RMS     Force            0.001506     0.000300     NO 
+ Maximum Force            0.001506     0.000450     NO
+ RMS     Force            0.001506     0.000300     NO
  Maximum Displacement     0.000934     0.001800     YES
- RMS     Displacement     0.001320     0.001200     NO 
+ RMS     Displacement     0.001320     0.001200     NO
  Predicted change in Energy=-1.405835D-06
  GradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGradGrad
 
  Leave Link  103 at Tue Aug  4 14:47:18 2009, MaxMem=  104857600 cpu:       1.4
  (Enter /home/g03/l202.exe)
-                          Input orientation:                          
+                          Input orientation:
  ---------------------------------------------------------------------
  Center     Atomic     Atomic              Coordinates (Angstroms)
  Number     Number      Type              X           Y           Z
@@ -857,7 +857,7 @@
  IRaf=       0 NMat=   1 IRICut=       1 DoRegI=T DoRafI=F ISym2E= 0 JSym2E=0.
 
  Cycle   1  Pass 1  IDiag  1:
- E= -150.378486893994    
+ E= -150.378486893994
  DIIS: error= 1.24D-04 at cycle   1 NSaved=   1.
  NSaved= 1 IEnMin= 1 EnMin= -150.378486893994     IErMin= 1 ErrMin= 1.24D-04
  ErrMax= 1.24D-04 EMaxC= 1.00D-01 BMatC= 4.07D-06 BMatP= 4.07D-06
@@ -1076,7 +1076,7 @@
  Largest change from initial coordinates is atom    1       0.000 Angstoms.
  Leave Link  103 at Tue Aug  4 14:47:28 2009, MaxMem=  104857600 cpu:       0.1
  (Enter /home/g03/l202.exe)
-                          Input orientation:                          
+                          Input orientation:
  ---------------------------------------------------------------------
  Center     Atomic     Atomic              Coordinates (Angstroms)
  Number     Number      Type              X           Y           Z
@@ -1199,11 +1199,11 @@
               Baa    -2.5445   184.121    65.699    61.416  0.0000  0.0000  1.0000
      1 O(17)  Bbb     1.2723   -92.061   -32.850   -30.708  1.0000 -0.0048  0.0000
               Bcc     1.2723   -92.061   -32.850   -30.708  0.0048  1.0000  0.0000
- 
+
               Baa    -2.5445   184.121    65.699    61.416  0.0000  0.0000  1.0000
      2 O(17)  Bbb     1.2723   -92.061   -32.850   -30.708  1.0000  0.0013  0.0000
               Bcc     1.2723   -92.061   -32.850   -30.708 -0.0013  1.0000  0.0000
- 
+
 
  ---------------------------------------------------------------------------------
 
@@ -1225,7 +1225,7 @@
  D*H [C*(O1.O1)]\\@
 
 
- IN THE LONG RUN, DIGGING FOR TRUTH HAS ALWAYS PROVED NOT ONLY 
+ IN THE LONG RUN, DIGGING FOR TRUTH HAS ALWAYS PROVED NOT ONLY
  MORE INTERESTING BUT MORE PROFITABLE THAN DIGGING FOR GOLD.
 
                              -- GEORGE R. HARRISON
@@ -1292,7 +1292,7 @@
 
  Leave Link  103 at Tue Aug  4 14:47:33 2009, MaxMem=  104857600 cpu:       0.2
  (Enter /home/g03/l202.exe)
-                          Input orientation:                          
+                          Input orientation:
  ---------------------------------------------------------------------
  Center     Atomic     Atomic              Coordinates (Angstroms)
  Number     Number      Type              X           Y           Z
@@ -1359,7 +1359,7 @@
  IRaf=       0 NMat=   1 IRICut=       1 DoRegI=T DoRafI=F ISym2E= 0 JSym2E=0.
 
  Cycle   1  Pass 1  IDiag  1:
- E= -150.378487701429    
+ E= -150.378487701429
  DIIS: error= 6.62D-09 at cycle   1 NSaved=   1.
  NSaved= 1 IEnMin= 1 EnMin= -150.378487701429     IErMin= 1 ErrMin= 6.62D-09
  ErrMax= 6.62D-09 EMaxC= 1.00D-01 BMatC= 3.48D-15 BMatP= 3.48D-15
@@ -1562,11 +1562,11 @@
               Baa    -2.5445   184.121    65.699    61.416  0.0000  0.0000  1.0000
      1 O(17)  Bbb     1.2723   -92.061   -32.850   -30.708  0.9965  0.0841  0.0000
               Bcc     1.2723   -92.061   -32.850   -30.708 -0.0841  0.9965  0.0000
- 
+
               Baa    -2.5445   184.121    65.699    61.416  0.0000  0.0000  1.0000
      2 O(17)  Bbb     1.2723   -92.061   -32.850   -30.708  1.0000  0.0042  0.0000
               Bcc     1.2723   -92.061   -32.850   -30.708 -0.0042  1.0000  0.0000
- 
+
 
  ---------------------------------------------------------------------------------
 
@@ -1629,7 +1629,7 @@
                                     2.34151 (Kcal/Mol)
  Vibrational temperatures:   2356.58
           (Kelvin)
- 
+
  Zero-point correction=                           0.003731 (Hartree/Particle)
  Thermal correction to Energy=                    0.006095
  Thermal correction to Enthalpy=                  0.007039
@@ -1638,7 +1638,7 @@
  Sum of electronic and thermal Energies=              -150.372393
  Sum of electronic and thermal Enthalpies=            -150.371449
  Sum of electronic and thermal Free Energies=         -150.394720
- 
+
                      E (Thermal)             CV                S
                       KCal/Mol        Cal/Mol-Kelvin    Cal/Mol-Kelvin
  Total                    3.824              5.014             48.978
@@ -1662,7 +1662,7 @@
     2          8           0.000000000    0.000000000    0.000005146
  -------------------------------------------------------------------
  Cartesian Forces:  Max     0.000005146 RMS     0.000002971
- Force constants in Cartesian coordinates: 
+ Force constants in Cartesian coordinates:
                 1             2             3             4             5
       1  0.972447D-04
       2  0.000000D+00  0.972447D-04
@@ -1672,7 +1672,7 @@
       6  0.000000D+00  0.000000D+00 -0.811939D+00  0.000000D+00  0.000000D+00
                 6
       6  0.811939D+00
- Force constants in internal coordinates: 
+ Force constants in internal coordinates:
                 1
       1  0.811939D+00
  Leave Link  716 at Tue Aug  4 14:47:56 2009, MaxMem=  104857600 cpu:       0.0

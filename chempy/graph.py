@@ -28,15 +28,17 @@
 ################################################################################
 
 """
-This module contains an implementation of a graph data structure (the 
-:class:`Graph` class) and functions for manipulating that graph, including 
+This module contains an implementation of a graph data structure (the
+:class:`Graph` class) and functions for manipulating that graph, including
 efficient isomorphism functions.
 """
 
-from chempy._cython_compat import cython
 import logging
 
+from chempy._cython_compat import cython
+
 ################################################################################
+
 
 class Vertex(object):
     """
@@ -83,13 +85,15 @@ class Vertex(object):
         self.connectivity3 = -1
         self.sortingLabel = -1
 
+
 def getVertexConnectivityValue(vertex):
     """
     Return a value used to sort vertices prior to poposing candidate pairs in
     :meth:`__VF2_pairs`. The value returned is based on the vertex's
     connectivity values (and assumes that they are set properly).
     """
-    return ( -256*vertex.connectivity1 - 16*vertex.connectivity2 - vertex.connectivity3 )
+    return -256 * vertex.connectivity1 - 16 * vertex.connectivity2 - vertex.connectivity3
+
 
 def getVertexSortingLabel(vertex):
     """
@@ -99,7 +103,9 @@ def getVertexSortingLabel(vertex):
     """
     return vertex.sortingLabel
 
+
 ################################################################################
+
 
 class Edge(object):
     """
@@ -127,7 +133,9 @@ class Edge(object):
         """
         return True
 
+
 ################################################################################
+
 
 class Graph:
     """
@@ -143,7 +151,7 @@ class Graph:
     def __init__(self, vertices=None, edges=None):
         self.vertices = vertices or []
         self.edges = edges or {}
-        
+
     def addVertex(self, vertex):
         """
         Add a `vertex` to the graph. The vertex is initialized with no edges.
@@ -225,8 +233,11 @@ class Graph:
                 if deep:
                     index1 = self.vertices.index(vertex1)
                     index2 = self.vertices.index(vertex2)
-                    other.addEdge(other.vertices[index1], other.vertices[index2],
-                    self.edges[vertex1][vertex2].copy())
+                    other.addEdge(
+                        other.vertices[index1],
+                        other.vertices[index2],
+                        self.edges[vertex1][vertex2].copy(),
+                    )
                 else:
                     other.addEdge(vertex1, vertex2, self.edges[vertex1][vertex2])
         return other
@@ -275,7 +286,7 @@ class Graph:
             return [new1]
 
         # Arbitrarily choose last atom as starting point
-        verticesToMove = [ self.vertices[-1] ]
+        verticesToMove = [self.vertices[-1]]
 
         # Iterate until there are no more atoms to move
         index = 0
@@ -314,8 +325,9 @@ class Graph:
         have modified the graph.
         """
         vertex = cython.declare(Vertex)
-        for vertex in self.vertices: vertex.resetConnectivityValues()
-        
+        for vertex in self.vertices:
+            vertex.resetConnectivityValues()
+
     def updateConnectivityValues(self):
         """
         Update the connectivity values for each vertex in the graph. These are
@@ -325,7 +337,9 @@ class Graph:
         cython.declare(count=cython.short, edges=dict)
         cython.declare(vertex1=Vertex, vertex2=Vertex)
 
-        assert str(self.__class__) != 'chempy.molecule.Molecule' or not self.implicitHydrogens, "%s has implicit hydrogens" % self
+        assert str(self.__class__) != "chempy.molecule.Molecule" or not self.implicitHydrogens, (
+            "%s has implicit hydrogens" % self
+        )
 
         for vertex1 in self.vertices:
             count = len(self.edges[vertex1])
@@ -333,14 +347,16 @@ class Graph:
         for vertex1 in self.vertices:
             count = 0
             edges = self.edges[vertex1]
-            for vertex2 in edges: count += vertex2.connectivity1
+            for vertex2 in edges:
+                count += vertex2.connectivity1
             vertex1.connectivity2 = count
         for vertex1 in self.vertices:
             count = 0
             edges = self.edges[vertex1]
-            for vertex2 in edges: count += vertex2.connectivity2
+            for vertex2 in edges:
+                count += vertex2.connectivity2
             vertex1.connectivity3 = count
-        
+
     def sortVertices(self):
         """
         Sort the vertices in the graph. This can make certain operations, e.g.
@@ -349,7 +365,8 @@ class Graph:
         cython.declare(index=cython.int, vertex=Vertex)
         # Only need to conduct sort if there is an invalid sorting label on any vertex
         for vertex in self.vertices:
-            if vertex.sortingLabel < 0: break
+            if vertex.sortingLabel < 0:
+                break
         else:
             return
         self.vertices.sort(key=getVertexConnectivityValue)
@@ -361,7 +378,9 @@ class Graph:
         Returns :data:`True` if two graphs are isomorphic and :data:`False`
         otherwise. Uses the VF2 algorithm of Vento and Foggia.
         """
-        ismatch, mapList = VF2_isomorphism(self, other, subgraph=False, findAll=False, initialMap=initialMap)
+        ismatch, mapList = VF2_isomorphism(
+            self, other, subgraph=False, findAll=False, initialMap=initialMap
+        )
         return ismatch
 
     def findIsomorphism(self, other, initialMap=None):
@@ -377,7 +396,9 @@ class Graph:
         Returns :data:`True` if `other` is subgraph isomorphic and :data:`False`
         otherwise. Uses the VF2 algorithm of Vento and Foggia.
         """
-        ismatch, mapList = VF2_isomorphism(self, other, subgraph=True, findAll=False, initialMap=initialMap)
+        ismatch, mapList = VF2_isomorphism(
+            self, other, subgraph=True, findAll=False, initialMap=initialMap
+        )
         return ismatch
 
     def findSubgraphIsomorphisms(self, other, initialMap=None):
@@ -437,7 +458,8 @@ class Graph:
                 # make the chain a little longer and explore again
                 chain.append(vertex2)
                 found = self.__isChainInCycle(chain)
-                if found: return True
+                if found:
+                    return True
                 # didn't find a cycle down this path (-vertex2),
                 # so remove the vertex from the chain
                 chain.remove(vertex2)
@@ -451,11 +473,11 @@ class Graph:
         chain = cython.declare(list)
         cycleList = cython.declare(list)
 
-        cycleList=list()
+        cycleList = list()
         chain = [startingVertex]
 
-        #chainLabels=range(len(self.keys()))
-        #print "Starting at %s in graph: %s"%(self.keys().index(startingVertex),chainLabels)
+        # chainLabels=range(len(self.keys()))
+        # print "Starting at %s in graph: %s"%(self.keys().index(startingVertex),chainLabels)
 
         cycleList = self.__exploreCyclesRecursively(chain, cycleList)
         return cycleList
@@ -517,13 +539,14 @@ class Graph:
 
         # Make a copy of the graph so we don't modify the original
         graph = self.copy()
-        
+
         # Step 1: Remove all terminal vertices
         done = False
         while not done:
             verticesToRemove = []
             for vertex1, value in graph.edges.items():
-                if len(value) == 1: verticesToRemove.append(vertex1)
+                if len(value) == 1:
+                    verticesToRemove.append(vertex1)
             done = len(verticesToRemove) == 0
             # Remove identified vertices from graph
             for vertex in verticesToRemove:
@@ -539,7 +562,7 @@ class Graph:
         for vertex in verticesToRemove:
             graph.removeVertex(vertex)
 
-        ### also need to remove EDGES that are not in ring
+        # also need to remove EDGES that are not in ring
 
         # Step 3: Split graph into remaining subgraphs
         graphs = graph.split()
@@ -568,9 +591,9 @@ class Graph:
                         graph.removeEdge(rootVertex, vertex2)
                     # then remove it
                     graph.removeVertex(rootVertex)
-                    #print("Removed vertex that's no longer in ring")
-                    continue # (pick a new root Vertex)
-#                   raise Exception('Did not find expected cycle!')
+                    # print("Removed vertex that's no longer in ring")
+                    continue  # (pick a new root Vertex)
+                #                   raise Exception('Did not find expected cycle!')
 
                 # Keep the smallest of the cycles found above
                 cycle = cycles[0]
@@ -595,7 +618,9 @@ class Graph:
 
         return cycleList
 
+
 ################################################################################
+
 
 def VF2_isomorphism(graph1, graph2, subgraph=False, findAll=False, initialMap=None):
     """
@@ -645,9 +670,10 @@ def VF2_isomorphism(graph1, graph2, subgraph=False, findAll=False, initialMap=No
             # a subgraph of the first
             return False, map21List
 
-    if initialMap is None: initialMap = {}
+    if initialMap is None:
+        initialMap = {}
     map12List = list()
-    
+
     # Initialize callDepth with the size of the largest graph
     # Each recursive call to __VF2_match will decrease it by one;
     # when the whole graph has been explored, it should reach 0
@@ -662,22 +688,35 @@ def VF2_isomorphism(graph1, graph2, subgraph=False, findAll=False, initialMap=No
     #   map21 = map to 2 from 1
     #   map12 = map to 1 from 2
     map21 = initialMap
-    map12 = dict([(v,k) for k,v in initialMap.items()])
-    
+    map12 = dict([(v, k) for k, v in initialMap.items()])
+
     # Generate an initial set of terminals
     terminals1 = __VF2_terminals(graph1, map21)
     terminals2 = __VF2_terminals(graph2, map12)
 
-    isMatch = __VF2_match(graph1, graph2, map21, map12, \
-        terminals1, terminals2, subgraph, findAll, map21List, map12List, callDepth)
+    isMatch = __VF2_match(
+        graph1,
+        graph2,
+        map21,
+        map12,
+        terminals1,
+        terminals2,
+        subgraph,
+        findAll,
+        map21List,
+        map12List,
+        callDepth,
+    )
 
     if findAll:
         return len(map21List) > 0, map21List
     else:
         return isMatch, map21
 
-def __VF2_feasible(graph1, graph2, vertex1, vertex2, map21, map12, terminals1,
-    terminals2, subgraph):
+
+def __VF2_feasible(
+    graph1, graph2, vertex1, vertex2, map21, map12, terminals1, terminals2, subgraph
+):
     """
     Returns :data:`True` if two vertices `vertex1` and `vertex2` from graphs
     `graph1` and `graph2`, respectively, are feasible matches. `mapping21` and
@@ -697,19 +736,29 @@ def __VF2_feasible(graph1, graph2, vertex1, vertex2, map21, map12, terminals1,
 
     cython.declare(vert1=Vertex, vert2=Vertex, edge1=Edge, edge2=Edge, edges1=dict, edges2=dict)
     cython.declare(i=cython.int)
-    cython.declare(term1Count=cython.int, term2Count=cython.int, neither1Count=cython.int, neither2Count=cython.int)
+    cython.declare(
+        term1Count=cython.int,
+        term2Count=cython.int,
+        neither1Count=cython.int,
+        neither2Count=cython.int,
+    )
 
     if not subgraph:
         # To be feasible the connectivity values must be an exact match
-        if vertex1.connectivity1 != vertex2.connectivity1: return False
-        if vertex1.connectivity2 != vertex2.connectivity2: return False
-        if vertex1.connectivity3 != vertex2.connectivity3: return False
+        if vertex1.connectivity1 != vertex2.connectivity1:
+            return False
+        if vertex1.connectivity2 != vertex2.connectivity2:
+            return False
+        if vertex1.connectivity3 != vertex2.connectivity3:
+            return False
 
     # Semantic check #1: vertex1 and vertex2 must be equivalent
     if subgraph:
-        if not vertex1.isSpecificCaseOf(vertex2): return False
+        if not vertex1.isSpecificCaseOf(vertex2):
+            return False
     else:
-        if not vertex1.equivalent(vertex2): return False
+        if not vertex1.equivalent(vertex2):
+            return False
 
     # Get edges adjacent to each vertex
     edges1 = graph1.edges[vertex1]
@@ -720,14 +769,16 @@ def __VF2_feasible(graph1, graph2, vertex1, vertex2, map21, map12, terminals1,
     for vert2 in edges2:
         if vert2 in map12:
             vert1 = map12[vert2]
-            if not vert1 in edges1: # atoms not joined in graph1
+            if vert1 not in edges1:  # atoms not joined in graph1
                 return False
             edge1 = edges1[vert1]
             edge2 = edges2[vert2]
             if subgraph:
-                if not edge1.isSpecificCaseOf(edge2): return False
-            else: # exact match required
-                if not edge1.equivalent(edge2): return False
+                if not edge1.isSpecificCaseOf(edge2):
+                    return False
+            else:  # exact match required
+                if not edge1.equivalent(edge2):
+                    return False
 
     # there could still be edges in graph1 that aren't in graph2.
     # this is ok for subgraph matching, but not for exact matching
@@ -735,52 +786,78 @@ def __VF2_feasible(graph1, graph2, vertex1, vertex2, map21, map12, terminals1,
         for vert1 in edges1:
             if vert1 in map21:
                 vert2 = map21[vert1]
-                if not vert2 in edges2: return False
+                if vert2 not in edges2:
+                    return False
 
     # Count number of terminals adjacent to vertex1 and vertex2
-    term1Count = 0; term2Count = 0; neither1Count = 0; neither2Count = 0
+    term1Count = 0
+    term2Count = 0
+    neither1Count = 0
+    neither2Count = 0
 
     for vert1 in edges1:
-        if vert1 in terminals1: term1Count += 1
-        elif vert1 not in map21: neither1Count += 1
+        if vert1 in terminals1:
+            term1Count += 1
+        elif vert1 not in map21:
+            neither1Count += 1
     for vert2 in edges2:
-        if vert2 in terminals2: term2Count += 1
-        elif vert2 not in map12: neither2Count += 1
+        if vert2 in terminals2:
+            term2Count += 1
+        elif vert2 not in map12:
+            neither2Count += 1
 
     # Level 2 look-ahead: the number of adjacent vertices of vertex1 and
     # vertex2 that are non-terminals must be equal
     if subgraph:
-        if neither1Count < neither2Count: return False
+        if neither1Count < neither2Count:
+            return False
     else:
-        if neither1Count != neither2Count: return False
+        if neither1Count != neither2Count:
+            return False
 
     # Level 1 look-ahead: the number of adjacent vertices of vertex1 and
     # vertex2 that are terminals must be equal
     if subgraph:
-        if term1Count < term2Count: return False
+        if term1Count < term2Count:
+            return False
     else:
-        if term1Count != term2Count: return False
+        if term1Count != term2Count:
+            return False
 
     # Level 0 look-ahead: all adjacent vertices of vertex2 already in the
     # mapping must map to adjacent vertices of vertex1
     for vert2 in edges2:
         if vert2 in map12:
             vert1 = map12[vert2]
-            if vert1 not in edges1: return False
+            if vert1 not in edges1:
+                return False
     # Also, all adjacent vertices of vertex1 already in the mapping must map to
     # adjacent vertices of vertex2, unless we are subgraph matching
     if not subgraph:
         for vert1 in edges1:
             if vert1 in map21:
                 vert2 = map21[vert1]
-                if vert2 not in edges2: return False
+                if vert2 not in edges2:
+                    return False
 
     # All of our tests have been passed, so the two vertices are a feasible
     # pair
     return True
 
-def __VF2_match(graph1, graph2, map21, map12, terminals1, terminals2, subgraph,
-    findAll, map21List, map12List, callDepth):
+
+def __VF2_match(
+    graph1,
+    graph2,
+    map21,
+    map12,
+    terminals1,
+    terminals2,
+    subgraph,
+    findAll,
+    map21List,
+    map12List,
+    callDepth,
+):
     """
     A recursive function used to explore two graphs `graph1` and `graph2` for
     isomorphism by attempting to map them to one another. `mapping21` and
@@ -810,15 +887,19 @@ def __VF2_match(graph1, graph2, map21, map12, terminals1, terminals2, subgraph,
     # Done if we have mapped to all vertices in graph
     if callDepth == 0:
         if not subgraph:
-            assert len(map21) == len(graph1.vertices), \
-                "Calldepth mismatch: callDepth = %g, len(map21) = %g, len(map12) = %g, len(graph1.vertices) = %g, len(graph2.vertices) = %g" % (callDepth, len(map21), len(map12), len(graph1.vertices), len(graph2.vertices))
+            assert len(map21) == len(graph1.vertices), (
+                "Calldepth mismatch: callDepth = %g, len(map21) = %g, len(map12) = %g, len(graph1.vertices) = %g, len(graph2.vertices) = %g"
+                % (callDepth, len(map21), len(map12), len(graph1.vertices), len(graph2.vertices))
+            )
             if findAll:
                 map21List.append(map21.copy())
                 map12List.append(map12.copy())
             return True
         else:
-            assert len(map12) == len(graph2.vertices), \
-                "Calldepth mismatch: callDepth = %g, len(map21) = %g, len(map12) = %g, len(graph1.vertices) = %g, len(graph2.vertices) = %g" % (callDepth, len(map21), len(map12), len(graph1.vertices), len(graph2.vertices))
+            assert len(map12) == len(graph2.vertices), (
+                "Calldepth mismatch: callDepth = %g, len(map21) = %g, len(map12) = %g, len(graph1.vertices) = %g, len(graph2.vertices) = %g"
+                % (callDepth, len(map21), len(map12), len(graph1.vertices), len(graph2.vertices))
+            )
             if findAll:
                 map21List.append(map21.copy())
                 map12List.append(map12.copy())
@@ -845,11 +926,12 @@ def __VF2_match(graph1, graph2, map21, map12, terminals1, terminals2, subgraph,
                 break
         else:
             raise Exception("Could not find a pair to propose!")
-    
+
     for vertex1 in vertices1:
         # propose a pairing
-        if __VF2_feasible(graph1, graph2, vertex1, vertex2, map21, map12, \
-                terminals1, terminals2, subgraph):
+        if __VF2_feasible(
+            graph1, graph2, vertex1, vertex2, map21, map12, terminals1, terminals2, subgraph
+        ):
             # Update mapping accordingly
             map21[vertex1] = vertex2
             map12[vertex2] = vertex1
@@ -859,9 +941,19 @@ def __VF2_match(graph1, graph2, map21, map12, terminals1, terminals2, subgraph,
             new_terminals2 = __VF2_updateTerminals(graph2, map12, terminals2, vertex2)
 
             # Recurse
-            ismatch = __VF2_match(graph1, graph2, \
-                map21, map12, new_terminals1, new_terminals2, subgraph, findAll, \
-                map21List, map12List, callDepth-1)
+            ismatch = __VF2_match(
+                graph1,
+                graph2,
+                map21,
+                map12,
+                new_terminals1,
+                new_terminals2,
+                subgraph,
+                findAll,
+                map21List,
+                map12List,
+                callDepth - 1,
+            )
             if ismatch:
                 if not findAll:
                     return True
@@ -871,6 +963,7 @@ def __VF2_match(graph1, graph2, map21, map12, terminals1, terminals2, subgraph,
             # changes to 'new_terminals' will be discarded and 'terminals' is unchanged
 
     return False
+
 
 def __VF2_terminals(graph, mapping):
     """
@@ -891,6 +984,7 @@ def __VF2_terminals(graph, mapping):
                     break
     return terminals
 
+
 def __VF2_updateTerminals(graph, mapping, old_terminals, new_vertex):
     """
     For a given graph `graph` and associated partial mapping `mapping`,
@@ -905,30 +999,33 @@ def __VF2_updateTerminals(graph, mapping, old_terminals, new_vertex):
 
     # Copy the old terminals, leaving out the new_vertex
     terminals = old_terminals[:]
-    if new_vertex in terminals: terminals.remove(new_vertex)
+    if new_vertex in terminals:
+        terminals.remove(new_vertex)
 
     # Add the terminals of new_vertex
     edges = graph.edges[new_vertex]
     for vertex1 in edges:
-        if vertex1 not in mapping: # only add if not already mapped
+        if vertex1 not in mapping:  # only add if not already mapped
             # find spot in the sorted terminals list where we should put this vertex
             sorting_label = vertex1.sortingLabel
-            i=0; sorting_label2=-1 # in case terminals list empty
+            i = 0
+            sorting_label2 = -1  # in case terminals list empty
             for i in range(len(terminals)):
                 vertex2 = terminals[i]
                 sorting_label2 = vertex2.sortingLabel
                 if sorting_label2 >= sorting_label:
                     break
                 # else continue going through the list of terminals
-            else: # got to end of list without breaking,
+            else:  # got to end of list without breaking,
                 # so add one to index to make sure vertex goes at end
-                i+=1
-            if sorting_label2 == sorting_label: # this vertex already in terminals.
-                continue # try next vertex in graph[new_vertex]
+                i += 1
+            if sorting_label2 == sorting_label:  # this vertex already in terminals.
+                continue  # try next vertex in graph[new_vertex]
 
             # insert vertex in right spot in terminals
-            terminals.insert(i,vertex1)
+            terminals.insert(i, vertex1)
 
     return terminals
+
 
 ################################################################################

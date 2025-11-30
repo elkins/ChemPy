@@ -1,8 +1,8 @@
+from __future__ import annotations
+
+from typing import Any, Optional, Tuple
 
 import chempy
-from __future__ import annotations
-from typing import Optional, Tuple, Any
-
 
 def createNewSurface(
     type: str,
@@ -10,8 +10,6 @@ def createNewSurface(
     width: int = ...,
     height: int = ...,
 ) -> Any: ...
-
-
 def drawMolecule(
     molecule: "chempy.molecule.Molecule",
     path: Optional[str] = ...,

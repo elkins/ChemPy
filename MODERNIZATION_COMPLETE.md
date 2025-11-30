@@ -37,10 +37,10 @@ ChemPy has been comprehensively modernized for Python 3.8-3.13 with modern devel
 
 ### 4. Testing & CI/CD
 
-- **Modern Test Structure**: 
+- **Modern Test Structure**:
   - `tests/` directory with pytest infrastructure
   - `unittest/` legacy tests still supported
-- **GitHub Actions**: 
+- **GitHub Actions**:
   - Matrix testing across Python 3.8-3.13
   - Cross-platform (Ubuntu, macOS, Windows)
   - Dependency caching for faster CI
@@ -145,7 +145,7 @@ ChemPy has been comprehensively modernized for Python 3.8-3.13 with modern devel
 1. **Modern Python**: Full Python 3.13 support
 2. **Type Safe**: PEP 561 compliant with comprehensive type hints
 3. **Well Tested**: GitHub Actions CI with matrix testing
-4. **Well Documented**: 
+4. **Well Documented**:
    - Comprehensive README
    - Development guides
    - Type hints guide

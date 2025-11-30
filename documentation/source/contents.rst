@@ -7,7 +7,7 @@ ChemPy documentation contents
 .. toctree::
     :maxdepth: 2
     :numbered:
-    
+
     introduction
     constants
     exception
@@ -21,8 +21,7 @@ ChemPy documentation contents
     pattern
     species
     reaction
-    
+
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

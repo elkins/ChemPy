@@ -58,7 +58,7 @@ jobs:
     - name: Run tests with pytest
       run: |
         pytest unittest/ --cov=chempy --cov-report=xml -v --tb=short
-    
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
@@ -74,36 +74,34 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.12', '3.13']
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         cache: 'pip'
-    
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -e ".[dev]"
-    
+
     - name: Check formatting with black
       run: black --check chempy unittest
       continue-on-error: true
-    
+
     - name: Check import sorting with isort
       run: isort --check-only chempy unittest
       continue-on-error: true
-    
+
     - name: Lint with flake8
       run: |
         flake8 chempy unittest --max-line-length=100 --extend-ignore=E203,W503,E501
       continue-on-error: true
-    
+
     - name: Type check with mypy
       run: mypy chempy --ignore-missing-imports
       continue-on-error: true
-
-

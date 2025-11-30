@@ -8,6 +8,7 @@ def sample_molecule():
     """Provide a sample molecule for testing."""
     try:
         from chempy import molecule
+
         return molecule.Molecule()
     except ImportError:
         return None
@@ -18,6 +19,7 @@ def sample_reaction():
     """Provide a sample reaction for testing."""
     try:
         from chempy import reaction
+
         return reaction.Reaction()
     except ImportError:
         return None

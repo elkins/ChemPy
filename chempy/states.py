@@ -92,13 +92,14 @@ freedom can be stored in a :class:`StatesModel` object.
 ################################################################################
 
 import math
-from chempy._cython_compat import cython
+
 import numpy
 
 from chempy import constants
-from chempy.exception import InvalidStatesModelError
+from chempy._cython_compat import cython
 
 ################################################################################
+
 
 class Mode:
 
@@ -114,7 +115,9 @@ class Mode:
     def getEntropies(self, Tlist):
         return numpy.array([self.getEntropy(T) for T in Tlist], numpy.float64)
 
+
 ################################################################################
+
 
 class Translation(Mode):
     """
@@ -132,7 +135,7 @@ class Translation(Mode):
         Return a string representation that can be used to reconstruct the
         object.
         """
-        return 'Translation(mass=%g)' % (self.mass)
+        return "Translation(mass=%g)" % (self.mass)
 
     def getPartitionFunction(self, T):
         """
@@ -146,8 +149,10 @@ class Translation(Mode):
         constant, and :math:`h` is the Planck constant.
         """
         cython.declare(qt=cython.double)
-        qt = ((2 * constants.pi * self.mass / constants.Na) / (constants.h * constants.h))**1.5 / 1e5
-        return qt * (constants.kB * T)**2.5
+        qt = (
+            (2 * constants.pi * self.mass / constants.Na) / (constants.h * constants.h)
+        ) ** 1.5 / 1e5
+        return qt * (constants.kB * T) ** 2.5
 
     def getHeatCapacity(self, T):
         """
@@ -195,11 +200,16 @@ class Translation(Mode):
         """
         cython.declare(rho=numpy.ndarray, qt=cython.double)
         rho = numpy.zeros_like(Elist)
-        qt = ((2 * constants.pi * self.mass / constants.Na / constants.Na) / (constants.h * constants.h))**(1.5) / 1e5
+        qt = (
+            (2 * constants.pi * self.mass / constants.Na / constants.Na)
+            / (constants.h * constants.h)
+        ) ** (1.5) / 1e5
         rho = qt * Elist**1.5 / (numpy.sqrt(math.pi) * 0.25) / constants.Na
         return rho
 
+
 ################################################################################
+
 
 class RigidRotor(Mode):
     """
@@ -222,8 +232,12 @@ class RigidRotor(Mode):
         Return a string representation that can be used to reconstruct the
         object.
         """
-        inertia = ', '.join(['%g' % i for i in self.inertia])
-        return 'RigidRotor(linear=%s, inertia=[%s], symmetry=%s)' % (self.linear, inertia, self.symmetry)
+        inertia = ", ".join(["%g" % i for i in self.inertia])
+        return "RigidRotor(linear=%s, inertia=[%s], symmetry=%s)" % (
+            self.linear,
+            inertia,
+            self.symmetry,
+        )
 
     def getPartitionFunction(self, T):
         """
@@ -246,13 +260,22 @@ class RigidRotor(Mode):
             inertia = self.inertia[0] if self.inertia else 0.0
             if inertia == 0.0:
                 return 0.0
-            theta = constants.kB * T / (self.symmetry * constants.h * constants.h / (8 * constants.pi * constants.pi * inertia))
+            theta = (
+                constants.kB
+                * T
+                / (
+                    self.symmetry
+                    * constants.h
+                    * constants.h
+                    / (8 * constants.pi * constants.pi * inertia)
+                )
+            )
             return theta
         else:
             if not self.inertia or any(i == 0.0 for i in self.inertia):
                 return 0.0
-            theta = (constants.kB * T)**1.5 * (8 * constants.pi**2 / constants.h**2)**1.5
-            theta *= (self.inertia[0] * self.inertia[1] * self.inertia[2])**0.5
+            theta = (constants.kB * T) ** 1.5 * (8 * constants.pi**2 / constants.h**2) ** 1.5
+            theta *= (self.inertia[0] * self.inertia[1] * self.inertia[2]) ** 0.5
             theta *= numpy.sqrt(numpy.pi) / self.symmetry
             return theta
 
@@ -331,15 +354,27 @@ class RigidRotor(Mode):
         """
         cython.declare(theta=cython.double, inertia=cython.double)
         if self.linear:
-            theta = constants.h * constants.h / (8 * constants.pi * constants.pi * self.inertia[0]) * constants.Na
+            theta = (
+                constants.h
+                * constants.h
+                / (8 * constants.pi * constants.pi * self.inertia[0])
+                * constants.Na
+            )
             return numpy.ones_like(Elist) / theta / self.symmetry
         else:
             theta = 1.0
             for inertia in self.inertia:
-                theta *= constants.h * constants.h / (8 * constants.pi * constants.pi * inertia) * constants.Na
+                theta *= (
+                    constants.h
+                    * constants.h
+                    / (8 * constants.pi * constants.pi * inertia)
+                    * constants.Na
+                )
             return 2.0 * numpy.sqrt(Elist / theta) / self.symmetry
 
+
 ################################################################################
+
 
 class HinderedRotor(Mode):
     """
@@ -371,14 +406,20 @@ class HinderedRotor(Mode):
         self.symmetry = symmetry
         self.fourier = fourier
         self.energies = None
-        if self.fourier is not None: self.energies = self.__solveSchrodingerEquation()
+        if self.fourier is not None:
+            self.energies = self.__solveSchrodingerEquation()
 
     def __repr__(self):
         """
         Return a string representation that can be used to reconstruct the
         object.
         """
-        return 'HinderedRotor(inertia=%g, barrier=%g, symmetry=%g, fourier=%s)' % (self.inertia, self.barrier, self.symmetry, self.fourier)
+        return "HinderedRotor(inertia=%g, barrier=%g, symmetry=%g, fourier=%s)" % (
+            self.inertia,
+            self.barrier,
+            self.symmetry,
+            self.fourier,
+        )
 
     def getPotential(self, phi):
         """
@@ -389,8 +430,10 @@ class HinderedRotor(Mode):
         V = numpy.zeros_like(phi)
         if self.fourier is not None:
             for k in range(self.fourier.shape[1]):
-                V += self.fourier[0,k] * numpy.cos((k+1) * phi) + self.fourier[1,k] * numpy.sin((k+1) * phi)
-            V -= numpy.sum(self.fourier[0,:])
+                V += self.fourier[0, k] * numpy.cos((k + 1) * phi) + self.fourier[1, k] * numpy.sin(
+                    (k + 1) * phi
+                )
+            V -= numpy.sum(self.fourier[0, :])
         else:
             V = 0.5 * self.barrier * (1 - numpy.cos(self.symmetry * phi))
         return V
@@ -419,15 +462,19 @@ class HinderedRotor(Mode):
         # The number of terms to use is 2*M + 1, ranging from -m to m inclusive
         M = 200
         # Populate Hamiltonian matrix
-        H = numpy.zeros((2*M+1,2*M+1), numpy.complex64)
+        H = numpy.zeros((2 * M + 1, 2 * M + 1), numpy.complex64)
         fourier = self.fourier / constants.Na / 2.0
-        A = numpy.sum(self.fourier[0,:]) / constants.Na
+        A = numpy.sum(self.fourier[0, :]) / constants.Na
         row = 0
-        for m in range(-M, M+1):
-            H[row,row] = A + constants.h * constants.h * m * m / (8 * math.pi * math.pi * self.inertia)
+        for m in range(-M, M + 1):
+            H[row, row] = A + constants.h * constants.h * m * m / (
+                8 * math.pi * math.pi * self.inertia
+            )
             for n in range(fourier.shape[1]):
-                if row-n-1 > -1:    H[row,row-n-1] = complex(fourier[0,n], - fourier[1,n])
-                if row+n+1 < 2*M+1: H[row,row+n+1] = complex(fourier[0,n], fourier[1,n])
+                if row - n - 1 > -1:
+                    H[row, row - n - 1] = complex(fourier[0, n], -fourier[1, n])
+                if row + n + 1 < 2 * M + 1:
+                    H[row, row + n + 1] = complex(fourier[0, n], fourier[1, n])
             row += 1
         # The overlap matrix is the identity matrix, i.e. this is a standard
         # eigenvalue problem
@@ -472,13 +519,22 @@ class HinderedRotor(Mode):
             cython.declare(Q=cython.double, E=numpy.ndarray, e_kT=numpy.ndarray, i=cython.int)
             e_kT = numpy.exp(-self.energies / constants.R / T)
             Q = numpy.sum(e_kT)
-            return Q / self.symmetry    # No Fourier data, so use the cosine potential data
+            return Q / self.symmetry  # No Fourier data, so use the cosine potential data
         else:
             cython.declare(frequency=cython.double, x=cython.double, z=cython.double)
             frequency = self.getFrequency() * constants.c * 100
             x = constants.h * frequency / (constants.kB * T)
             z = 0.5 * self.barrier / (constants.R * T)
-            return x / (1 - numpy.exp(-x)) * numpy.sqrt(2 * math.pi * self.inertia * constants.kB * T / constants.h / constants.h) * (2 * math.pi / self.symmetry) * numpy.exp(-z) * besseli0(z)
+            return (
+                x
+                / (1 - numpy.exp(-x))
+                * numpy.sqrt(
+                    2 * math.pi * self.inertia * constants.kB * T / constants.h / constants.h
+                )
+                * (2 * math.pi / self.symmetry)
+                * numpy.exp(-z)
+                * besseli0(z)
+            )
 
     def getHeatCapacity(self, T):
         """
@@ -506,7 +562,9 @@ class HinderedRotor(Mode):
             cython.declare(Cv=cython.double, E=numpy.ndarray, e_kT=numpy.ndarray, i=cython.int)
             E = self.energies
             e_kT = numpy.exp(-E / constants.R / T)
-            Cv = (numpy.sum(E*E*e_kT) * numpy.sum(e_kT) - numpy.sum(E*e_kT)**2) / (constants.R*T*T * numpy.sum(e_kT)**2)
+            Cv = (numpy.sum(E * E * e_kT) * numpy.sum(e_kT) - numpy.sum(E * e_kT) ** 2) / (
+                constants.R * T * T * numpy.sum(e_kT) ** 2
+            )
             return Cv
         else:
             cython.declare(frequency=cython.double, x=cython.double, z=cython.double)
@@ -517,7 +575,9 @@ class HinderedRotor(Mode):
             exp_x = numpy.exp(x)
             one_minus_exp_x = 1.0 - exp_x
             BB = besseli1(z) / besseli0(z)
-            return (x * x * exp_x / one_minus_exp_x / one_minus_exp_x - 0.5 + z * (z - BB - z * BB * BB)) * constants.R
+            return (
+                x * x * exp_x / one_minus_exp_x / one_minus_exp_x - 0.5 + z * (z - BB - z * BB * BB)
+            ) * constants.R
 
     def getEnthalpy(self, T):
         """
@@ -536,15 +596,23 @@ class HinderedRotor(Mode):
             cython.declare(H=cython.double, E=numpy.ndarray, e_kT=numpy.ndarray, i=cython.int)
             E = self.energies
             e_kT = numpy.exp(-E / constants.R / T)
-            H = numpy.sum(E*e_kT) / numpy.sum(e_kT)
+            H = numpy.sum(E * e_kT) / numpy.sum(e_kT)
             return H
         else:
             Tlow = T * 0.999
             Thigh = T * 1.001
-            return (T *
-                (numpy.log(self.getPartitionFunction(Thigh)) -
-                numpy.log(self.getPartitionFunction(Tlow))) /
-                (Thigh - Tlow)) * constants.R * T
+            return (
+                (
+                    T
+                    * (
+                        numpy.log(self.getPartitionFunction(Thigh))
+                        - numpy.log(self.getPartitionFunction(Tlow))
+                    )
+                    / (Thigh - Tlow)
+                )
+                * constants.R
+                * T
+            )
 
     def getEntropy(self, T):
         """
@@ -564,15 +632,20 @@ class HinderedRotor(Mode):
             E = self.energies
             S = constants.R * numpy.log(self.getPartitionFunction(T))
             e_kT = numpy.exp(-E / constants.R / T)
-            S += numpy.sum(E*e_kT) / (T * numpy.sum(e_kT))
+            S += numpy.sum(E * e_kT) / (T * numpy.sum(e_kT))
             return S
         else:
             Tlow = T * 0.999
             Thigh = T * 1.001
-            return (numpy.log(self.getPartitionFunction(Thigh)) +
-                T * (numpy.log(self.getPartitionFunction(Thigh)) -
-                numpy.log(self.getPartitionFunction(Tlow))) /
-                (Thigh - Tlow)) * constants.R
+            return (
+                numpy.log(self.getPartitionFunction(Thigh))
+                + T
+                * (
+                    numpy.log(self.getPartitionFunction(Thigh))
+                    - numpy.log(self.getPartitionFunction(Tlow))
+                )
+                / (Thigh - Tlow)
+            ) * constants.R
 
     def getDensityOfStates(self, Elist):
         """
@@ -594,9 +667,23 @@ class HinderedRotor(Mode):
         kind. There is currently no functionality for using the Fourier series
         potential.
         """
-        cython.declare(rho=numpy.ndarray, q1f=cython.double, pre=cython.double, V0=cython.double, i=cython.int)
+        cython.declare(
+            rho=numpy.ndarray, q1f=cython.double, pre=cython.double, V0=cython.double, i=cython.int
+        )
         rho = numpy.zeros_like(Elist)
-        q1f = math.sqrt(8 * math.pi * math.pi * math.pi * self.inertia / constants.h / constants.h / constants.Na) / self.symmetry
+        q1f = (
+            math.sqrt(
+                8
+                * math.pi
+                * math.pi
+                * math.pi
+                * self.inertia
+                / constants.h
+                / constants.h
+                / constants.Na
+            )
+            / self.symmetry
+        )
         V0 = self.barrier
         pre = 2.0 * q1f / math.sqrt(math.pi * math.pi * math.pi * V0)
         # The following is only valid in the classical limit
@@ -621,31 +708,45 @@ class HinderedRotor(Mode):
         """
         V0 = self.barrier
         if self.fourier is not None:
-            V0 = -numpy.sum(self.fourier[:,0])
-        return self.symmetry / 2.0 / math.pi * math.sqrt(V0 / constants.Na / 2 / self.inertia) / (constants.c * 100)
+            V0 = -numpy.sum(self.fourier[:, 0])
+        return (
+            self.symmetry
+            / 2.0
+            / math.pi
+            * math.sqrt(V0 / constants.Na / 2 / self.inertia)
+            / (constants.c * 100)
+        )
+
 
 def besseli0(x):
     """
     Return the value of the zeroth-order modified Bessel function at `x`.
     """
     import scipy.special
+
     return scipy.special.i0(x)
+
 
 def besseli1(x):
     """
     Return the value of the first-order modified Bessel function at `x`.
     """
     import scipy.special
+
     return scipy.special.i1(x)
+
 
 def cellipk(x):
     """
     Return the value of the complete elliptic integral of the first kind at `x`.
     """
     import scipy.special
+
     return scipy.special.ellipk(x)
 
+
 ################################################################################
+
 
 class HarmonicOscillator(Mode):
     """
@@ -662,8 +763,8 @@ class HarmonicOscillator(Mode):
         Return a string representation that can be used to reconstruct the
         object.
         """
-        frequencies = ', '.join(['%g' % freq for freq in self.frequencies])
-        return 'HarmonicOscillator(frequencies=[%s])' % (frequencies)
+        frequencies = ", ".join(["%g" % freq for freq in self.frequencies])
+        return "HarmonicOscillator(frequencies=[%s])" % (frequencies)
 
     def getPartitionFunction(self, T):
         """
@@ -701,7 +802,7 @@ class HarmonicOscillator(Mode):
         cython.declare(x=cython.double, exp_x=cython.double, one_minus_exp_x=cython.double)
         Cv = 0.0
         for freq in self.frequencies:
-            x = freq / (0.695039 * T)	# kB = 0.695039 cm^-1/K
+            x = freq / (0.695039 * T)  # kB = 0.695039 cm^-1/K
             exp_x = numpy.exp(x)
             one_minus_exp_x = 1.0 - exp_x
             Cv = Cv + x * x * exp_x / one_minus_exp_x / one_minus_exp_x
@@ -723,7 +824,7 @@ class HarmonicOscillator(Mode):
         cython.declare(x=cython.double, exp_x=cython.double)
         H = 0.0
         for freq in self.frequencies:
-            x = freq / (0.695039 * T)	# kB = 0.695039 cm^-1/K
+            x = freq / (0.695039 * T)  # kB = 0.695039 cm^-1/K
             exp_x = numpy.exp(x)
             H = H + x / (exp_x - 1)
         return H * constants.R * T
@@ -744,7 +845,7 @@ class HarmonicOscillator(Mode):
         cython.declare(x=cython.double, exp_x=cython.double)
         S = numpy.log(self.getPartitionFunction(T))
         for freq in self.frequencies:
-            x = freq / (0.695039 * T)	# kB = 0.695039 cm^-1/K
+            x = freq / (0.695039 * T)  # kB = 0.695039 cm^-1/K
             exp_x = numpy.exp(x)
             S = S + x / (exp_x - 1)
         return S * constants.R
@@ -767,11 +868,13 @@ class HarmonicOscillator(Mode):
         nE = len(Elist)
         for freq in self.frequencies:
             dn = int(freq * constants.h * constants.c * 100 * constants.Na / dE)
-            for n in range(dn+1, nE):
-                rho[n] = rho[n] + rho[n-dn]
+            for n in range(dn + 1, nE):
+                rho[n] = rho[n] + rho[n - dn]
         return rho
 
+
 ################################################################################
+
 
 class StatesModel:
     """
@@ -854,7 +957,8 @@ class StatesModel:
         if len(rotors) == 0:
             rho0 = numpy.zeros_like(Elist)
             for i, E in enumerate(Elist):
-                if E > 0: rho0[i] = 1.0 / math.sqrt(1.0 * E)
+                if E > 0:
+                    rho0[i] = 1.0 / math.sqrt(1.0 * E)
             rho = convolve(rho, rho0, Elist)
         # Other non-vibrational modes
         for mode in self.modes:
@@ -872,14 +976,16 @@ class StatesModel:
         in J/mol above the ground state. The sum of states is computed via
         numerical integration of the density of states.
         """
-        cython.declare(densStates=numpy.ndarray, sumStates=numpy.ndarray, i=cython.int, dE=cython.double)
+        cython.declare(
+            densStates=numpy.ndarray, sumStates=numpy.ndarray, i=cython.int, dE=cython.double
+        )
         densStates = self.getDensityOfStates(Elist)
         sumStates = numpy.zeros_like(densStates)
         dE = Elist[1] - Elist[0]
         for i in range(len(densStates)):
             sumStates[i] = numpy.sum(densStates[0:i]) * dE
         return sumStates
-    
+
     def getPartitionFunctions(self, Tlist):
         return numpy.array([self.getPartitionFunction(T) for T in Tlist], numpy.float64)
 
@@ -922,6 +1028,7 @@ class StatesModel:
 
         """
         import scipy.optimize
+
         cython.declare(rho=numpy.ndarray)
         cython.declare(x=cython.double, E=cython.double, dx=cython.double, f=cython.double)
         cython.declare(d2fdx2=cython.double, d3fdx3=cython.double, d4fdx4=cython.double)
@@ -932,21 +1039,37 @@ class StatesModel:
         for i in range(1, len(Elist)):
             E = Elist[i]
             # Find minimum of phi         func x0 arg  xtol  ftol maxi  maxf fullout  disp retall  callback
-            x = scipy.optimize.fmin(self.__phi, x, (Elist[i],), 1e-8, 1e-8, 100, 1000, False, False, False, None)
+            x = scipy.optimize.fmin(
+                self.__phi, x, (Elist[i],), 1e-8, 1e-8, 100, 1000, False, False, False, None
+            )
             # scipy.optimize.fmin returns array, extract scalar safely
             x = float(x[0]) if isinstance(x, numpy.ndarray) else float(x)
             dx = 1e-4 * x
             # Determine value of density of states using steepest descents approximation
-            d2fdx2 = (self.__phi(x+dx, E) - 2 * self.__phi(x, E) + self.__phi(x-dx, E)) / (dx**2)
+            d2fdx2 = (self.__phi(x + dx, E) - 2 * self.__phi(x, E) + self.__phi(x - dx, E)) / (
+                dx**2
+            )
             # Apply first-order steepest descents approximation (accurate to 1-3%, smoother)
             f = self.__phi(x, E)
             rho[i] = math.exp(f) / math.sqrt(2 * math.pi * d2fdx2)
             if order == 2:
                 # Apply second-order steepest descents approximation (more accurate, less smooth)
-                d3fdx3 = (self.__phi(x+1.5*dx, E) - 3 * self.__phi(x+0.5*dx, E) + 3 * self.__phi(x-0.5*dx, E) - self.__phi(x-1.5*dx, E)) / (dx**3)
-                d4fdx4 = (self.__phi(x+2*dx, E) - 4 * self.__phi(x+dx, E) + 6 * self.__phi(x, E) - 4 * self.__phi(x-dx, E) + self.__phi(x-2*dx, E)) / (dx**4)
+                d3fdx3 = (
+                    self.__phi(x + 1.5 * dx, E)
+                    - 3 * self.__phi(x + 0.5 * dx, E)
+                    + 3 * self.__phi(x - 0.5 * dx, E)
+                    - self.__phi(x - 1.5 * dx, E)
+                ) / (dx**3)
+                d4fdx4 = (
+                    self.__phi(x + 2 * dx, E)
+                    - 4 * self.__phi(x + dx, E)
+                    + 6 * self.__phi(x, E)
+                    - 4 * self.__phi(x - dx, E)
+                    + self.__phi(x - 2 * dx, E)
+                ) / (dx**4)
                 rho[i] *= 1 + d4fdx4 / 8 / (d2fdx2**2) - 5 * (d3fdx3**2) / 24 / (d2fdx2**3)
         return rho
+
 
 def convolve(rho1, rho2, Elist):
     """
@@ -962,7 +1085,8 @@ def convolve(rho1, rho2, Elist):
     cython.declare(dE=cython.double, nE=cython.int, i=cython.int, j=cython.int)
     rho = numpy.zeros_like(Elist)
 
-    found1 = rho1.any(); found2 = rho2.any()
+    found1 = rho1.any()
+    found2 = rho2.any()
     if not found1 and not found2:
         pass
     elif found1 and not found2:
@@ -973,7 +1097,7 @@ def convolve(rho1, rho2, Elist):
         dE = Elist[1] - Elist[0]
         nE = len(Elist)
         for i in range(nE):
-            for j in range(i+1):
-                rho[i] += rho2[i-j] * rho1[i] * dE
+            for j in range(i + 1):
+                rho[i] += rho2[i - j] * rho1[i] * dE
 
     return rho

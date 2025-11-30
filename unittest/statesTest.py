@@ -1,21 +1,25 @@
+# flake8: noqa
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import numpy
-import unittest
 import sys
-sys.path.append('.')
+import unittest
 
-from chempy.states import *
+import numpy
+
+sys.path.append(".")
+
+from chempy.states import *  # noqa: F403,F405
 
 ################################################################################
+
 
 class StatesTest(unittest.TestCase):
     """
     Contains unit tests for the chempy.states module, used for working with
     molecular degrees of freedom.
     """
-    
+
     def testModesForEthylene(self):
         """
         Uses data for ethylene (C2H4) to test the various modes. The data comes
@@ -26,7 +30,22 @@ class StatesTest(unittest.TestCase):
 
         trans = Translation(mass=0.02803)
         rot = RigidRotor(linear=False, inertia=[5.6952e-47, 2.7758e-46, 3.3454e-46], symmetry=1)
-        vib = HarmonicOscillator(frequencies=[834.50, 973.31, 975.37, 1067.1, 1238.5, 1379.5, 1472.3, 1691.3, 3121.6, 3136.7, 3192.5, 3221.0])
+        vib = HarmonicOscillator(
+            frequencies=[
+                834.50,
+                973.31,
+                975.37,
+                1067.1,
+                1238.5,
+                1379.5,
+                1472.3,
+                1691.3,
+                3121.6,
+                3136.7,
+                3192.5,
+                3221.0,
+            ]
+        )
 
         self.assertAlmostEqual(trans.getPartitionFunction(T) / 1.01325 / 5.83338e6, 1.0, 3)
         self.assertAlmostEqual(rot.getPartitionFunction(T) / 2.59622e3, 1.0, 3)
@@ -39,18 +58,23 @@ class StatesTest(unittest.TestCase):
         self.assertAlmostEqual(trans.getEnthalpy(T) / 8.314472 / T / 1.5, 1.0, 3)
         self.assertAlmostEqual(rot.getEnthalpy(T) / 8.314472 / T / 1.5, 1.0, 3)
         self.assertAlmostEqual(vib.getEnthalpy(T) / 8.314472 / T / 0.221258, 1.0, 3)
-        
+
         self.assertAlmostEqual(trans.getEntropy(T) / 4.184 / 35.927, 1.0, 2)
         self.assertAlmostEqual(rot.getEntropy(T) / 4.184 / 18.604, 1.0, 3)
         self.assertAlmostEqual(vib.getEntropy(T) / 4.184 / 0.533, 1.0, 3)
 
         states = StatesModel(modes=[rot, vib], spinMultiplicity=1)
-        
+
         dE = 10.0
         Elist = numpy.arange(0, 100001, dE, numpy.float64)
         rho = states.getDensityOfStates(Elist)
-        self.assertAlmostEqual(numpy.sum(rho * numpy.exp(-Elist / 8.314472 / 298.15) * dE) / states.getPartitionFunction(T), 1.0, 2)
-        
+        self.assertAlmostEqual(
+            numpy.sum(rho * numpy.exp(-Elist / 8.314472 / 298.15) * dE)
+            / states.getPartitionFunction(T),
+            1.0,
+            2,
+        )
+
     def testModesForOxygen(self):
         """
         Uses data for oxygen (O2) to test the various modes. The data comes
@@ -80,12 +104,17 @@ class StatesTest(unittest.TestCase):
         self.assertAlmostEqual(vib.getEntropy(T) / 4.184 / 0.00654, 1.0, 2)
 
         states = StatesModel(modes=[rot, vib], spinMultiplicity=3)
-        
+
         dE = 10.0
         Elist = numpy.arange(0, 100001, dE, numpy.float64)
         rho = states.getDensityOfStates(Elist)
-        self.assertAlmostEqual(numpy.sum(rho * numpy.exp(-Elist / 8.314472 / 298.15) * dE) / states.getPartitionFunction(T), 1.0, 2)
-    
+        self.assertAlmostEqual(
+            numpy.sum(rho * numpy.exp(-Elist / 8.314472 / 298.15) * dE)
+            / states.getPartitionFunction(T),
+            1.0,
+            2,
+        )
+
     def testHinderedRotorDensityOfStates(self):
         """
         Test that the density of states and the partition function of the
@@ -94,23 +123,31 @@ class StatesTest(unittest.TestCase):
         function is not.
         """
 
-        hr = HinderedRotor(inertia=3e-46, barrier=0.5*4184, symmetry=3)
+        hr = HinderedRotor(inertia=3e-46, barrier=0.5 * 4184, symmetry=3)
         dE = 10.0
         Elist = numpy.arange(0, 100001, dE, numpy.float64)
         rho = hr.getDensityOfStates(Elist)
 
-#        Tlist = 1000.0 / numpy.arange(0.5, 3.5, 0.1, numpy.float64)
-#        Q = numpy.zeros_like(Tlist)
-#        for i in range(len(Tlist)):
-#            Q[i] = numpy.sum(rho * numpy.exp(-Elist / 8.314472 / Tlist[i]) * dE)
-#        import pylab
-#        pylab.semilogy(1000.0 / Tlist, Q, '--k', 1000.0 / Tlist, hr.getPartitionFunction(Tlist), '-k')
-#        pylab.show()
+        #        Tlist = 1000.0 / numpy.arange(0.5, 3.5, 0.1, numpy.float64)
+        #        Q = numpy.zeros_like(Tlist)
+        #        for i in range(len(Tlist)):
+        #            Q[i] = numpy.sum(rho * numpy.exp(-Elist / 8.314472 / Tlist[i]) * dE)
+        #        import pylab
+        #        pylab.semilogy(1000.0 / Tlist, Q, '--k', 1000.0 / Tlist, hr.getPartitionFunction(Tlist), '-k')
+        #        pylab.show()
 
         T = 298.15
-        self.assertTrue(0.9 < numpy.sum(rho * numpy.exp(-Elist / 8.314472 / T) * dE) / hr.getPartitionFunction(T) < 1.1)
+        self.assertTrue(
+            0.9
+            < numpy.sum(rho * numpy.exp(-Elist / 8.314472 / T) * dE) / hr.getPartitionFunction(T)
+            < 1.1
+        )
         T = 1000.0
-        self.assertTrue(0.9 < numpy.sum(rho * numpy.exp(-Elist / 8.314472 / T) * dE) / hr.getPartitionFunction(T) < 1.1)
+        self.assertTrue(
+            0.9
+            < numpy.sum(rho * numpy.exp(-Elist / 8.314472 / T) * dE) / hr.getPartitionFunction(T)
+            < 1.1
+        )
 
     def testHinderedRotor1(self):
         """
@@ -119,10 +156,24 @@ class StatesTest(unittest.TestCase):
         SKIPPED: Requires detailed debugging of potential calculation model.
         """
         return  # Skip for Python 3.13 modernization
-        
-        fourier = numpy.array([ [-4.683e-01, 8.767e-05], [-2.827e+00, 1.048e-03], [ 1.751e-01,-9.278e-05], [-1.355e-02, 1.916e-06], [-1.128e-01, 1.025e-04] ], numpy.float64) * 4184
-        hr1 = HinderedRotor(inertia=7.38359/6.022e46, barrier=2139.3*11.96, symmetry=2)
-        hr2 = HinderedRotor(inertia=7.38359/6.022e46, barrier=3.20429*4184, symmetry=1, fourier=fourier)
+
+        fourier = (
+            numpy.array(
+                [
+                    [-4.683e-01, 8.767e-05],
+                    [-2.827e00, 1.048e-03],
+                    [1.751e-01, -9.278e-05],
+                    [-1.355e-02, 1.916e-06],
+                    [-1.128e-01, 1.025e-04],
+                ],
+                numpy.float64,
+            )
+            * 4184
+        )
+        hr1 = HinderedRotor(inertia=7.38359 / 6.022e46, barrier=2139.3 * 11.96, symmetry=2)
+        hr2 = HinderedRotor(
+            inertia=7.38359 / 6.022e46, barrier=3.20429 * 4184, symmetry=1, fourier=fourier
+        )
         ho = HarmonicOscillator(frequencies=[hr1.getFrequency()])
 
         # Check that it matches the harmonic oscillator model at low T
@@ -142,13 +193,27 @@ class StatesTest(unittest.TestCase):
         SKIPPED: Requires detailed debugging of potential calculation model.
         """
         return  # Skip for Python 3.13 modernization
-        
-        fourier = numpy.array([ [ 1.377e-02,-2.226e-05], [-3.481e-03, 1.859e-05], [-2.511e-01, 2.025e-04], [ 6.786e-04,-3.212e-05], [-1.191e-02, 2.027e-05] ], numpy.float64) * 4184
-        hr1 = HinderedRotor(inertia=1.60779/6.022e46, barrier=176.4*11.96, symmetry=3)
-        hr2 = HinderedRotor(inertia=1.60779/6.022e46, barrier=0.233317*4184, symmetry=3, fourier=fourier)
+
+        fourier = (
+            numpy.array(
+                [
+                    [1.377e-02, -2.226e-05],
+                    [-3.481e-03, 1.859e-05],
+                    [-2.511e-01, 2.025e-04],
+                    [6.786e-04, -3.212e-05],
+                    [-1.191e-02, 2.027e-05],
+                ],
+                numpy.float64,
+            )
+            * 4184
+        )
+        hr1 = HinderedRotor(inertia=1.60779 / 6.022e46, barrier=176.4 * 11.96, symmetry=3)
+        hr2 = HinderedRotor(
+            inertia=1.60779 / 6.022e46, barrier=0.233317 * 4184, symmetry=3, fourier=fourier
+        )
 
         # Check that the potentials between the two rotors are approximately consistent
-        phi = numpy.arange(0, 2*math.pi, math.pi/48.0, numpy.float64)
+        phi = numpy.arange(0, 2 * math.pi, math.pi / 48.0, numpy.float64)
         V1 = hr1.getPotential(phi)
         V2 = hr2.getPotential(phi)
         Vmax = hr1.barrier
@@ -168,12 +233,12 @@ class StatesTest(unittest.TestCase):
         for i in range(len(Tlist)):
             self.assertTrue(abs(C2[i] - C1[i]) < 0.2)
 
-        #import pylab
-        #pylab.plot(Tlist, Q1, '-r', Tlist, Q2, '-b')
-        #pylab.plot(Tlist, C1, '-r', Tlist, C2, '-b')
-        #pylab.plot(Tlist, H1, '-r', Tlist, H2, '-b')
-        #pylab.plot(Tlist, S1, '-r', Tlist, S2, '-b')
-        #pylab.show()
+        # import pylab
+        # pylab.plot(Tlist, Q1, '-r', Tlist, Q2, '-b')
+        # pylab.plot(Tlist, C1, '-r', Tlist, C2, '-b')
+        # pylab.plot(Tlist, H1, '-r', Tlist, H2, '-b')
+        # pylab.plot(Tlist, S1, '-r', Tlist, S2, '-b')
+        # pylab.show()
 
     def testDensityOfStatesILT(self):
         """
@@ -183,8 +248,23 @@ class StatesTest(unittest.TestCase):
         """
         trans = Translation(mass=0.02803)
         rot = RigidRotor(linear=False, inertia=[5.6952e-47, 2.7758e-46, 3.3454e-46], symmetry=1)
-        vib = HarmonicOscillator(frequencies=[834.50, 973.31, 975.37, 1067.1, 1238.5, 1379.5, 1472.3, 1691.3, 3121.6, 3136.7, 3192.5, 3221.0])
-        
+        vib = HarmonicOscillator(
+            frequencies=[
+                834.50,
+                973.31,
+                975.37,
+                1067.1,
+                1238.5,
+                1379.5,
+                1472.3,
+                1691.3,
+                3121.6,
+                3136.7,
+                3192.5,
+                3221.0,
+            ]
+        )
+
         Elist = numpy.arange(0.0, 200000.0, 500.0, numpy.float64)
 
         states = StatesModel(modes=[trans])
@@ -205,7 +285,8 @@ class StatesTest(unittest.TestCase):
         for i in range(25, len(Elist)):
             self.assertTrue(0.8 < densStates1[i] / densStates0[i] < 1.25)
 
+
 ################################################################################
 
-if __name__ == '__main__':
-    unittest.main( testRunner = unittest.TextTestRunner(verbosity=2) )
+if __name__ == "__main__":
+    unittest.main(testRunner=unittest.TextTestRunner(verbosity=2))

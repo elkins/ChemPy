@@ -26,6 +26,7 @@
 
 cimport numpy
 
+
 cdef class Mode:
 
     cpdef numpy.ndarray getPartitionFunctions(self, numpy.ndarray Tlist)
@@ -39,23 +40,23 @@ cdef class Mode:
 ################################################################################
 
 cdef class Translation(Mode):
-    
+
     cdef public double mass
-    
+
     cpdef double getPartitionFunction(self, double T)
-    
+
     cpdef double getHeatCapacity(self, double T)
-    
+
     cpdef double getEnthalpy(self, double T)
-    
+
     cpdef double getEntropy(self, double T)
-    
+
     cpdef numpy.ndarray getDensityOfStates(self, numpy.ndarray Elist)
 
 ################################################################################
 
 cdef class RigidRotor(Mode):
-    
+
     cdef public list inertia
     cdef public bint linear
     cdef public int symmetry
@@ -73,7 +74,7 @@ cdef class RigidRotor(Mode):
 ################################################################################
 
 cdef class HinderedRotor(Mode):
-    
+
     cdef public double inertia
     cdef public double barrier
     cdef public int symmetry
@@ -101,9 +102,9 @@ cdef double cellipk(double x)
 ################################################################################
 
 cdef class HarmonicOscillator(Mode):
-    
+
     cdef public list frequencies
-    
+
     cpdef double getPartitionFunction(self, double T)
 
     cpdef double getHeatCapacity(self, double T)
@@ -117,7 +118,7 @@ cdef class HarmonicOscillator(Mode):
 ################################################################################
 
 cdef class StatesModel:
-    
+
     cdef public list modes
     cdef public int spinMultiplicity
 
@@ -142,8 +143,7 @@ cdef class StatesModel:
     cpdef numpy.ndarray getEnthalpies(self, numpy.ndarray Tlist)
 
     cpdef numpy.ndarray getEntropies(self, numpy.ndarray Tlist)
-    
+
 ################################################################################
 
 cpdef numpy.ndarray convolve(numpy.ndarray rho1, numpy.ndarray rho2, numpy.ndarray Elist)
-

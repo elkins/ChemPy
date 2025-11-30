@@ -36,18 +36,26 @@ describe the corresponding atom or bond.
 """
 
 import warnings
-# Suppress Open Babel deprecation warning about "import openbabel"
-warnings.filterwarnings('ignore', message='.*"import openbabel".*deprecated.*')
-
-from chempy._cython_compat import cython
 
 from chempy import element as elements
-from chempy.graph import Vertex, Edge, Graph
+from chempy._cython_compat import cython
 from chempy.exception import ChemPyError
-from chempy.pattern import AtomPattern, BondPattern, MoleculePattern, AtomType
-from chempy.pattern import getAtomType, fromAdjacencyList, toAdjacencyList
+from chempy.graph import Edge, Graph, Vertex
+from chempy.pattern import (
+    AtomPattern,
+    AtomType,
+    BondPattern,
+    MoleculePattern,
+    fromAdjacencyList,
+    getAtomType,
+    toAdjacencyList,
+)
+
+# Suppress Open Babel deprecation warning about "import openbabel"
+warnings.filterwarnings("ignore", message='.*"import openbabel".*deprecated.*')
 
 ################################################################################
+
 
 class Atom(Vertex):
     """
@@ -69,7 +77,15 @@ class Atom(Vertex):
     e.g. ``atom.symbol`` instead of ``atom.element.symbol``.
     """
 
-    def __init__(self, element=None, radicalElectrons=0, spinMultiplicity=1, implicitHydrogens=0, charge=0, label=''):
+    def __init__(
+        self,
+        element=None,
+        radicalElectrons=0,
+        spinMultiplicity=1,
+        implicitHydrogens=0,
+        charge=0,
+        label="",
+    ):
         Vertex.__init__(self)
         if isinstance(element, str):
             self.element = elements.__dict__[element]
@@ -87,26 +103,39 @@ class Atom(Vertex):
         Return a human-readable string representation of the object.
         """
         return "<Atom '%s'>" % (
-            str(self.element) +
-            ''.join(['.' for i in range(self.radicalElectrons)]) +
-            ''.join(['+' for i in range(self.charge)]) +
-            ''.join(['-' for i in range(-self.charge)])
+            str(self.element)
+            + "".join(["." for i in range(self.radicalElectrons)])
+            + "".join(["+" for i in range(self.charge)])
+            + "".join(["-" for i in range(-self.charge)])
         )
 
     def __repr__(self):
         """
         Return a representation that can be used to reconstruct the object.
         """
-        return "Atom(element='%s', radicalElectrons=%s, spinMultiplicity=%s, implicitHydrogens=%s, charge=%s, label='%s')" % (self.element, self.radicalElectrons, self.spinMultiplicity, self.implicitHydrogens, self.charge, self.label)
+        return (
+            "Atom(element='%s', radicalElectrons=%s, spinMultiplicity=%s, implicitHydrogens=%s, charge=%s, label='%s')"
+            % (
+                self.element,
+                self.radicalElectrons,
+                self.spinMultiplicity,
+                self.implicitHydrogens,
+                self.charge,
+                self.label,
+            )
+        )
 
     @property
-    def mass(self): return self.element.mass
-    
-    @property
-    def number(self): return self.element.number
+    def mass(self):
+        return self.element.mass
 
     @property
-    def symbol(self): return self.element.symbol
+    def number(self):
+        return self.element.number
+
+    @property
+    def symbol(self):
+        return self.element.symbol
 
     def equivalent(self, other):
         """
@@ -119,24 +148,29 @@ class Atom(Vertex):
         cython.declare(atom=Atom, ap=AtomPattern)
         if isinstance(other, Atom):
             atom = other
-            return (self.element is atom.element and
-                self.radicalElectrons == atom.radicalElectrons and
-                self.spinMultiplicity == atom.spinMultiplicity and
-                self.implicitHydrogens == atom.implicitHydrogens and
-                self.charge == atom.charge)
+            return (
+                self.element is atom.element
+                and self.radicalElectrons == atom.radicalElectrons
+                and self.spinMultiplicity == atom.spinMultiplicity
+                and self.implicitHydrogens == atom.implicitHydrogens
+                and self.charge == atom.charge
+            )
         elif isinstance(other, AtomPattern):
             cython.declare(a=AtomType, radical=cython.short, spin=cython.short, charge=cython.short)
             ap = other
             for a in ap.atomType:
-                if self.atomType.equivalent(a): break
+                if self.atomType.equivalent(a):
+                    break
             else:
                 return False
             for radical, spin in zip(ap.radicalElectrons, ap.spinMultiplicity):
-                if self.radicalElectrons == radical and self.spinMultiplicity == spin: break
+                if self.radicalElectrons == radical and self.spinMultiplicity == spin:
+                    break
             else:
                 return False
             for charge in ap.charge:
-                if self.charge == charge: break
+                if self.charge == charge:
+                    break
             else:
                 return False
             return True
@@ -152,18 +186,27 @@ class Atom(Vertex):
         if isinstance(other, Atom):
             return self.equivalent(other)
         elif isinstance(other, AtomPattern):
-            cython.declare(atom=AtomPattern, a=AtomType, radical=cython.short, spin=cython.short, charge=cython.short)
+            cython.declare(
+                atom=AtomPattern,
+                a=AtomType,
+                radical=cython.short,
+                spin=cython.short,
+                charge=cython.short,
+            )
             atom = other
-            for a in atom.atomType: 
-                if self.atomType.isSpecificCaseOf(a): break
+            for a in atom.atomType:
+                if self.atomType.isSpecificCaseOf(a):
+                    break
             else:
                 return False
             for radical, spin in zip(atom.radicalElectrons, atom.spinMultiplicity):
-                if self.radicalElectrons == radical and self.spinMultiplicity == spin: break
+                if self.radicalElectrons == radical and self.spinMultiplicity == spin:
+                    break
             else:
                 return False
             for charge in atom.charge:
-                if self.charge == charge: break
+                if self.charge == charge:
+                    break
             else:
                 return False
             return True
@@ -173,7 +216,14 @@ class Atom(Vertex):
         Generate a deep copy of the current atom. Modifying the
         attributes of the copy will not affect the original.
         """
-        a = Atom(self.element, self.radicalElectrons, self.spinMultiplicity, self.implicitHydrogens, self.charge, self.label)
+        a = Atom(
+            self.element,
+            self.radicalElectrons,
+            self.spinMultiplicity,
+            self.implicitHydrogens,
+            self.charge,
+            self.label,
+        )
         a.atomType = self.atomType
         return a
 
@@ -221,7 +271,10 @@ class Atom(Vertex):
         """
         # Set the new radical electron counts and spin multiplicities
         if self.radicalElectrons - 1 < 0:
-            raise ChemPyError('Unable to update Atom due to LOSE_RADICAL action: Invalid radical electron set "%s".' % (self.radicalElectrons))
+            raise ChemPyError(
+                'Unable to update Atom due to LOSE_RADICAL action: Invalid radical electron set "%s".'
+                % (self.radicalElectrons)
+            )
         self.radicalElectrons -= 1
         if self.spinMultiplicity - 1 < 0:
             self.spinMultiplicity -= 1 - 2
@@ -238,17 +291,21 @@ class Atom(Vertex):
         # Invalidate current atom type
         self.atomType = None
         # Modify attributes if necessary
-        if action[0].upper() in ['CHANGE_BOND', 'FORM_BOND', 'BREAK_BOND']:
+        if action[0].upper() in ["CHANGE_BOND", "FORM_BOND", "BREAK_BOND"]:
             # Nothing else to do here
             pass
-        elif action[0].upper() == 'GAIN_RADICAL':
-            for i in range(action[2]): self.incrementRadical()
-        elif action[0].upper() == 'LOSE_RADICAL':
-            for i in range(abs(action[2])): self.decrementRadical()
+        elif action[0].upper() == "GAIN_RADICAL":
+            for i in range(action[2]):
+                self.incrementRadical()
+        elif action[0].upper() == "LOSE_RADICAL":
+            for i in range(abs(action[2])):
+                self.decrementRadical()
         else:
             raise ChemPyError('Unable to update Atom: Invalid action %s".' % (action))
 
+
 ################################################################################
+
 
 class Bond(Edge):
     """
@@ -287,10 +344,10 @@ class Bond(Edge):
         cython.declare(bond=Bond, bp=BondPattern)
         if isinstance(other, Bond):
             bond = other
-            return (self.order == bond.order)
+            return self.order == bond.order
         elif isinstance(other, BondPattern):
             bp = other
-            return (self.order in bp.order)
+            return self.order in bp.order
 
     def isSpecificCaseOf(self, other):
         """
@@ -313,49 +370,59 @@ class Bond(Edge):
         Return ``True`` if the bond represents a single bond or ``False`` if
         not.
         """
-        return self.order == 'S'
+        return self.order == "S"
 
     def isDouble(self):
         """
         Return ``True`` if the bond represents a double bond or ``False`` if
         not.
         """
-        return self.order == 'D'
+        return self.order == "D"
 
     def isTriple(self):
         """
         Return ``True`` if the bond represents a triple bond or ``False`` if
         not.
         """
-        return self.order == 'T'
+        return self.order == "T"
 
     def isBenzene(self):
         """
         Return ``True`` if the bond represents a benzene bond or ``False`` if
         not.
         """
-        return self.order == 'B'
+        return self.order == "B"
 
     def incrementOrder(self):
         """
         Update the bond as a result of applying a CHANGE_BOND action to
         increase the order by one.
         """
-        if self.order == 'S': self.order = 'D'
-        elif self.order == 'D': self.order = 'T'
+        if self.order == "S":
+            self.order = "D"
+        elif self.order == "D":
+            self.order = "T"
         else:
-            raise ChemPyError('Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".' % (self.order))
-        
+            raise ChemPyError(
+                'Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".'
+                % (self.order)
+            )
+
     def decrementOrder(self):
         """
         Update the bond as a result of applying a CHANGE_BOND action to
         decrease the order by one.
         """
-        if self.order == 'D': self.order = 'S'
-        elif self.order == 'T': self.order = 'D'
+        if self.order == "D":
+            self.order = "S"
+        elif self.order == "T":
+            self.order = "D"
         else:
-            raise ChemPyError('Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".' % (self.order))
-        
+            raise ChemPyError(
+                'Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".'
+                % (self.order)
+            )
+
     def __changeBond(self, order):
         """
         Update the bond as a result of applying a CHANGE_BOND action,
@@ -363,17 +430,29 @@ class Bond(Edge):
         in bond order, and should be 1 or -1.
         """
         if order == 1:
-            if self.order == 'S': self.order = 'D'
-            elif self.order == 'D': self.order = 'T'
+            if self.order == "S":
+                self.order = "D"
+            elif self.order == "D":
+                self.order = "T"
             else:
-                raise ChemPyError('Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".' % (self.order))
+                raise ChemPyError(
+                    'Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".'
+                    % (self.order)
+                )
         elif order == -1:
-            if self.order == 'D': self.order = 'S'
-            elif self.order == 'T': self.order = 'D'
+            if self.order == "D":
+                self.order = "S"
+            elif self.order == "T":
+                self.order = "D"
             else:
-                raise ChemPyError('Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".' % (self.order))
+                raise ChemPyError(
+                    'Unable to update Bond due to CHANGE_BOND action: Invalid bond order "%s".'
+                    % (self.order)
+                )
         else:
-            raise ChemPyError('Unable to update Bond due to CHANGE_BOND action: Invalid order "%g".' % order)
+            raise ChemPyError(
+                'Unable to update Bond due to CHANGE_BOND action: Invalid order "%g".' % order
+            )
 
     def applyAction(self, action):
         """
@@ -382,17 +461,22 @@ class Bond(Edge):
         required parameters. The available actions can be found
         :ref:`here <reaction-recipe-actions>`.
         """
-        if action[0].upper() == 'CHANGE_BOND':
+        if action[0].upper() == "CHANGE_BOND":
             if action[2] == 1:
                 self.incrementOrder()
             elif action[2] == -1:
                 self.decrementOrder()
             else:
-                raise ChemPyError('Unable to update Bond due to CHANGE_BOND action: Invalid order "%g".' % action[2])
+                raise ChemPyError(
+                    'Unable to update Bond due to CHANGE_BOND action: Invalid order "%g".'
+                    % action[2]
+                )
         else:
             raise ChemPyError('Unable to update BondPattern: Invalid action %s".' % (action))
 
+
 ################################################################################
+
 
 class Molecule(Graph):
     """
@@ -402,12 +486,14 @@ class Molecule(Graph):
     also been provided.
     """
 
-    def __init__(self, atoms=None, bonds=None, SMILES='', InChI='', implicitH=False):
+    def __init__(self, atoms=None, bonds=None, SMILES="", InChI="", implicitH=False):
         Graph.__init__(self, atoms, bonds)
         self.implicitHydrogens = False
-        if SMILES != '': self.fromSMILES(SMILES, implicitH)
-        elif InChI != '': self.fromInChI(InChI, implicitH)
-    
+        if SMILES != "":
+            self.fromSMILES(SMILES, implicitH)
+        elif InChI != "":
+            self.fromInChI(InChI, implicitH)
+
     def __str__(self):
         """
         Return a human-readable string representation of the object.
@@ -420,12 +506,20 @@ class Molecule(Graph):
         """
         return "Molecule(SMILES='%s')" % (self.toSMILES())
 
-    def __getAtoms(self): return self.vertices
-    def __setAtoms(self, atoms): self.vertices = atoms
+    def __getAtoms(self):
+        return self.vertices
+
+    def __setAtoms(self, atoms):
+        self.vertices = atoms
+
     atoms = property(__getAtoms, __setAtoms)
 
-    def __getBonds(self): return self.edges
-    def __setBonds(self, bonds): self.edges = bonds
+    def __getBonds(self):
+        return self.edges
+
+    def __setBonds(self, bonds):
+        self.edges = bonds
+
     bonds = property(__getBonds, __setBonds)
 
     def addAtom(self, atom):
@@ -433,7 +527,7 @@ class Molecule(Graph):
         Add an `atom` to the graph. The atom is initialized with no bonds.
         """
         return self.addVertex(atom)
-    
+
     def addBond(self, atom1, atom2, bond):
         """
         Add a `bond` to the graph as an edge connecting the two atoms `atom1`
@@ -495,6 +589,7 @@ class Molecule(Graph):
         Return the molecular formula for the molecule.
         """
         import pybel
+
         mol = pybel.Molecule(self.toOBMol())
         return mol.formula
 
@@ -553,7 +648,7 @@ class Molecule(Graph):
         else:
             # No heavy atoms, so leave explicit
             return
-        
+
         # Count the hydrogen atoms on each non-hydrogen atom and set the
         # `implicitHydrogens` attribute accordingly
         hydrogens = []
@@ -584,8 +679,8 @@ class Molecule(Graph):
         hydrogens = []
         for atom in self.vertices:
             while atom.implicitHydrogens > 0:
-                H = Atom(element='H')
-                bond = Bond(order='S')
+                H = Atom(element="H")
+                bond = Bond(order="S")
                 hydrogens.append((H, atom, bond))
                 atom.implicitHydrogens -= 1
 
@@ -594,7 +689,7 @@ class Molecule(Graph):
         for H, atom, bond in hydrogens:
             self.addAtom(H)
             self.addBond(H, atom, bond)
-            H.atomType = getAtomType(H, {atom:bond})
+            H.atomType = getAtomType(H, {atom: bond})
             # If known, set the connectivity information
             H.connectivity1 = 1
             H.connectivity2 = atom.connectivity1
@@ -619,7 +714,7 @@ class Molecule(Graph):
         Remove the labels from all atoms in the molecule.
         """
         for atom in self.vertices:
-            atom.label = ''
+            atom.label = ""
 
     def containsLabeledAtom(self, label):
         """
@@ -627,7 +722,8 @@ class Molecule(Graph):
         `label` and :data:`False` otherwise.
         """
         for atom in self.vertices:
-            if atom.label == label: return True
+            if atom.label == label:
+                return True
         return False
 
     def getLabeledAtom(self, label):
@@ -635,7 +731,8 @@ class Molecule(Graph):
         Return the atoms in the molecule that are labeled.
         """
         for atom in self.vertices:
-            if atom.label == label: return atom
+            if atom.label == label:
+                return atom
         return None
 
     def getLabeledAtoms(self):
@@ -646,7 +743,7 @@ class Molecule(Graph):
         """
         labeled = {}
         for atom in self.vertices:
-            if atom.label != '':
+            if atom.label != "":
                 if atom.label in labeled:
                     labeled[atom.label] = [labeled[atom.label]]
                     labeled[atom.label].append(atom)
@@ -665,7 +762,10 @@ class Molecule(Graph):
         # It only makes sense to compare a Molecule to a Molecule for full
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, Molecule):
-            raise TypeError('Got a %s object for parameter "other", when a Molecule object is required.' % other.__class__)
+            raise TypeError(
+                'Got a %s object for parameter "other", when a Molecule object is required.'
+                % other.__class__
+            )
         # Ensure that both self and other have the same implicit hydrogen status
         # If not, make them both explicit just to be safe
         implicitH = [self.implicitHydrogens, other.implicitHydrogens]
@@ -675,8 +775,10 @@ class Molecule(Graph):
         # Do the isomorphism comparison
         result = Graph.isIsomorphic(self, other, initialMap)
         # Restore implicit status if needed
-        if implicitH[0]: self.makeHydrogensImplicit()
-        if implicitH[1]: other.makeHydrogensImplicit()
+        if implicitH[0]:
+            self.makeHydrogensImplicit()
+        if implicitH[1]:
+            other.makeHydrogensImplicit()
         return result
 
     def findIsomorphism(self, other, initialMap=None):
@@ -692,7 +794,10 @@ class Molecule(Graph):
         # It only makes sense to compare a Molecule to a Molecule for full
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, Molecule):
-            raise TypeError('Got a %s object for parameter "other", when a Molecule object is required.' % other.__class__)
+            raise TypeError(
+                'Got a %s object for parameter "other", when a Molecule object is required.'
+                % other.__class__
+            )
         # Ensure that both self and other have the same implicit hydrogen status
         # If not, make them both explicit just to be safe
         implicitH = [self.implicitHydrogens, other.implicitHydrogens]
@@ -702,8 +807,10 @@ class Molecule(Graph):
         # Do the isomorphism comparison
         result = Graph.findIsomorphism(self, other, initialMap)
         # Restore implicit status if needed
-        if implicitH[0]: self.makeHydrogensImplicit()
-        if implicitH[1]: other.makeHydrogensImplicit()
+        if implicitH[0]:
+            self.makeHydrogensImplicit()
+        if implicitH[1]:
+            other.makeHydrogensImplicit()
         return result
 
     def isSubgraphIsomorphic(self, other, initialMap=None):
@@ -717,14 +824,18 @@ class Molecule(Graph):
         # It only makes sense to compare a Molecule to a MoleculePattern for subgraph
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, MoleculePattern):
-            raise TypeError('Got a %s object for parameter "other", when a MoleculePattern object is required.' % other.__class__)
+            raise TypeError(
+                'Got a %s object for parameter "other", when a MoleculePattern object is required.'
+                % other.__class__
+            )
         # Ensure that self is explicit (assume other is explicit)
         implicitH = self.implicitHydrogens
         self.makeHydrogensExplicit()
         # Do the isomorphism comparison
         result = Graph.isSubgraphIsomorphic(self, other, initialMap)
         # Restore implicit status if needed
-        if implicitH: self.makeHydrogensImplicit()
+        if implicitH:
+            self.makeHydrogensImplicit()
         return result
 
     def findSubgraphIsomorphisms(self, other, initialMap=None):
@@ -741,14 +852,18 @@ class Molecule(Graph):
         # It only makes sense to compare a Molecule to a MoleculePattern for subgraph
         # isomorphism, so raise an exception if this is not what was requested
         if not isinstance(other, MoleculePattern):
-            raise TypeError('Got a %s object for parameter "other", when a MoleculePattern object is required.' % other.__class__)
+            raise TypeError(
+                'Got a %s object for parameter "other", when a MoleculePattern object is required.'
+                % other.__class__
+            )
         # Ensure that self is explicit (assume other is explicit)
         implicitH = self.implicitHydrogens
         self.makeHydrogensExplicit()
         # Do the isomorphism comparison
         result = Graph.findSubgraphIsomorphisms(self, other, initialMap)
         # Restore implicit status if needed
-        if implicitH: self.makeHydrogensImplicit()
+        if implicitH:
+            self.makeHydrogensImplicit()
         return result
 
     def isAtomInCycle(self, atom):
@@ -775,6 +890,7 @@ class Molecule(Graph):
         vector formats.
         """
         from ext.molecule_draw import drawMolecule
+
         drawMolecule(self, path=path)
 
     def fromCML(self, cmlstr, implicitH=False):
@@ -791,9 +907,9 @@ class Molecule(Graph):
                 "Windows support is currently experimental."
             ) from exc
         obConversion = openbabel.OBConversion()
-        obConversion.SetInFormat('cml')
+        obConversion.SetInFormat("cml")
         obmol = openbabel.OBMol()
-        cmlstr = cmlstr.replace('\t', '')
+        cmlstr = cmlstr.replace("\t", "")
         obConversion.ReadString(obmol, cmlstr)
         self.fromOBMol(obmol, implicitH)
         return self
@@ -812,7 +928,7 @@ class Molecule(Graph):
                 "Windows support is currently experimental."
             ) from exc
         obConversion = openbabel.OBConversion()
-        obConversion.SetInFormat('inchi')
+        obConversion.SetInFormat("inchi")
         obmol = openbabel.OBMol()
         obConversion.ReadString(obmol, inchistr)
         self.fromOBMol(obmol, implicitH)
@@ -832,7 +948,7 @@ class Molecule(Graph):
                 "Windows support is currently experimental."
             ) from exc
         obConversion = openbabel.OBConversion()
-        obConversion.SetInFormat('smi')
+        obConversion.SetInFormat("smi")
         obmol = openbabel.OBMol()
         obConversion.ReadString(obmol, smilesstr)
         self.fromOBMol(obmol, implicitH)
@@ -861,18 +977,22 @@ class Molecule(Graph):
             # Use atomic number as key for element
             number = obatom.GetAtomicNum()
             element = elements.getElement(number=number)
-            
+
             # Process spin multiplicity
             radicalElectrons = 0
             spinMultiplicity = obatom.GetSpinMultiplicity()
             if spinMultiplicity == 0:
-                radicalElectrons = 0; spinMultiplicity = 1
+                radicalElectrons = 0
+                spinMultiplicity = 1
             elif spinMultiplicity == 1:
-                radicalElectrons = 2; spinMultiplicity = 1
+                radicalElectrons = 2
+                spinMultiplicity = 1
             elif spinMultiplicity == 2:
-                radicalElectrons = 1; spinMultiplicity = 2
+                radicalElectrons = 1
+                spinMultiplicity = 2
             elif spinMultiplicity == 3:
-                radicalElectrons = 2; spinMultiplicity = 3
+                radicalElectrons = 2
+                spinMultiplicity = 3
 
             # Process charge
             charge = obatom.GetFormalCharge()
@@ -880,7 +1000,7 @@ class Molecule(Graph):
             atom = Atom(element, radicalElectrons, spinMultiplicity, 0, charge)
             self.vertices.append(atom)
             self.edges[atom] = {}
-            
+
             # Add bonds by iterating again through atoms
             for j in range(0, i):
                 obatom2 = obmol.GetAtom(j + 1)
@@ -889,15 +1009,15 @@ class Molecule(Graph):
                     order = None
                     bond_order = obbond.GetBondOrder()
                     if bond_order == 1:
-                        order = 'S'
+                        order = "S"
                     elif bond_order == 2:
-                        order = 'D'
+                        order = "D"
                     elif bond_order == 3:
-                        order = 'T'
+                        order = "T"
                     elif obbond.IsAromatic():
-                        order = 'B'
+                        order = "B"
                     else:
-                        order = 'S'  # Default to single if unknown
+                        order = "S"  # Default to single if unknown
 
                     bond = Bond(order)
                     atom1 = self.vertices[i]
@@ -910,7 +1030,8 @@ class Molecule(Graph):
         self.updateAtomTypes()
 
         # Make hydrogens implicit to conserve memory
-        if implicitH: self.makeHydrogensImplicit()
+        if implicitH:
+            self.makeHydrogensImplicit()
 
         return self
 
@@ -932,9 +1053,10 @@ class Molecule(Graph):
         `OpenBabel <http://openbabel.org/>`_ to perform the conversion.
         """
         import pybel
+
         mol = pybel.Molecule(self.toOBMol())
-        cml = mol.write('cml').strip()
-        return '\n'.join([l for l in cml.split('\n') if l.strip()])
+        cml = mol.write("cml").strip()
+        return "\n".join([line for line in cml.split("\n") if line.strip()])
 
     def toInChI(self):
         """
@@ -942,11 +1064,12 @@ class Molecule(Graph):
         `OpenBabel <http://openbabel.org/>`_ to perform the conversion.
         """
         import openbabel
+
         # This version does not write a warning to stderr if stereochemistry is undefined
         obmol = self.toOBMol()
         obConversion = openbabel.OBConversion()
-        obConversion.SetOutFormat('inchi')
-        obConversion.SetOptions('w', openbabel.OBConversion.OUTOPTIONS)
+        obConversion.SetOutFormat("inchi")
+        obConversion.SetOptions("w", openbabel.OBConversion.OUTOPTIONS)
         return obConversion.WriteString(obmol).strip()
 
     def toSMILES(self):
@@ -955,8 +1078,9 @@ class Molecule(Graph):
         `OpenBabel <http://openbabel.org/>`_ to perform the conversion.
         """
         import pybel
+
         mol = pybel.Molecule(self.toOBMol())
-        return mol.write('smiles').strip()
+        return mol.write("smiles").strip()
 
     def toOBMol(self):
         """
@@ -965,7 +1089,7 @@ class Molecule(Graph):
         """
 
         import openbabel
-        
+
         cython.declare(implicitH=cython.bint)
         cython.declare(atom=Atom, atom1=Atom, bonds=dict, atom2=Atom, bond=Bond)
         cython.declare(index1=cython.int, index2=cython.int, order=cython.int)
@@ -986,19 +1110,20 @@ class Molecule(Graph):
             a = obmol.NewAtom()
             a.SetAtomicNum(atom.number)
             a.SetFormalCharge(atom.charge)
-        orders = {'S': 1, 'D': 2, 'T': 3, 'B': 5}
+        orders = {"S": 1, "D": 2, "T": 3, "B": 5}
         for atom1, bonds in bonds.items():
             for atom2, bond in bonds.items():
                 index1 = atoms.index(atom1)
                 index2 = atoms.index(atom2)
                 if index1 < index2:
                     order = orders[bond.order]
-                    obmol.AddBond(index1+1, index2+1, order)
+                    obmol.AddBond(index1 + 1, index2 + 1, order)
 
         obmol.AssignSpinMultiplicity(True)
 
         # Restore implicit hydrogens if necessary
-        if implicitH: self.makeHydrogensImplicit()
+        if implicitH:
+            self.makeHydrogensImplicit()
 
         return obmol
 
@@ -1029,10 +1154,13 @@ class Molecule(Graph):
         # True if all bonds are double bonds (e.g. O=C=O)
         allDoubleBonds = True
         for atom1 in self.edges:
-            if atom1.implicitHydrogens > 0: allDoubleBonds = False
+            if atom1.implicitHydrogens > 0:
+                allDoubleBonds = False
             for bond in self.edges[atom1].values():
-                if not bond.isDouble(): allDoubleBonds = False
-        if allDoubleBonds: return True
+                if not bond.isDouble():
+                    allDoubleBonds = False
+        if allDoubleBonds:
+            return True
 
         # True if alternating single-triple bonds (e.g. H-C#C-H)
         # This test requires explicit hydrogen atoms
@@ -1040,22 +1168,24 @@ class Molecule(Graph):
         self.makeHydrogensExplicit()
         for atom in self.vertices:
             bonds = list(self.edges[atom].values())
-            if len(bonds)==1:
-                continue # ok, next atom
-            if len(bonds)>2:
-                break # fail!
+            if len(bonds) == 1:
+                continue  # ok, next atom
+            if len(bonds) > 2:
+                break  # fail!
             if bonds[0].isSingle() and bonds[1].isTriple():
-                continue # ok, next atom
+                continue  # ok, next atom
             if bonds[1].isSingle() and bonds[0].isTriple():
-                continue # ok, next atom
-            break # fail if we haven't continued
+                continue  # ok, next atom
+            break  # fail if we haven't continued
         else:
             # didn't fail
-            if implicitH: self.makeHydrogensImplicit()
+            if implicitH:
+                self.makeHydrogensImplicit()
             return True
-        
+
         # not returned yet? must be nonlinear
-        if implicitH: self.makeHydrogensImplicit()
+        if implicitH:
+            self.makeHydrogensImplicit()
         return False
 
     def countInternalRotors(self):
@@ -1067,8 +1197,15 @@ class Molecule(Graph):
         count = 0
         for atom1 in self.edges:
             for atom2, bond in self.edges[atom1].items():
-                if self.vertices.index(atom1) < self.vertices.index(atom2) and bond.isSingle() and not self.isBondInCycle(atom1, atom2):
-                    if len(self.edges[atom1]) + atom1.implicitHydrogens > 1 and len(self.edges[atom2]) + atom2.implicitHydrogens > 1:
+                if (
+                    self.vertices.index(atom1) < self.vertices.index(atom2)
+                    and bond.isSingle()
+                    and not self.isBondInCycle(atom1, atom2)
+                ):
+                    if (
+                        len(self.edges[atom1]) + atom1.implicitHydrogens > 1
+                        and len(self.edges[atom2]) + atom2.implicitHydrogens > 1
+                    ):
                         count += 1
         return count
 
@@ -1079,21 +1216,30 @@ class Molecule(Graph):
         """
         symmetryNumber = 1
 
-        single = 0; double = 0; triple = 0; benzene = 0
+        single = 0
+        double = 0
+        triple = 0
+        benzene = 0
         numNeighbors = 0
         for bond in self.edges[atom].values():
-            if bond.isSingle(): single += 1
-            elif bond.isDouble(): double += 1
-            elif bond.isTriple(): triple += 1
-            elif bond.isBenzene(): benzene += 1
+            if bond.isSingle():
+                single += 1
+            elif bond.isDouble():
+                double += 1
+            elif bond.isTriple():
+                triple += 1
+            elif bond.isBenzene():
+                benzene += 1
             numNeighbors += 1
-        
+
         # If atom has zero or one neighbors, the symmetry number is 1
-        if numNeighbors < 2: return symmetryNumber
+        if numNeighbors < 2:
+            return symmetryNumber
 
         # Create temporary structures for each functional group attached to atom
         molecule = self.copy()
-        for atom2 in list(molecule.bonds[atom].keys()): molecule.removeBond(atom, atom2)
+        for atom2 in list(molecule.bonds[atom].keys()):
+            molecule.removeBond(atom, atom2)
         molecule.removeAtom(atom)
         groups = molecule.split()
 
@@ -1106,39 +1252,56 @@ class Molecule(Graph):
                     groupIsomorphism[group2][group1] = groupIsomorphism[group1][group2]
                 elif group1 is group2:
                     groupIsomorphism[group1][group1] = True
-        count = [sum([int(groupIsomorphism[group1][group2]) for group2 in groups]) for group1 in groups]
+        count = [
+            sum([int(groupIsomorphism[group1][group2]) for group2 in groups]) for group1 in groups
+        ]
         for i in range(count.count(2) // 2):
             count.remove(2)
         for i in range(count.count(3) // 3):
-            count.remove(3); count.remove(3)
+            count.remove(3)
+            count.remove(3)
         for i in range(count.count(4) // 4):
-            count.remove(4); count.remove(4); count.remove(4)
-        count.sort(); count.reverse()
-        
+            count.remove(4)
+            count.remove(4)
+            count.remove(4)
+        count.sort()
+        count.reverse()
+
         if atom.radicalElectrons == 0:
             if single == 4:
                 # Four single bonds
-                if count == [4]: symmetryNumber *= 12
-                elif count == [3, 1]: symmetryNumber *= 3
-                elif count == [2, 2]: symmetryNumber *= 2
-                elif count == [2, 1, 1]: symmetryNumber *= 1
-                elif count == [1, 1, 1, 1]: symmetryNumber *= 1
+                if count == [4]:
+                    symmetryNumber *= 12
+                elif count == [3, 1]:
+                    symmetryNumber *= 3
+                elif count == [2, 2]:
+                    symmetryNumber *= 2
+                elif count == [2, 1, 1]:
+                    symmetryNumber *= 1
+                elif count == [1, 1, 1, 1]:
+                    symmetryNumber *= 1
             elif single == 2:
                 # Two single bonds
-                if count == [2]: symmetryNumber *= 2
+                if count == [2]:
+                    symmetryNumber *= 2
             elif double == 2:
                 # Two double bonds
-                if count == [2]: symmetryNumber *= 2
+                if count == [2]:
+                    symmetryNumber *= 2
         elif atom.radicalElectrons == 1:
             if single == 3:
                 # Three single bonds
-                if count == [3]: symmetryNumber *= 6
-                elif count == [2, 1]: symmetryNumber *= 2
-                elif count == [1, 1, 1]: symmetryNumber *= 1
+                if count == [3]:
+                    symmetryNumber *= 6
+                elif count == [2, 1]:
+                    symmetryNumber *= 2
+                elif count == [1, 1, 1]:
+                    symmetryNumber *= 1
         elif atom.radicalElectrons == 2:
             if single == 2:
                 # Two single bonds
-                if count == [2]: symmetryNumber *= 2
+                if count == [2]:
+                    symmetryNumber *= 2
 
         return symmetryNumber
 
@@ -1152,8 +1315,10 @@ class Molecule(Graph):
             if atom1.equivalent(atom2):
                 # An O-O bond is considered to be an "optical isomer" and so no
                 # symmetry correction will be applied
-                if atom1.atomType == atom2.atomType == 'Os' and \
-                    atom1.radicalElectrons == atom2.radicalElectrons == 0:
+                if (
+                    atom1.atomType == atom2.atomType == "Os"
+                    and atom1.radicalElectrons == atom2.radicalElectrons == 0
+                ):
                     pass
                 # If the molecule is diatomic, then we don't have to check the
                 # ligands on the two atoms in this bond (since we know there
@@ -1164,29 +1329,71 @@ class Molecule(Graph):
                     molecule = self.copy()
                     molecule.removeBond(atom1, atom2)
                     fragments = molecule.split()
-                    if len(fragments) != 2: return symmetryNumber
+                    if len(fragments) != 2:
+                        return symmetryNumber
 
                     fragment1, fragment2 = fragments
-                    if atom1 in fragment1.atoms: fragment1.removeAtom(atom1)
-                    if atom2 in fragment1.atoms: fragment1.removeAtom(atom2)
-                    if atom1 in fragment2.atoms: fragment2.removeAtom(atom1)
-                    if atom2 in fragment2.atoms: fragment2.removeAtom(atom2)
+                    if atom1 in fragment1.atoms:
+                        fragment1.removeAtom(atom1)
+                    if atom2 in fragment1.atoms:
+                        fragment1.removeAtom(atom2)
+                    if atom1 in fragment2.atoms:
+                        fragment2.removeAtom(atom1)
+                    if atom2 in fragment2.atoms:
+                        fragment2.removeAtom(atom2)
                     groups1 = fragment1.split()
                     groups2 = fragment2.split()
 
                     # Test functional groups for symmetry
                     if len(groups1) == len(groups2) == 1:
-                        if groups1[0].isIsomorphic(groups2[0]): symmetryNumber *= 2
+                        if groups1[0].isIsomorphic(groups2[0]):
+                            symmetryNumber *= 2
                     elif len(groups1) == len(groups2) == 2:
-                        if groups1[0].isIsomorphic(groups2[0]) and groups1[1].isIsomorphic(groups2[1]): symmetryNumber *= 2
-                        elif groups1[1].isIsomorphic(groups2[0]) and groups1[0].isIsomorphic(groups2[1]): symmetryNumber *= 2
+                        if groups1[0].isIsomorphic(groups2[0]) and groups1[1].isIsomorphic(
+                            groups2[1]
+                        ):
+                            symmetryNumber *= 2
+                        elif groups1[1].isIsomorphic(groups2[0]) and groups1[0].isIsomorphic(
+                            groups2[1]
+                        ):
+                            symmetryNumber *= 2
                     elif len(groups1) == len(groups2) == 3:
-                        if groups1[0].isIsomorphic(groups2[0]) and groups1[1].isIsomorphic(groups2[1]) and groups1[2].isIsomorphic(groups2[2]): symmetryNumber *= 2
-                        elif groups1[0].isIsomorphic(groups2[0]) and groups1[1].isIsomorphic(groups2[2]) and groups1[2].isIsomorphic(groups2[1]): symmetryNumber *= 2
-                        elif groups1[0].isIsomorphic(groups2[1]) and groups1[1].isIsomorphic(groups2[2]) and groups1[2].isIsomorphic(groups2[0]): symmetryNumber *= 2
-                        elif groups1[0].isIsomorphic(groups2[1]) and groups1[1].isIsomorphic(groups2[0]) and groups1[2].isIsomorphic(groups2[2]): symmetryNumber *= 2
-                        elif groups1[0].isIsomorphic(groups2[2]) and groups1[1].isIsomorphic(groups2[0]) and groups1[2].isIsomorphic(groups2[1]): symmetryNumber *= 2
-                        elif groups1[0].isIsomorphic(groups2[2]) and groups1[1].isIsomorphic(groups2[1]) and groups1[2].isIsomorphic(groups2[0]): symmetryNumber *= 2
+                        if (
+                            groups1[0].isIsomorphic(groups2[0])
+                            and groups1[1].isIsomorphic(groups2[1])
+                            and groups1[2].isIsomorphic(groups2[2])
+                        ):
+                            symmetryNumber *= 2
+                        elif (
+                            groups1[0].isIsomorphic(groups2[0])
+                            and groups1[1].isIsomorphic(groups2[2])
+                            and groups1[2].isIsomorphic(groups2[1])
+                        ):
+                            symmetryNumber *= 2
+                        elif (
+                            groups1[0].isIsomorphic(groups2[1])
+                            and groups1[1].isIsomorphic(groups2[2])
+                            and groups1[2].isIsomorphic(groups2[0])
+                        ):
+                            symmetryNumber *= 2
+                        elif (
+                            groups1[0].isIsomorphic(groups2[1])
+                            and groups1[1].isIsomorphic(groups2[0])
+                            and groups1[2].isIsomorphic(groups2[2])
+                        ):
+                            symmetryNumber *= 2
+                        elif (
+                            groups1[0].isIsomorphic(groups2[2])
+                            and groups1[1].isIsomorphic(groups2[0])
+                            and groups1[2].isIsomorphic(groups2[1])
+                        ):
+                            symmetryNumber *= 2
+                        elif (
+                            groups1[0].isIsomorphic(groups2[2])
+                            and groups1[1].isIsomorphic(groups2[1])
+                            and groups1[2].isIsomorphic(groups2[0])
+                        ):
+                            symmetryNumber *= 2
 
         return symmetryNumber
 
@@ -1195,29 +1402,29 @@ class Molecule(Graph):
         Get the axis symmetry number correction. The "axis" refers to a series
         of two or more cumulated double bonds (e.g. C=C=C, etc.). Corrections
         for single C=C bonds are handled in getBondSymmetryNumber().
-        
+
         Each axis (C=C=C) has the potential to double the symmetry number.
-        If an end has 0 or 1 groups (eg. =C=CJJ or =C=C-R) then it cannot 
+        If an end has 0 or 1 groups (eg. =C=CJJ or =C=C-R) then it cannot
         alter the axis symmetry and is disregarded::
-        
+
             A=C=C=C..        A-C=C=C=C-A
-            
+
               s=1                s=1
-        
-        If an end has 2 groups that are different then it breaks the symmetry 
+
+        If an end has 2 groups that are different then it breaks the symmetry
         and the symmetry for that axis is 1, no matter what's at the other end::
-        
+
             A\\               A\\         /A
               T=C=C=C=C-A      T=C=C=C=T
             B/               A/         \\B
                   s=1             s=1
-        
-        If you have one or more ends with 2 groups, and neither end breaks the 
+
+        If you have one or more ends with 2 groups, and neither end breaks the
         symmetry, then you have an axis symmetry number of 2::
-        
-            A\\         /B      A\\         
+
+            A\\         /B      A\\
               C=C=C=C=C          C=C=C=C-B
-            A/         \\B      A/         
+            A/         \\B      A/
                   s=2                s=2
         """
 
@@ -1227,14 +1434,16 @@ class Molecule(Graph):
         doubleBonds = []
         for atom1 in self.edges:
             for atom2 in self.edges[atom1]:
-                if self.edges[atom1][atom2].isDouble() and self.vertices.index(atom1) < self.vertices.index(atom2):
+                if self.edges[atom1][atom2].isDouble() and self.vertices.index(
+                    atom1
+                ) < self.vertices.index(atom2):
                     doubleBonds.append((atom1, atom2))
 
         # Search for adjacent double bonds
         cumulatedBonds = []
         for i, bond1 in enumerate(doubleBonds):
             atom11, atom12 = bond1
-            for bond2 in doubleBonds[i+1:]:
+            for bond2 in doubleBonds[i + 1 :]:
                 atom21, atom22 = bond2
                 if atom11 is atom21 or atom11 is atom22 or atom12 is atom21 or atom12 is atom22:
                     listToAddTo = None
@@ -1242,72 +1451,82 @@ class Molecule(Graph):
                         if (atom11, atom12) in cumBonds or (atom21, atom22) in cumBonds:
                             listToAddTo = cumBonds
                     if listToAddTo is not None:
-                        if (atom11, atom12) not in listToAddTo: listToAddTo.append((atom11, atom12))
-                        if (atom21, atom22) not in listToAddTo: listToAddTo.append((atom21, atom22))
+                        if (atom11, atom12) not in listToAddTo:
+                            listToAddTo.append((atom11, atom12))
+                        if (atom21, atom22) not in listToAddTo:
+                            listToAddTo.append((atom21, atom22))
                     else:
                         cumulatedBonds.append([(atom11, atom12), (atom21, atom22)])
 
         # For each set of adjacent double bonds, check for axis symmetry
         for bonds in cumulatedBonds:
-            
+
             # Do nothing if less than two cumulated bonds
-            if len(bonds) < 2: continue
+            if len(bonds) < 2:
+                continue
 
             # Do nothing if axis is in cycle
             found = False
             for atom1, atom2 in bonds:
-               if self.isBondInCycle(atom1, atom2): found = True
-            if found: continue
+                if self.isBondInCycle(atom1, atom2):
+                    found = True
+            if found:
+                continue
 
             # Find terminal atoms in axis
             # Terminal atoms labelled T:  T=C=C=C=T
             axis = []
-            for bond in bonds: axis.extend(bond)
+            for bond in bonds:
+                axis.extend(bond)
             terminalAtoms = []
             for atom in axis:
-                if axis.count(atom) == 1: terminalAtoms.append(atom)
-            if len(terminalAtoms) != 2: continue
-            
+                if axis.count(atom) == 1:
+                    terminalAtoms.append(atom)
+            if len(terminalAtoms) != 2:
+                continue
+
             # Remove axis from (copy of) structure
             structure = self.copy()
             for atom1, atom2 in bonds:
                 structure.removeBond(atom1, atom2)
             atomsToRemove = []
             for atom in structure.atoms:
-                if len(structure.bonds[atom]) == 0: # it's not bonded to anything
+                if len(structure.bonds[atom]) == 0:  # it's not bonded to anything
                     atomsToRemove.append(atom)
-            for atom in atomsToRemove: structure.removeAtom(atom)
+            for atom in atomsToRemove:
+                structure.removeAtom(atom)
 
             # Split remaining fragments of structure
             end_fragments = structure.split()
             # you may have only one end fragment,
             # eg. if you started with H2C=C=C..
-            
-            # 
+
+            #
             # there can be two groups at each end     A\         /B
             #                                           T=C=C=C=T
             #                                         A/         \B
-            
+
             # to start with nothing has broken symmetry about the axis
-            symmetry_broken=False 
-            for fragment in end_fragments: # a fragment is one end of the axis
-                
+            symmetry_broken = False
+            for fragment in end_fragments:  # a fragment is one end of the axis
+
                 # remove the atom that was at the end of the axis and split what's left into groups
                 for atom in terminalAtoms:
-                    if atom in fragment.atoms: fragment.removeAtom(atom)
+                    if atom in fragment.atoms:
+                        fragment.removeAtom(atom)
                 groups = fragment.split()
-                
+
                 # If end has only one group then it can't contribute to (nor break) axial symmetry
                 #   Eg. this has no axis symmetry:   A-T=C=C=C=T-A
                 # so we remove this end from the list of interesting end fragments
-                if len(groups)==1:
+                if len(groups) == 1:
                     end_fragments.remove(fragment)
-                    continue # next end fragment
-                if len(groups)==2:
+                    continue  # next end fragment
+                if len(groups) == 2:
                     if not groups[0].isIsomorphic(groups[1]):
                         # this end has broken the symmetry of the axis
                         symmetry_broken = True
-                        
+
             # If there are end fragments left that can contribute to symmetry,
             # and none of them broke it, then double the symmetry number
             # NB>> This assumes coordination number of 4 (eg. Carbon).
@@ -1317,7 +1536,7 @@ class Molecule(Graph):
             #      (for some T with coordination number 5).
             if end_fragments and not symmetry_broken:
                 symmetryNumber *= 2
-                    
+
         return symmetryNumber
 
     def calculateCyclicSymmetryNumber(self):
@@ -1337,7 +1556,7 @@ class Molecule(Graph):
 
             # Remove bonds of ring from structure
             for i, atom1 in enumerate(ring):
-                for atom2 in ring[i+1:]:
+                for atom2 in ring[i + 1 :]:
                     if structure.hasBond(atom1, atom2):
                         structure.removeBond(atom1, atom2)
 
@@ -1345,7 +1564,8 @@ class Molecule(Graph):
             groups = []
             for struct in structures:
                 for atom in ring:
-                    if atom in struct.atoms(): struct.removeAtom(atom)
+                    if atom in struct.atoms():
+                        struct.removeAtom(atom)
                 groups.append(struct.split())
 
             # Find equivalent functional groups on ring
@@ -1363,7 +1583,7 @@ class Molecule(Graph):
             # Find equivalent bonds on ring
             equivalentBonds = []
             for i, atom1 in enumerate(ring):
-                for atom2 in ring[i+1:]:
+                for atom2 in ring[i + 1 :]:
                     if self.hasBond(atom1, atom2):
                         bond = self.getBond(atom1, atom2)
                         found = False
@@ -1392,7 +1612,6 @@ class Molecule(Graph):
 
             print(len(ring), maxEquivalentGroups, maxEquivalentBonds, symmetryNumber)
 
-
         return symmetryNumber
 
     def calculateSymmetryNumber(self):
@@ -1411,17 +1630,20 @@ class Molecule(Graph):
 
         for atom1 in self.edges:
             for atom2 in self.edges[atom1]:
-                if self.vertices.index(atom1) < self.vertices.index(atom2) and not self.isBondInCycle(atom1, atom2):
+                if self.vertices.index(atom1) < self.vertices.index(
+                    atom2
+                ) and not self.isBondInCycle(atom1, atom2):
                     symmetryNumber *= self.calculateBondSymmetryNumber(atom1, atom2)
 
         symmetryNumber *= self.calculateAxisSymmetryNumber()
 
-        #if self.isCyclic():
+        # if self.isCyclic():
         #   symmetryNumber *= self.calculateCyclicSymmetryNumber()
 
         self.symmetryNumber = symmetryNumber
 
-        if implicitH: self.makeHydrogensImplicit()
+        if implicitH:
+            self.makeHydrogensImplicit()
 
         return symmetryNumber
 
@@ -1477,9 +1699,9 @@ class Molecule(Graph):
         paths = []
         for atom2, bond12 in self.edges[atom1].items():
             # Vinyl bond must be capable of gaining an order
-            if bond12.order in ['S', 'D']:
+            if bond12.order in ["S", "D"]:
                 for atom3, bond23 in self.getBonds(atom2).items():
                     # Allyl bond must be capable of losing an order without breaking
-                    if atom1 is not atom3 and bond23.order in ['D', 'T']:
+                    if atom1 is not atom3 and bond23.order in ["D", "T"]:
                         paths.append([atom1, atom2, atom3, bond12, bond23])
         return paths

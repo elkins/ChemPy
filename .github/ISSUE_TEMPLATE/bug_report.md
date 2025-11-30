@@ -22,8 +22,8 @@ What you expected to happen.
 What actually happened.
 
 ## Environment
-- Python version: 
-- ChemPy version: 
+- Python version:
+- ChemPy version:
 - OS: [e.g., macOS 12.5, Ubuntu 22.04, Windows 11]
 - Installation method: [e.g., pip, conda, from source]
 

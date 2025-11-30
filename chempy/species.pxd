@@ -24,9 +24,9 @@
 #
 ################################################################################
 
-from thermo cimport ThermoModel
-from states cimport StatesModel
 from geometry cimport Geometry
+from states cimport StatesModel
+from thermo cimport ThermoModel
 
 ################################################################################
 
@@ -38,7 +38,7 @@ cdef class LennardJones:
 ################################################################################
 
 cdef class Species:
-    
+
     cdef public int index
     cdef public str label
     cdef public ThermoModel thermo
@@ -55,7 +55,7 @@ cdef class Species:
 ################################################################################
 
 cdef class TransitionState:
-    
+
     cdef public str label
     cdef public StatesModel states
     cdef public Geometry geometry
