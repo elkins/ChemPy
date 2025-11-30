@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
-[![Tests](https://github.com/elkins/ChemPy/actions/workflows/tests.yml/badge.svg)](https://github.com/elkins/ChemPy/actions/workflows/tests.yml)
+[![Tests](https://github.com/elkins/ChemPy/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/elkins/ChemPy/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/elkins/ChemPy/branch/master/graph/badge.svg)](https://codecov.io/gh/elkins/ChemPy)
 [![PEP 561 Compliant](https://img.shields.io/badge/pep-561-blue.svg)](https://www.python.org/dev/peps/pep-0561/)
 [![Benchmarks](https://github.com/elkins/ChemPy/actions/workflows/benchmarks.yml/badge.svg?branch=master)](https://github.com/elkins/ChemPy/actions/workflows/benchmarks.yml?query=branch%3Amaster)
