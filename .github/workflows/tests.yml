@@ -43,7 +43,7 @@ jobs:
       env:
         PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
       run: |
-        pytest unittest/ -k "not benchmark" --cov=chempy --cov-report=xml -v --tb=short -p no:xdist -p no:benchmark
+        pytest unittest/ -k "not benchmark" -v --tb=short -p no:xdist -p no:benchmark -p pytest_cov --cov=chempy --cov-report=xml
 
     - name: Run tests with pytest (Unix/macOS)
       if: runner.os != 'Windows'
