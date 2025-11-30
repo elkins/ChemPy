@@ -1143,12 +1143,12 @@ class MoleculePattern(Graph):
         and the values the atoms themselves. If two or more atoms have the
         same label, the value is converted to a list of these atoms.
         """
-        labeled = {}
+        labeled: dict = {}
         for atom in self.vertices:
             if atom.label != "":
                 if atom.label in labeled:
-                    labeled[atom.label] = [labeled[atom.label]]
-                    labeled[atom.label].append(atom)
+                    prev = labeled[atom.label]
+                    labeled[atom.label] = [prev, atom]
                 else:
                     labeled[atom.label] = atom
         return labeled
@@ -1268,7 +1268,7 @@ def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
 
     atoms = []
     atomdict = {}
-    bonds = {}
+    bonds: dict = {}
 
     lines = adjlist.splitlines()
     # Skip the first line if it contains a label
@@ -1394,16 +1394,17 @@ def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
                 )
             radical = atom.radicalElectrons
             order = 0
-            for atom2, bond in bonds[atom].items():
+            for atom2, bond in bonds[atom].items():  # type: ignore[union-attr]
+                # add up bond orders for valence check
                 order += orders[bond.order]
-            count = valence - radical - int(order)
+            count = valence - int(radical) - int(order)
             for i in range(count):
                 a = Atom("H", 0, 1, 0, 0, "")
                 b = Bond("S")
                 newAtoms.append(a)
-                bonds[atom][a] = b
+                bonds[atom][a] = b  # type: ignore[index]
                 bonds[a] = {atom: b}
-        atoms.extend(newAtoms)
+        atoms.extend(newAtoms)  # type: ignore[arg-type]
 
     return atoms, bonds
 

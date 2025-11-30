@@ -159,6 +159,9 @@ class Atom(Vertex):
         elif isinstance(other, AtomPattern):
             cython.declare(a=AtomType, radical=cython.short, spin=cython.short, charge=cython.short)
             ap = other
+            if not ap.atomType:
+                return False
+            assert self.atomType is not None
             for a in ap.atomType:
                 if self.atomType.equivalent(a):
                     break
@@ -195,6 +198,9 @@ class Atom(Vertex):
                 charge=cython.short,
             )
             atom = other
+            if not atom.atomType:
+                return False
+            assert self.atomType is not None
             for a in atom.atomType:
                 if self.atomType.isSpecificCaseOf(a):
                     break
@@ -652,7 +658,7 @@ class Molecule(Graph):
             if atom.isHydrogen():
                 neighbor = list(self.edges[atom].keys())[0]
                 neighbor.implicitHydrogens += 1
-                hydrogens.append(atom)
+                hydrogens.append(atom)  # type: ignore[arg-type]
 
         # Remove the hydrogen atoms from the structure
         for atom in hydrogens:
@@ -677,7 +683,7 @@ class Molecule(Graph):
             while atom.implicitHydrogens > 0:
                 H = Atom(element="H")
                 bond = Bond(order="S")
-                hydrogens.append((H, atom, bond))
+                hydrogens.append((H, atom, bond))  # type: ignore[arg-type]
                 atom.implicitHydrogens -= 1
 
         # Add the hydrogens to the graph
@@ -743,8 +749,10 @@ class Molecule(Graph):
                 if atom.label in labeled:
                     # Convert single Atom to a list on second occurrence
                     prev = labeled[atom.label]
-                    labeled[atom.label] = [prev] if isinstance(prev, Atom) else list(prev)
-                    labeled[atom.label].append(atom)
+                    if isinstance(prev, Atom):
+                        labeled[atom.label] = [prev, atom]
+                    else:
+                        prev.append(atom)  # type: ignore[union-attr]
                 else:
                     labeled[atom.label] = atom
         return labeled
@@ -1105,7 +1113,7 @@ class Molecule(Graph):
             a.SetAtomicNum(atom.number)
             a.SetFormalCharge(atom.charge)
         orders = {"S": 1, "D": 2, "T": 3, "B": 5}
-        for atom1, bonds in bonds.items():
+        for atom1, bonds in bonds.items():  # type: ignore[assignment]
             for atom2, bond in bonds.items():
                 index1 = atoms.index(atom1)
                 index2 = atoms.index(atom2)
@@ -1161,7 +1169,7 @@ class Molecule(Graph):
         implicitH: bool = self.implicitHydrogens
         self.makeHydrogensExplicit()
         for atom in self.vertices:
-            bonds: List[Bond] = list(self.edges[atom].values())
+            bonds: List[Bond] = list(self.edges[atom].values())  # type: ignore[arg-type]
             if len(bonds) == 1:
                 continue  # ok, next atom
             if len(bonds) > 2:
@@ -1301,7 +1309,7 @@ class Molecule(Graph):
         """
         Return the symmetry number centered at `bond` in the structure.
         """
-        bond: Bond = self.edges[atom1][atom2]
+        bond: Bond = self.edges[atom1][atom2]  # type: ignore[assignment]
         symmetryNumber: int = 1
         if bond.isSingle() or bond.isDouble() or bond.isTriple():
             if atom1.equivalent(atom2):
@@ -1420,7 +1428,7 @@ class Molecule(Graph):
         for atom1 in self.edges:
             for atom2 in self.edges[atom1]:
                 if self.edges[atom1][atom2].isDouble() and self.vertices.index(atom1) < self.vertices.index(atom2):
-                    doubleBonds.append((atom1, atom2))
+                    doubleBonds.append((atom1, atom2))  # type: ignore[arg-type]
 
         # Search for adjacent double bonds
         cumulatedBonds: List[List[Tuple[Atom, Atom]]] = []
@@ -1684,5 +1692,5 @@ class Molecule(Graph):
                 for atom3, bond23 in self.getBonds(atom2).items():
                     # Allyl bond must be capable of losing an order without breaking
                     if atom1 is not atom3 and bond23.order in ["D", "T"]:
-                        paths.append([atom1, atom2, atom3, bond12, bond23])
+                        paths.append([atom1, atom2, atom3, bond12, bond23])  # type: ignore[list-item]
         return paths
