@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 import unittest
-
 import numpy
 
-sys.path.append(".")
-
-from chempy.kinetics import ArrheniusModel
 import chempy.constants as constants
+from chempy.kinetics import ArrheniusModel
 from chempy.reaction import Reaction
 from chempy.species import Species, TransitionState
 from chempy.states import HarmonicOscillator, RigidRotor, StatesModel, Translation

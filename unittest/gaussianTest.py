@@ -1,12 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 import unittest
-
-import numpy
-
-sys.path.append(".")
 
 from chempy.io.gaussian import GaussianLog
 from chempy.states import HarmonicOscillator, HinderedRotor, RigidRotor, Translation

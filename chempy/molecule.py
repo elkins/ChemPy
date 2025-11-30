@@ -36,7 +36,7 @@ describe the corresponding atom or bond.
 """
 
 import warnings
-from typing import Dict, List, Optional, Tuple, Union, Iterable, Sequence
+from typing import Dict, List, Tuple, Union
 
 from chempy import element as elements
 from chempy._cython_compat import cython
@@ -590,6 +590,7 @@ class Molecule(Graph):
         Return the molecular formula for the molecule.
         """
         import pybel
+
         mol: "pybel.Molecule" = pybel.Molecule(self.toOBMol())
         formula: str = mol.formula
         return formula
@@ -1142,7 +1143,9 @@ class Molecule(Graph):
         otherwise.
         """
 
-        atomCount: int = len(self.vertices) + sum([atom.implicitHydrogens for atom in self.vertices])
+        atomCount: int = len(self.vertices) + sum(
+            [atom.implicitHydrogens for atom in self.vertices]
+        )
 
         # Monatomic molecules are definitely nonlinear
         if atomCount == 1:
@@ -1247,7 +1250,9 @@ class Molecule(Graph):
         groups = molecule.split()
 
         # Determine equivalence of functional groups around atom
-        groupIsomorphism: Dict[Molecule, Dict[Molecule, bool]] = dict([(group, dict()) for group in groups])
+        groupIsomorphism: Dict[Molecule, Dict[Molecule, bool]] = dict(
+            [(group, dict()) for group in groups]
+        )
         for group1 in groups:
             for group2 in groups:
                 if group1 is not group2 and group2 not in groupIsomorphism[group1]:

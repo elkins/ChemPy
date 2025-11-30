@@ -1,20 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 import unittest
-
+import math
 import numpy
 
-sys.path.append(".")
-
-from chempy.states import (
-    HarmonicOscillator,
-    HinderedRotor,
-    RigidRotor,
-    StatesModel,
-    Translation,
-)
+from chempy.states import HarmonicOscillator, HinderedRotor, RigidRotor, StatesModel, Translation
 
 ################################################################################
 

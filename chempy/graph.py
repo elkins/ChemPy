@@ -149,7 +149,11 @@ class Graph:
     or the :meth:`getEdges` method.
     """
 
-    def __init__(self, vertices: Optional[List[Vertex]] = None, edges: Optional[Dict[Vertex, Dict[Vertex, Edge]]] = None):
+    def __init__(
+        self,
+        vertices: Optional[List[Vertex]] = None,
+        edges: Optional[Dict[Vertex, Dict[Vertex, Edge]]] = None,
+    ):
         self.vertices: List[Vertex] = vertices or []
         self.edges: Dict[Vertex, Dict[Vertex, Edge]] = edges or {}
 
@@ -374,7 +378,9 @@ class Graph:
         for index, vertex in enumerate(self.vertices):
             vertex.sortingLabel = index
 
-    def isIsomorphic(self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None) -> bool:
+    def isIsomorphic(
+        self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None
+    ) -> bool:
         """
         Returns :data:`True` if two graphs are isomorphic and :data:`False`
         otherwise. Uses the VF2 algorithm of Vento and Foggia.
@@ -382,7 +388,9 @@ class Graph:
         result = VF2_isomorphism(self, other, subgraph=False, findAll=False, initialMap=initialMap)
         return bool(result[0])
 
-    def findIsomorphism(self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None) -> Tuple[bool, Dict[Vertex, Vertex]]:
+    def findIsomorphism(
+        self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None
+    ) -> Tuple[bool, Dict[Vertex, Vertex]]:
         """
         Returns :data:`True` if `other` is subgraph isomorphic and :data:`False`
         otherwise, and the matching mapping.
@@ -391,7 +399,9 @@ class Graph:
         res = VF2_isomorphism(self, other, subgraph=False, findAll=True, initialMap=initialMap)
         return bool(res[0]), res[1]
 
-    def isSubgraphIsomorphic(self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None) -> bool:
+    def isSubgraphIsomorphic(
+        self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None
+    ) -> bool:
         """
         Returns :data:`True` if `other` is subgraph isomorphic and :data:`False`
         otherwise. Uses the VF2 algorithm of Vento and Foggia.
@@ -399,7 +409,9 @@ class Graph:
         result = VF2_isomorphism(self, other, subgraph=True, findAll=False, initialMap=initialMap)
         return bool(result[0])
 
-    def findSubgraphIsomorphisms(self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None) -> Tuple[bool, List[Dict[Vertex, Vertex]]]:
+    def findSubgraphIsomorphisms(
+        self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None
+    ) -> Tuple[bool, List[Dict[Vertex, Vertex]]]:
         """
         Returns :data:`True` if `other` is subgraph isomorphic and :data:`False`
         otherwise. Also returns the lists all of valid mappings.
@@ -481,7 +493,9 @@ class Graph:
         cycleList = self.__exploreCyclesRecursively(chain, cycleList)
         return cycleList
 
-    def __exploreCyclesRecursively(self, chain: List[Vertex], cycleList: List[List[Vertex]]) -> List[List[Vertex]]:
+    def __exploreCyclesRecursively(
+        self, chain: List[Vertex], cycleList: List[List[Vertex]]
+    ) -> List[List[Vertex]]:
         """
         Finds cycles by spidering through a graph.
         Give it a chain of atoms that are connected, `chain`,
