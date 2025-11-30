@@ -11,4 +11,5 @@ from reactionTest import *
 from statesTest import *
 from thermoTest import *
 
-unittest.main( testRunner = unittest.TextTestRunner(verbosity=2) )
+if __name__ == "__main__":
+	unittest.main(testRunner=unittest.TextTestRunner(verbosity=2))
