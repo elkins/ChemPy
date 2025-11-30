@@ -1,4 +1,3 @@
-# flake8: noqa
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -9,8 +8,8 @@ import numpy
 
 sys.path.append(".")
 
-from chempy.io.gaussian import *  # noqa: F403,F405
-from chempy.states import *  # noqa: F403,F405
+from chempy.io.gaussian import GaussianLog
+from chempy.states import HarmonicOscillator, HinderedRotor, RigidRotor, Translation
 
 ################################################################################
 

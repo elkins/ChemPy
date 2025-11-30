@@ -1,0 +1,183 @@
+{
+    "machine_info": {
+        "node": "Georges-Mini",
+        "processor": "arm",
+        "machine": "arm64",
+        "python_compiler": "Clang 18.1.8 ",
+        "python_implementation": "CPython",
+        "python_implementation_version": "3.12.10",
+        "python_version": "3.12.10",
+        "python_build": [
+            "main",
+            "Apr 10 2025 22:19:24"
+        ],
+        "release": "25.1.0",
+        "system": "Darwin",
+        "cpu": {
+            "python_version": "3.12.10.final.0 (64 bit)",
+            "cpuinfo_version": [
+                9,
+                0,
+                0
+            ],
+            "cpuinfo_version_string": "9.0.0",
+            "arch": "ARM_8",
+            "bits": 64,
+            "count": 10,
+            "arch_string_raw": "arm64",
+            "brand_raw": "Apple M4"
+        }
+    },
+    "commit_info": {
+        "id": "659c1303a77acd9517a592564d2b16e15534ff26",
+        "time": "2025-11-30T15:37:16-05:00",
+        "author_time": "2025-11-30T15:37:16-05:00",
+        "dirty": true,
+        "project": "ChemPy",
+        "branch": "master"
+    },
+    "benchmarks": [
+        {
+            "group": "molecule",
+            "name": "test_bench_molecule_from_smiles_benzene",
+            "fullname": "unittest/benchmarksTest.py::test_bench_molecule_from_smiles_benzene",
+            "params": null,
+            "param": null,
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.00023558316752314568,
+                "max": 0.0002960828132927418,
+                "mean": 0.00025211661122739317,
+                "stddev": 2.5213789042751517e-05,
+                "rounds": 5,
+                "median": 0.00024266703985631466,
+                "iqr": 2.4936278350651264e-05,
+                "q1": 0.00023633387172594666,
+                "q3": 0.00026127015007659793,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.00023558316752314568,
+                "hd15iqr": 0.0002960828132927418,
+                "ops": 3966.4185359768444,
+                "total": 0.0012605830561369658,
+                "iterations": 1
+            }
+        },
+        {
+            "group": "molecule",
+            "name": "test_bench_molecule_from_smiles_ethane_rotors",
+            "fullname": "unittest/benchmarksTest.py::test_bench_molecule_from_smiles_ethane_rotors",
+            "params": null,
+            "param": null,
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 4.8625050112605095e-05,
+                "max": 0.0026821668725460768,
+                "mean": 5.8376059826447295e-05,
+                "stddev": 5.2342820895647595e-05,
+                "rounds": 12904,
+                "median": 5.1083043217658997e-05,
+                "iqr": 2.874992787837982e-06,
+                "q1": 5.02921175211668e-05,
+                "q3": 5.3167110309004784e-05,
+                "iqr_outliers": 2071,
+                "stddev_outliers": 481,
+                "outliers": "481;2071",
+                "ld15iqr": 4.8625050112605095e-05,
+                "hd15iqr": 5.7499855756759644e-05,
+                "ops": 17130.309975921835,
+                "total": 0.7532846760004759,
+                "iterations": 1
+            }
+        },
+        {
+            "group": "states",
+            "name": "test_bench_density_of_states_ilt",
+            "fullname": "unittest/benchmarksTest.py::test_bench_density_of_states_ilt",
+            "params": null,
+            "param": null,
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 0.03824570798315108,
+                "max": 0.038739207899197936,
+                "mean": 0.038405808387324214,
+                "stddev": 0.0001997663437607365,
+                "rounds": 5,
+                "median": 0.03832020913250744,
+                "iqr": 0.00023793673608452082,
+                "q1": 0.038275614962913096,
+                "q3": 0.03851355169899762,
+                "iqr_outliers": 0,
+                "stddev_outliers": 1,
+                "outliers": "1;0",
+                "ld15iqr": 0.03824570798315108,
+                "hd15iqr": 0.038739207899197936,
+                "ops": 26.037728197645453,
+                "total": 0.19202904193662107,
+                "iterations": 1
+            }
+        },
+        {
+            "group": "states",
+            "name": "test_bench_states_construction",
+            "fullname": "unittest/benchmarksTest.py::test_bench_states_construction",
+            "params": null,
+            "param": null,
+            "extra_info": {},
+            "options": {
+                "disable_gc": false,
+                "timer": "perf_counter",
+                "min_rounds": 5,
+                "max_time": 1.0,
+                "min_time": 5e-06,
+                "warmup": false
+            },
+            "stats": {
+                "min": 5.00003807246685e-07,
+                "max": 4.391651600599289e-06,
+                "mean": 5.282627402545919e-07,
+                "stddev": 3.937120054251051e-08,
+                "rounds": 82475,
+                "median": 5.229027010500431e-07,
+                "iqr": 1.040752977132793e-08,
+                "q1": 5.187466740608215e-07,
+                "q3": 5.291542038321495e-07,
+                "iqr_outliers": 6764,
+                "stddev_outliers": 4044,
+                "outliers": "4044;6764",
+                "ld15iqr": 5.04148192703724e-07,
+                "hd15iqr": 5.457899533212185e-07,
+                "ops": 1892997.4117009619,
+                "total": 0.043568469502497466,
+                "iterations": 20
+            }
+        }
+    ],
+    "datetime": "2025-11-30T21:01:24.508702+00:00",
+    "version": "5.2.3"
+}

@@ -35,17 +35,11 @@ If you are able to help improve Windows compatibility, contributions and fixes a
 
 ### Requirements
 
-- **Python** 3.8 or later (3.12 or 3.13 recommended)
-- **NumPy** 1.20.0 or later
-- **SciPy** 1.7.0 or later (recommended)
 
 Note: Features such as SMILES parsing and certain rotor-counting utilities depend on Open Babel. On macOS/Linux, install `openbabel-wheel` to enable these features. Windows support for Open Babel is currently experimental.
 
 ### Optional Dependencies
 
-- **Cython** - For building optimized extensions from source
-- **OpenBabel** 2.2.0 or later - Additional molecular formats support
-- **Cairo** 1.8.0 or later - Graphics and molecular drawing
 
 ### Quick Start
 
@@ -64,28 +58,24 @@ pip install -e ".[dev]"
 make build
 ```
 
-## Getting Started
+Compare the latest two runs in text
+
+CI:
+
+- GitHub Actions runs mypy on `chempy/graph.py` and `chempy/molecule.py` with `--check-untyped-defs`, executes tests, and uploads `.benchmarks/**/*.json` as artifacts for performance tracking.
 
 ```python
-from chempy import constants, element, molecule
+Filter by group or exact names
 
 # Access physical constants
 print(f"Avogadro constant: {constants.avogadro_constant}")
-
+Regex filter and save to CSV/JSON
 # Query element properties
 h = element.Element.from_atomic_number(1)
 print(f"Hydrogen mass: {h.mass} u")
 
 # Create molecular structures
 mol = molecule.Molecule()  # Create molecule
-```
-
-## Development
-
-### Modernization Status
-
-ChemPy has been fully modernized for Python 3.8-3.13:
-
 - ✅ **Python 3.13 support** - All code updated and tested on latest Python
 - ✅ **Open Babel 3.x integration** - Modern molecular format handling
 - ✅ **Type hints (PEP 561)** - Full type annotation coverage with `py.typed` marker

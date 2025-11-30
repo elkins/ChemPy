@@ -1,4 +1,3 @@
-# flake8: noqa
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
@@ -7,7 +6,7 @@ import unittest
 
 sys.path.append(".")
 
-from chempy.graph import *  # noqa: F403,F405
+from chempy.graph import Edge, Graph, Vertex
 
 ################################################################################
 

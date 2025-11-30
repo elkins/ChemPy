@@ -1,4 +1,3 @@
-# flake8: noqa
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -9,7 +8,7 @@ import numpy
 
 sys.path.append(".")
 
-from chempy.geometry import *  # noqa: F403,F405
+from chempy.geometry import Geometry
 
 ################################################################################
 

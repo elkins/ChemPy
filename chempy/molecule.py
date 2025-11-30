@@ -36,6 +36,7 @@ describe the corresponding atom or bond.
 """
 
 import warnings
+from typing import Dict, List, Optional, Tuple, Union, Iterable, Sequence
 
 from chempy import element as elements
 from chempy._cython_compat import cython
@@ -589,9 +590,9 @@ class Molecule(Graph):
         Return the molecular formula for the molecule.
         """
         import pybel
-
-        mol = pybel.Molecule(self.toOBMol())
-        return mol.formula
+        mol: "pybel.Molecule" = pybel.Molecule(self.toOBMol())
+        formula: str = mol.formula
+        return formula
 
     def getMolecularWeight(self):
         """
@@ -616,8 +617,8 @@ class Molecule(Graph):
         Merge two molecules so as to store them in a single :class:`Molecule`
         object. The merged :class:`Molecule` object is returned.
         """
-        g = Graph.merge(self, other)
-        molecule = Molecule(atoms=g.vertices, bonds=g.edges)
+        g: Graph = Graph.merge(self, other)
+        molecule: Molecule = Molecule(atoms=g.vertices, bonds=g.edges)
         return molecule
 
     def split(self):
@@ -625,10 +626,10 @@ class Molecule(Graph):
         Convert a single :class:`Molecule` object containing two or more
         unconnected molecules into separate class:`Molecule` objects.
         """
-        graphs = Graph.split(self)
-        molecules = []
+        graphs: List[Graph] = Graph.split(self)
+        molecules: List[Molecule] = []
         for g in graphs:
-            molecule = Molecule(atoms=g.vertices, bonds=g.edges)
+            molecule: Molecule = Molecule(atoms=g.vertices, bonds=g.edges)
             molecules.append(molecule)
         return molecules
 
@@ -651,7 +652,7 @@ class Molecule(Graph):
 
         # Count the hydrogen atoms on each non-hydrogen atom and set the
         # `implicitHydrogens` attribute accordingly
-        hydrogens = []
+        hydrogens: List[Atom] = []
         for atom in self.vertices:
             if atom.isHydrogen():
                 neighbor = list(self.edges[atom].keys())[0]
@@ -676,7 +677,7 @@ class Molecule(Graph):
         cython.declare(atom=Atom, H=Atom, bond=Bond, hydrogens=list, numAtoms=cython.short)
 
         # Create new hydrogen atoms for each implicit hydrogen
-        hydrogens = []
+        hydrogens: List[Tuple[Atom, Atom, Bond]] = []
         for atom in self.vertices:
             while atom.implicitHydrogens > 0:
                 H = Atom(element="H")
@@ -685,7 +686,7 @@ class Molecule(Graph):
                 atom.implicitHydrogens -= 1
 
         # Add the hydrogens to the graph
-        numAtoms = len(self.vertices)
+        numAtoms: int = len(self.vertices)
         for H, atom, bond in hydrogens:
             self.addAtom(H)
             self.addBond(H, atom, bond)
@@ -741,11 +742,13 @@ class Molecule(Graph):
         and the values the atoms themselves. If two or more atoms have the
         same label, the value is converted to a list of these atoms.
         """
-        labeled = {}
+        labeled: Dict[str, Union[Atom, List[Atom]]] = {}
         for atom in self.vertices:
             if atom.label != "":
                 if atom.label in labeled:
-                    labeled[atom.label] = [labeled[atom.label]]
+                    # Convert single Atom to a list on second occurrence
+                    prev = labeled[atom.label]
+                    labeled[atom.label] = [prev] if isinstance(prev, Atom) else list(prev)
                     labeled[atom.label].append(atom)
                 else:
                     labeled[atom.label] = atom
@@ -1139,7 +1142,7 @@ class Molecule(Graph):
         otherwise.
         """
 
-        atomCount = len(self.vertices) + sum([atom.implicitHydrogens for atom in self.vertices])
+        atomCount: int = len(self.vertices) + sum([atom.implicitHydrogens for atom in self.vertices])
 
         # Monatomic molecules are definitely nonlinear
         if atomCount == 1:
@@ -1152,7 +1155,7 @@ class Molecule(Graph):
             return False
 
         # True if all bonds are double bonds (e.g. O=C=O)
-        allDoubleBonds = True
+        allDoubleBonds: bool = True
         for atom1 in self.edges:
             if atom1.implicitHydrogens > 0:
                 allDoubleBonds = False
@@ -1164,10 +1167,10 @@ class Molecule(Graph):
 
         # True if alternating single-triple bonds (e.g. H-C#C-H)
         # This test requires explicit hydrogen atoms
-        implicitH = self.implicitHydrogens
+        implicitH: bool = self.implicitHydrogens
         self.makeHydrogensExplicit()
         for atom in self.vertices:
-            bonds = list(self.edges[atom].values())
+            bonds: List[Bond] = list(self.edges[atom].values())
             if len(bonds) == 1:
                 continue  # ok, next atom
             if len(bonds) > 2:
@@ -1194,7 +1197,7 @@ class Molecule(Graph):
         bond not in a cycle and between two atoms that also have other bonds
         are considered to be internal rotors.
         """
-        count = 0
+        count: int = 0
         for atom1 in self.edges:
             for atom2, bond in self.edges[atom1].items():
                 if (
@@ -1216,11 +1219,11 @@ class Molecule(Graph):
         """
         symmetryNumber = 1
 
-        single = 0
-        double = 0
-        triple = 0
-        benzene = 0
-        numNeighbors = 0
+        single: int = 0
+        double: int = 0
+        triple: int = 0
+        benzene: int = 0
+        numNeighbors: int = 0
         for bond in self.edges[atom].values():
             if bond.isSingle():
                 single += 1
@@ -1237,14 +1240,14 @@ class Molecule(Graph):
             return symmetryNumber
 
         # Create temporary structures for each functional group attached to atom
-        molecule = self.copy()
+        molecule: Molecule = self.copy()
         for atom2 in list(molecule.bonds[atom].keys()):
             molecule.removeBond(atom, atom2)
         molecule.removeAtom(atom)
         groups = molecule.split()
 
         # Determine equivalence of functional groups around atom
-        groupIsomorphism = dict([(group, dict()) for group in groups])
+        groupIsomorphism: Dict[Molecule, Dict[Molecule, bool]] = dict([(group, dict()) for group in groups])
         for group1 in groups:
             for group2 in groups:
                 if group1 is not group2 and group2 not in groupIsomorphism[group1]:
@@ -1252,7 +1255,7 @@ class Molecule(Graph):
                     groupIsomorphism[group2][group1] = groupIsomorphism[group1][group2]
                 elif group1 is group2:
                     groupIsomorphism[group1][group1] = True
-        count = [
+        count: List[int] = [
             sum([int(groupIsomorphism[group1][group2]) for group2 in groups]) for group1 in groups
         ]
         for i in range(count.count(2) // 2):
@@ -1309,8 +1312,8 @@ class Molecule(Graph):
         """
         Return the symmetry number centered at `bond` in the structure.
         """
-        bond = self.edges[atom1][atom2]
-        symmetryNumber = 1
+        bond: Bond = self.edges[atom1][atom2]
+        symmetryNumber: int = 1
         if bond.isSingle() or bond.isDouble() or bond.isTriple():
             if atom1.equivalent(atom2):
                 # An O-O bond is considered to be an "optical isomer" and so no
@@ -1326,7 +1329,7 @@ class Molecule(Graph):
                 elif len(self.vertices) == 2:
                     symmetryNumber = 2
                 else:
-                    molecule = self.copy()
+                    molecule: Molecule = self.copy()
                     molecule.removeBond(atom1, atom2)
                     fragments = molecule.split()
                     if len(fragments) != 2:
@@ -1341,8 +1344,8 @@ class Molecule(Graph):
                         fragment2.removeAtom(atom1)
                     if atom2 in fragment2.atoms:
                         fragment2.removeAtom(atom2)
-                    groups1 = fragment1.split()
-                    groups2 = fragment2.split()
+                    groups1: List[Molecule] = fragment1.split()
+                    groups2: List[Molecule] = fragment2.split()
 
                     # Test functional groups for symmetry
                     if len(groups1) == len(groups2) == 1:
@@ -1431,7 +1434,7 @@ class Molecule(Graph):
         symmetryNumber = 1
 
         # List all double bonds in the structure
-        doubleBonds = []
+        doubleBonds: List[Tuple[Atom, Atom]] = []
         for atom1 in self.edges:
             for atom2 in self.edges[atom1]:
                 if self.edges[atom1][atom2].isDouble() and self.vertices.index(
@@ -1440,7 +1443,7 @@ class Molecule(Graph):
                     doubleBonds.append((atom1, atom2))
 
         # Search for adjacent double bonds
-        cumulatedBonds = []
+        cumulatedBonds: List[List[Tuple[Atom, Atom]]] = []
         for i, bond1 in enumerate(doubleBonds):
             atom11, atom12 = bond1
             for bond2 in doubleBonds[i + 1 :]:
@@ -1475,10 +1478,10 @@ class Molecule(Graph):
 
             # Find terminal atoms in axis
             # Terminal atoms labelled T:  T=C=C=C=T
-            axis = []
+            axis: List[Atom] = []
             for bond in bonds:
                 axis.extend(bond)
-            terminalAtoms = []
+            terminalAtoms: List[Atom] = []
             for atom in axis:
                 if axis.count(atom) == 1:
                     terminalAtoms.append(atom)
@@ -1489,7 +1492,7 @@ class Molecule(Graph):
             structure = self.copy()
             for atom1, atom2 in bonds:
                 structure.removeBond(atom1, atom2)
-            atomsToRemove = []
+            atomsToRemove: List[Atom] = []
             for atom in structure.atoms:
                 if len(structure.bonds[atom]) == 0:  # it's not bonded to anything
                     atomsToRemove.append(atom)
@@ -1497,7 +1500,7 @@ class Molecule(Graph):
                 structure.removeAtom(atom)
 
             # Split remaining fragments of structure
-            end_fragments = structure.split()
+            end_fragments: List[Molecule] = structure.split()
             # you may have only one end fragment,
             # eg. if you started with H2C=C=C..
 
@@ -1507,7 +1510,7 @@ class Molecule(Graph):
             #                                         A/         \B
 
             # to start with nothing has broken symmetry about the axis
-            symmetry_broken = False
+            symmetry_broken: bool = False
             for fragment in end_fragments:  # a fragment is one end of the axis
 
                 # remove the atom that was at the end of the axis and split what's left into groups
@@ -1560,8 +1563,8 @@ class Molecule(Graph):
                     if structure.hasBond(atom1, atom2):
                         structure.removeBond(atom1, atom2)
 
-            structures = structure.split()
-            groups = []
+            structures: List[Molecule] = structure.split()
+            groups: List[Molecule] = []
             for struct in structures:
                 for atom in ring:
                     if atom in struct.atoms():
@@ -1569,7 +1572,7 @@ class Molecule(Graph):
                 groups.append(struct.split())
 
             # Find equivalent functional groups on ring
-            equivalentGroups = []
+            equivalentGroups: List[List[Molecule]] = []
             for group in groups:
                 found = False
                 for eqGroup in equivalentGroups:
@@ -1581,7 +1584,7 @@ class Molecule(Graph):
                     equivalentGroups.append([group])
 
             # Find equivalent bonds on ring
-            equivalentBonds = []
+            equivalentBonds: List[List[Bond]] = []
             for i, atom1 in enumerate(ring):
                 for atom2 in ring[i + 1 :]:
                     if self.hasBond(atom1, atom2):
@@ -1590,7 +1593,7 @@ class Molecule(Graph):
                         for eqBond in equivalentBonds:
                             if not found:
                                 if bond.equivalent(eqBond[0]):
-                                    eqBond.append(group)
+                                    eqBond.append(bond)
                                     found = True
                         if not found:
                             equivalentBonds.append([bond])
@@ -1610,7 +1613,7 @@ class Molecule(Graph):
             else:
                 symmetryNumber *= max(maxEquivalentGroups, maxEquivalentBonds)
 
-            print(len(ring), maxEquivalentGroups, maxEquivalentBonds, symmetryNumber)
+            # Debug print removed for cleaner output
 
         return symmetryNumber
 
@@ -1652,7 +1655,7 @@ class Molecule(Graph):
         Generate all of the resonance isomers formed by one allyl radical shift.
         """
 
-        isomers = []
+        isomers: List[Molecule] = []
 
         # Radicals
         if sum([atom.radicalElectrons for atom in self.vertices]) > 0:
@@ -1667,7 +1670,7 @@ class Molecule(Graph):
                     bond12.incrementOrder()
                     bond23.decrementOrder()
                     # Make a copy of isomer
-                    isomer = self.copy(deep=True)
+                    isomer: Molecule = self.copy(deep=True)
                     # Also copy the connectivity values, since they are the same
                     # for all resonance forms
                     for v1, v2 in zip(self.vertices, isomer.vertices):
@@ -1696,7 +1699,7 @@ class Molecule(Graph):
             return []
 
         # Find all delocalization paths
-        paths = []
+        paths: List[List[Union[Atom, Bond]]] = []
         for atom2, bond12 in self.edges[atom1].items():
             # Vinyl bond must be capable of gaining an order
             if bond12.order in ["S", "D"]:

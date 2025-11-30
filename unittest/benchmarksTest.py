@@ -1,5 +1,11 @@
 import pytest
 
+# Skip benchmark tests if pytest-benchmark plugin is not installed
+try:
+    import pytest_benchmark  # noqa: F401
+except Exception:  # pragma: no cover
+    pytestmark = pytest.mark.skip(reason="pytest-benchmark plugin not installed")
+
 from chempy.molecule import Molecule
 from chempy.states import HarmonicOscillator, RigidRotor, StatesModel, Translation
 

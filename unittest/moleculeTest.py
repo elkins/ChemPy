@@ -1,4 +1,3 @@
-# flake8: noqa
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 

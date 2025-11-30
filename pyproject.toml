@@ -118,11 +118,12 @@ max-line-length = 100
 [tool.pytest.ini_options]
 testpaths = ["unittest"]
 python_files = ["*Test.py", "test_*.py"]
-addopts = "-v --tb=short --strict-markers"
+addopts = "-v --tb=short --strict-markers --benchmark-save=latest --benchmark-autosave --benchmark-sort=name --benchmark-columns=min,max,mean,stddev,median,iqr,ops,rounds,iterations"
 markers = [
     "slow: marks tests as slow",
     "integration: marks tests as integration tests",
     "unit: marks tests as unit tests",
+    "benchmark: marks performance benchmark tests",
 ]
 filterwarnings = [
     # Suppress Open Babel deprecation warnings (external library issue)

@@ -1,4 +1,3 @@
-# flake8: noqa
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -10,7 +9,7 @@ import numpy
 sys.path.append(".")
 
 import chempy.constants as constants
-from chempy.thermo import *
+from chempy.thermo import WilhoitModel
 
 ################################################################################
 

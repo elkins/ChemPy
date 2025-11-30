@@ -1,4 +1,3 @@
-# flake8: noqa
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -10,9 +9,10 @@ import numpy
 sys.path.append(".")
 
 from chempy.kinetics import ArrheniusModel
-from chempy.reaction import *  # noqa: F403,F405
+import chempy.constants as constants
+from chempy.reaction import Reaction
 from chempy.species import Species, TransitionState
-from chempy.states import *  # noqa: F403,F405
+from chempy.states import HarmonicOscillator, RigidRotor, StatesModel, Translation
 from chempy.thermo import WilhoitModel
 
 ################################################################################

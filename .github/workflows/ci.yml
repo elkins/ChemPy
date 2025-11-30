@@ -1,0 +1,143 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test-and-type:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pytest pytest-benchmark mypy
+          # Open Babel wheel for macOS/Linux
+          pip install openbabel-wheel || true
+
+      - name: Type check (strict for key modules)
+        run: |
+          mypy chempy/graph.py chempy/molecule.py --show-error-codes --check-untyped-defs
+
+      - name: Run tests and save benchmarks
+        run: |
+          pytest -q
+
+      - name: Upload benchmark artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmarks-json
+          path: .benchmarks/**/**/*.json
+          if-no-files-found: ignore
+
+  compare-artifacts:
+    runs-on: macos-latest
+    needs: test-and-type
+    env:
+      REGRESS_THRESHOLD_OPS: "-10.0"
+      REGRESS_THRESHOLD_MEAN: "-10.0"
+      REGRESS_THRESHOLD_MEDIAN: "-10.0"
+      REGRESS_FILTER_REGEX: ""
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pytest pytest-benchmark
+
+      - name: Download benchmark artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: benchmarks-json
+          path: .benchmarks
+      - name: Generate CSV and JSON comparisons
+        shell: bash
+        run: |
+          # Latest summary JSON for 'states' benchmarks
+          python3 scripts/compare_benchmarks.py --latest 1 --regex 'states_' --output json --save benchmark_states.json || true
+          # Two-run comparison CSV for molecule benchmarks
+          python3 scripts/compare_benchmarks.py --latest 2 --group molecule --output csv --save benchmark_molecule.csv || true
+
+      - name: Fail on significant performance regressions
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv, sys, os, re
+          try:
+            with open('benchmark_molecule.csv', newline='') as f:
+              reader = csv.DictReader(f)
+              worst_ops = 0.0
+              worst_mean = 0.0
+              worst_median = 0.0
+              rows = list(reader)
+              # Optional name regex filter
+              pattern = os.environ.get('REGRESS_FILTER_REGEX', '')
+              if pattern:
+                try:
+                  rx = re.compile(pattern)
+                  rows = [r for r in rows if rx.search(r.get('name',''))]
+                except re.error:
+                  print(f"Invalid REGRESS_FILTER_REGEX: {pattern}")
+              for r in rows:
+                for key, target in (
+                  ('ops_delta', 'ops'),
+                  ('mean_delta', 'mean'),
+                  ('median_delta', 'median'),
+                ):
+                  s = r.get(key, '')
+                  if s.endswith('%'):
+                    val = float(s.strip('%'))
+                    if target == 'ops' and val < worst_ops:
+                      worst_ops = val
+                    if target == 'mean' and val < worst_mean:
+                      worst_mean = val
+                    if target == 'median' and val < worst_median:
+                      worst_median = val
+              def get_thr(name, default):
+                try:
+                  return float(os.environ.get(name, str(default)))
+                except Exception:
+                  return default
+              threshold_ops = get_thr('REGRESS_THRESHOLD_OPS', -10.0)
+              threshold_mean = get_thr('REGRESS_THRESHOLD_MEAN', -10.0)
+              threshold_median = get_thr('REGRESS_THRESHOLD_MEDIAN', -10.0)
+              msg = (
+                f"Worst deltas — ops: {worst_ops:.2f}%, mean: {worst_mean:.2f}%, median: {worst_median:.2f}%"
+              )
+              print(msg)
+              if worst_ops < threshold_ops or worst_mean < threshold_mean or worst_median < threshold_median:
+                print("Regression detected beyond thresholds.")
+                sys.exit(1)
+              print("No regressions beyond thresholds.")
+          except FileNotFoundError:
+            print('No benchmark_molecule.csv found; skipping regression check')
+          PY
+
+      - name: Upload comparison artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-comparisons
+          path: |
+            benchmark_states.json
+            benchmark_molecule.csv
+          if-no-files-found: ignore

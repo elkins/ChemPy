@@ -1,0 +1,27 @@
+{
+  "run": ".benchmarks/Darwin-CPython-3.12-64bit/0005_latest.json",
+  "benchmarks": {
+    "test_bench_density_of_states_ilt": {
+      "min": 0.03873725002631545,
+      "max": 0.039327667094767094,
+      "mean": 0.038956049783155325,
+      "stddev": 0.00023144431210765445,
+      "median": 0.03895545797422528,
+      "iqr": 0.0002846981515176594,
+      "ops": 25.66995384712754,
+      "rounds": 5.0,
+      "iterations": 1.0
+    },
+    "test_bench_states_construction": {
+      "min": 5.00003807246685e-07,
+      "max": 4.854146391153336e-06,
+      "mean": 5.320958957982121e-07,
+      "stddev": 5.2786756999192506e-08,
+      "median": 5.228910595178605e-07,
+      "iqr": 1.2549571692943594e-08,
+      "ops": 1879360.4835080935,
+      "rounds": 80809.0,
+      "iterations": 20.0
+    }
+  }
+}

@@ -34,6 +34,7 @@ efficient isomorphism functions.
 """
 
 import logging
+from typing import Dict, List, Optional, Tuple
 
 from chempy._cython_compat import cython
 
@@ -60,7 +61,7 @@ class Vertex(object):
     def __init__(self):
         self.resetConnectivityValues()
 
-    def equivalent(self, other):
+    def equivalent(self, other: "Vertex") -> bool:
         """
         Return :data:`True` if two vertices `self` and `other` are semantically
         equivalent, or :data:`False` if not. You should reimplement this
@@ -68,7 +69,7 @@ class Vertex(object):
         """
         return True
 
-    def isSpecificCaseOf(self, other):
+    def isSpecificCaseOf(self, other: "Vertex") -> bool:
         """
         Return ``True`` if `self` is semantically more specific than `other`,
         or ``False`` if not. You should reimplement this function in a derived
@@ -76,7 +77,7 @@ class Vertex(object):
         """
         return True
 
-    def resetConnectivityValues(self):
+    def resetConnectivityValues(self) -> None:
         """
         Reset the cached structure information for this vertex.
         """
@@ -86,7 +87,7 @@ class Vertex(object):
         self.sortingLabel = -1
 
 
-def getVertexConnectivityValue(vertex):
+def getVertexConnectivityValue(vertex: Vertex) -> int:
     """
     Return a value used to sort vertices prior to poposing candidate pairs in
     :meth:`__VF2_pairs`. The value returned is based on the vertex's
@@ -95,7 +96,7 @@ def getVertexConnectivityValue(vertex):
     return -256 * vertex.connectivity1 - 16 * vertex.connectivity2 - vertex.connectivity3
 
 
-def getVertexSortingLabel(vertex):
+def getVertexSortingLabel(vertex: Vertex) -> int:
     """
     Return a value used to sort vertices prior to poposing candidate pairs in
     :meth:`__VF2_pairs`. The value returned is based on the vertex's
@@ -117,7 +118,7 @@ class Edge(object):
     def __init__(self):
         pass
 
-    def equivalent(self, other):
+    def equivalent(self, other: "Edge") -> bool:
         """
         Return ``True`` if two edges `self` and `other` are semantically
         equivalent, or ``False`` if not. You should reimplement this
@@ -125,7 +126,7 @@ class Edge(object):
         """
         return True
 
-    def isSpecificCaseOf(self, other):
+    def isSpecificCaseOf(self, other: "Edge") -> bool:
         """
         Return ``True`` if `self` is semantically more specific than `other`,
         or ``False`` if not. You should reimplement this function in a derived
@@ -148,11 +149,11 @@ class Graph:
     or the :meth:`getEdges` method.
     """
 
-    def __init__(self, vertices=None, edges=None):
-        self.vertices = vertices or []
-        self.edges = edges or {}
+    def __init__(self, vertices: Optional[List[Vertex]] = None, edges: Optional[Dict[Vertex, Dict[Vertex, Edge]]] = None):
+        self.vertices: List[Vertex] = vertices or []
+        self.edges: Dict[Vertex, Dict[Vertex, Edge]] = edges or {}
 
-    def addVertex(self, vertex):
+    def addVertex(self, vertex: Vertex) -> Vertex:
         """
         Add a `vertex` to the graph. The vertex is initialized with no edges.
         """
@@ -160,7 +161,7 @@ class Graph:
         self.edges[vertex] = dict()
         return vertex
 
-    def addEdge(self, vertex1, vertex2, edge):
+    def addEdge(self, vertex1: Vertex, vertex2: Vertex, edge: Edge) -> Edge:
         """
         Add an `edge` to the graph as an edge connecting the two vertices
         `vertex1` and `vertex2`.
@@ -169,33 +170,33 @@ class Graph:
         self.edges[vertex2][vertex1] = edge
         return edge
 
-    def getEdges(self, vertex):
+    def getEdges(self, vertex: Vertex) -> Dict[Vertex, Edge]:
         """
         Return a list of the edges involving the specified `vertex`.
         """
         return self.edges[vertex]
 
-    def getEdge(self, vertex1, vertex2):
+    def getEdge(self, vertex1: Vertex, vertex2: Vertex) -> Edge:
         """
         Returns the edge connecting vertices `vertex1` and `vertex2`.
         """
         return self.edges[vertex1][vertex2]
 
-    def hasVertex(self, vertex):
+    def hasVertex(self, vertex: Vertex) -> bool:
         """
         Returns ``True`` if `vertex` is a vertex in the graph, or ``False`` if
         not.
         """
         return vertex in self.vertices
 
-    def hasEdge(self, vertex1, vertex2):
+    def hasEdge(self, vertex1: Vertex, vertex2: Vertex) -> bool:
         """
         Returns ``True`` if vertices `vertex1` and `vertex2` are connected
         by an edge, or ``False`` if not.
         """
         return vertex2 in self.edges[vertex1] if vertex1 in self.edges else False
 
-    def removeVertex(self, vertex):
+    def removeVertex(self, vertex: Vertex) -> None:
         """
         Remove `vertex` and all edges associated with it from the graph. Does
         not remove vertices that no longer have any edges as a result of this
@@ -208,7 +209,7 @@ class Graph:
         del self.edges[vertex]
         self.vertices.remove(vertex)
 
-    def removeEdge(self, vertex1, vertex2):
+    def removeEdge(self, vertex1: Vertex, vertex2: Vertex) -> None:
         """
         Remove the edge having vertices `vertex1` and `vertex2` from the graph.
         Does not remove vertices that no longer have any edges as a result of
@@ -217,7 +218,7 @@ class Graph:
         del self.edges[vertex1][vertex2]
         del self.edges[vertex2][vertex1]
 
-    def copy(self, deep=False):
+    def copy(self, deep: bool = False) -> "Graph":
         """
         Create a copy of the current graph. If `deep` is ``True``, a deep copy
         is made: copies of the vertices and edges are used in the new graph.
@@ -242,7 +243,7 @@ class Graph:
                     other.addEdge(vertex1, vertex2, self.edges[vertex1][vertex2])
         return other
 
-    def merge(self, other):
+    def merge(self, other: "Graph") -> "Graph":
         """
         Merge two graphs so as to store them in a single Graph object.
         """
@@ -267,7 +268,7 @@ class Graph:
 
         return new
 
-    def split(self):
+    def split(self) -> List["Graph"]:
         """
         Convert a single Graph object containing two or more unconnected graphs
         into separate graphs.
@@ -319,7 +320,7 @@ class Graph:
         new.extend(new1.split())
         return new
 
-    def resetConnectivityValues(self):
+    def resetConnectivityValues(self) -> None:
         """
         Reset any cached connectivity information. Call this method when you
         have modified the graph.
@@ -328,7 +329,7 @@ class Graph:
         for vertex in self.vertices:
             vertex.resetConnectivityValues()
 
-    def updateConnectivityValues(self):
+    def updateConnectivityValues(self) -> None:
         """
         Update the connectivity values for each vertex in the graph. These are
         used to accelerate the isomorphism checking.
@@ -357,7 +358,7 @@ class Graph:
                 count += vertex2.connectivity2
             vertex1.connectivity3 = count
 
-    def sortVertices(self):
+    def sortVertices(self) -> None:
         """
         Sort the vertices in the graph. This can make certain operations, e.g.
         the isomorphism functions, much more efficient.
@@ -373,44 +374,42 @@ class Graph:
         for index, vertex in enumerate(self.vertices):
             vertex.sortingLabel = index
 
-    def isIsomorphic(self, other, initialMap=None):
+    def isIsomorphic(self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None) -> bool:
         """
         Returns :data:`True` if two graphs are isomorphic and :data:`False`
         otherwise. Uses the VF2 algorithm of Vento and Foggia.
         """
-        ismatch, mapList = VF2_isomorphism(
-            self, other, subgraph=False, findAll=False, initialMap=initialMap
-        )
-        return ismatch
+        result = VF2_isomorphism(self, other, subgraph=False, findAll=False, initialMap=initialMap)
+        return bool(result[0])
 
-    def findIsomorphism(self, other, initialMap=None):
+    def findIsomorphism(self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None) -> Tuple[bool, Dict[Vertex, Vertex]]:
         """
         Returns :data:`True` if `other` is subgraph isomorphic and :data:`False`
         otherwise, and the matching mapping.
         Uses the VF2 algorithm of Vento and Foggia.
         """
-        return VF2_isomorphism(self, other, subgraph=False, findAll=True, initialMap=initialMap)
+        res = VF2_isomorphism(self, other, subgraph=False, findAll=True, initialMap=initialMap)
+        return bool(res[0]), res[1]
 
-    def isSubgraphIsomorphic(self, other, initialMap=None):
+    def isSubgraphIsomorphic(self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None) -> bool:
         """
         Returns :data:`True` if `other` is subgraph isomorphic and :data:`False`
         otherwise. Uses the VF2 algorithm of Vento and Foggia.
         """
-        ismatch, mapList = VF2_isomorphism(
-            self, other, subgraph=True, findAll=False, initialMap=initialMap
-        )
-        return ismatch
+        result = VF2_isomorphism(self, other, subgraph=True, findAll=False, initialMap=initialMap)
+        return bool(result[0])
 
-    def findSubgraphIsomorphisms(self, other, initialMap=None):
+    def findSubgraphIsomorphisms(self, other: "Graph", initialMap: Optional[Dict[Vertex, Vertex]] = None) -> Tuple[bool, List[Dict[Vertex, Vertex]]]:
         """
         Returns :data:`True` if `other` is subgraph isomorphic and :data:`False`
         otherwise. Also returns the lists all of valid mappings.
 
         Uses the VF2 algorithm of Vento and Foggia.
         """
-        return VF2_isomorphism(self, other, subgraph=True, findAll=True, initialMap=initialMap)
+        res = VF2_isomorphism(self, other, subgraph=True, findAll=True, initialMap=initialMap)
+        return bool(res[0]), res[1]
 
-    def isCyclic(self):
+    def isCyclic(self) -> bool:
         """
         Return :data:`True` if one or more cycles are present in the structure
         and :data:`False` otherwise.
@@ -420,7 +419,7 @@ class Graph:
                 return True
         return False
 
-    def isVertexInCycle(self, vertex):
+    def isVertexInCycle(self, vertex: Vertex) -> bool:
         """
         Return :data:`True` if `vertex` is in one or more cycles in the graph,
         or :data:`False` if not.
@@ -429,7 +428,7 @@ class Graph:
         chain = [vertex]
         return self.__isChainInCycle(chain)
 
-    def isEdgeInCycle(self, vertex1, vertex2):
+    def isEdgeInCycle(self, vertex1: Vertex, vertex2: Vertex) -> bool:
         """
         Return :data:`True` if the edge between vertices `vertex1` and `vertex2`
         is in one or more cycles in the graph, or :data:`False` if not.
@@ -440,7 +439,7 @@ class Graph:
                 return True
         return False
 
-    def __isChainInCycle(self, chain):
+    def __isChainInCycle(self, chain: List[Vertex]) -> bool:
         """
         Is the `chain` in a cycle?
         Returns True/False.
@@ -465,7 +464,7 @@ class Graph:
                 chain.remove(vertex2)
         return False
 
-    def getAllCycles(self, startingVertex):
+    def getAllCycles(self, startingVertex: Vertex) -> List[List[Vertex]]:
         """
         Given a starting vertex, returns a list of all the cycles containing
         that vertex.
@@ -482,7 +481,7 @@ class Graph:
         cycleList = self.__exploreCyclesRecursively(chain, cycleList)
         return cycleList
 
-    def __exploreCyclesRecursively(self, chain, cycleList):
+    def __exploreCyclesRecursively(self, chain: List[Vertex], cycleList: List[List[Vertex]]) -> List[List[Vertex]]:
         """
         Finds cycles by spidering through a graph.
         Give it a chain of atoms that are connected, `chain`,
@@ -514,7 +513,7 @@ class Graph:
                 chain.pop(-1)
         return cycleList
 
-    def getSmallestSetOfSmallestRings(self):
+    def getSmallestSetOfSmallestRings(self) -> List[List[Vertex]]:
         """
         Return a list of the smallest set of smallest rings in the graph. The
         algorithm implements was adapted from a description by Fan, Panaye,
@@ -611,7 +610,7 @@ class Graph:
                     # there are no vertices in this cycle that with only two edges
 
                     # Remove edge between root vertex and any one vertex it is connected to
-                    graph.removeEdge(rootVertex, list(graph[rootVertex].keys())[0])
+                    graph.removeEdge(rootVertex, list(graph.edges[rootVertex].keys())[0])
                 else:
                     for vertex in verticesToRemove:
                         graph.removeVertex(vertex)
