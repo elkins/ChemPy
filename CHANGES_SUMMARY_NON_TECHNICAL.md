@@ -5,6 +5,8 @@
 - Split long lines in `chempy/species.py` Lennard-Jones equation; added raw docstrings selectively to suppress invalid escape warnings.
 - Ran pre-commit hooks (black, isort, flake8); accepted formatter changes across `reaction.py`, `states.py`, and unit tests; repository is lint-clean.
 - Verified test suite passes (`pytest -q`) with benchmarks executing as expected.
+ - Documentation: Added a "Manual CI" section to `README.md` explaining how to trigger the lint-and-test workflow manually.
+ - Documentation: Added a `Lint & Test` CI status badge to `README.md`.
 # ChemPy Modernization & CI Improvements (Non-Technical Summary)
 
 This document summarizes the work done on the ChemPy project since this fork began, focusing on what changed, why it matters, and how the same lessons can help other projects.
