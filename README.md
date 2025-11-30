@@ -23,19 +23,14 @@
 
 ## Features
 
-- Molecular structure representation and manipulation
-- Chemical reactions and kinetics modeling
-- Thermodynamic calculations
-- Graph-based molecular analysis
-- Pattern matching for molecular structures
-- Optimized performance with optional Cython extensions
-- **Full type hint support with PEP 561 compliance**
-- **Comprehensive test coverage with pytest (35 tests, 100% passing)**
-- **Modern Python 3.13 support with Open Babel 3.x integration**
-- Modern Python packaging (PEP 517/518)
-- GitHub Actions CI/CD with matrix testing (Python 3.8-3.13)
-- Zero warnings and clean code quality (mypy, black, isort)
 
+## Platform Support
+
+**Windows:** Experimental. Unit tests are not run on Windows in CI due to persistent failures and lack of a Windows development environment. Use at your own risk.
+
+If you are able to help improve Windows compatibility, contributions and fixes are very welcome!
+
+**macOS and Linux:** Fully supported and tested in CI.
 ## Installation
 
 ### Requirements
