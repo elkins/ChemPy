@@ -94,7 +94,7 @@ class Element:
 ################################################################################
 
 
-def getElement(number: int = 0, symbol: str = "") -> Element:
+def getElement(number=0, symbol=""):
     """
     Return the :class:`Element` object with attributes defined by the given
     parameters. Only the parameters explicitly given will be used, so you can
