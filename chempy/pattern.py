@@ -112,14 +112,11 @@ We define the following reaction recipe actions:
 
 """
 
-from typing import TYPE_CHECKING, Any, Dict, List, Literal, Tuple, cast, overload
+from typing import Any, Dict, List, Tuple, cast
 
 from chempy._cython_compat import cython
 from chempy.exception import ChemPyError
 from chempy.graph import Edge, Graph, Vertex
-
-if TYPE_CHECKING:
-    from chempy.molecule import Atom, Bond
 
 ################################################################################
 
@@ -1270,18 +1267,6 @@ class InvalidAdjacencyListError(Exception):
     """
 
     pass
-
-
-@overload
-def fromAdjacencyList(
-    adjlist: str, pattern: Literal[False] = False, addH: bool = False, withLabel: bool = True
-) -> Tuple[List["Atom"], Dict["Atom", Dict["Atom", "Bond"]]]: ...
-
-
-@overload
-def fromAdjacencyList(
-    adjlist: str, pattern: Literal[True], addH: bool = False, withLabel: bool = True
-) -> Tuple[List[AtomPattern], Dict[AtomPattern, Dict[AtomPattern, BondPattern]]]: ...
 
 
 def fromAdjacencyList(adjlist: str, pattern: bool = False, addH: bool = False, withLabel: bool = True):

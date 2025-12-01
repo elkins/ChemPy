@@ -1116,8 +1116,9 @@ class Molecule(Graph):
             a.SetAtomicNum(atom.number)
             a.SetFormalCharge(atom.charge)
         orders = {"S": 1, "D": 2, "T": 3, "B": 5}
-        for atom1, bonds in bonds.items():
-            for atom2, bond in bonds.items():
+        for atom1 in bonds:
+            for atom2 in bonds[atom1]:
+                bond = bonds[atom1][atom2]
                 index1 = atoms.index(atom1)
                 index2 = atoms.index(atom2)
                 if index1 < index2:
@@ -1201,7 +1202,8 @@ class Molecule(Graph):
         """
         count: int = 0
         for atom1 in self.edges:
-            for atom2, bond in self.edges[atom1].items():
+            for atom2 in self.edges[atom1]:
+                bond = self.edges[atom1][atom2]
                 if (
                     self.vertices.index(atom1) < self.vertices.index(atom2)
                     and bond.isSingle()
@@ -1689,10 +1691,13 @@ class Molecule(Graph):
 
         # Find all delocalization paths
         paths: List[List[Union[Atom, Bond]]] = []
-        for atom2, bond12 in self.edges[atom1].items():
+        for atom2 in self.edges[atom1]:
+            bond12 = self.edges[atom1][atom2]
             # Vinyl bond must be capable of gaining an order
             if bond12.order in ["S", "D"]:
-                for atom3, bond23 in self.getBonds(atom2).items():
+                atom2Bonds = self.getBonds(atom2)
+                for atom3 in atom2Bonds:
+                    bond23 = atom2Bonds[atom3]
                     # Allyl bond must be capable of losing an order without breaking
                     if atom1 is not atom3 and bond23.order in ["D", "T"]:
                         paths.append([atom1, atom2, atom3, bond12, bond23])

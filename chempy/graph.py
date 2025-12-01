@@ -249,7 +249,7 @@ class Graph:
 
         return cast("Graph", other)
 
-    def merge(self, other: "Graph") -> "Graph":
+    def merge(self, other):
         """
         Merge two graphs so as to store them in a single Graph object.
         """
@@ -557,8 +557,8 @@ class Graph:
         done = False
         while not done:
             verticesToRemove = []
-            for vertex1, value in graph.edges.items():
-                if len(value) == 1:
+            for vertex1 in graph.edges:
+                if len(graph.edges[vertex1]) == 1:
                     verticesToRemove.append(vertex1)
             done = len(verticesToRemove) == 0
             # Remove identified vertices from graph

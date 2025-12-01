@@ -24,9 +24,9 @@
 #
 ################################################################################
 
-from geometry cimport Geometry
-from states cimport StatesModel
-from thermo cimport ThermoModel
+from chempy.geometry cimport Geometry
+from chempy.states cimport StatesModel
+from chempy.thermo cimport ThermoModel
 
 ################################################################################
 

@@ -24,9 +24,9 @@
 #
 ################################################################################
 
-from element cimport Element
-from graph cimport Edge, Graph, Vertex
-from pattern cimport AtomPattern, AtomType, BondPattern, MoleculePattern
+from chempy.element cimport Element
+from chempy.graph cimport Edge, Graph, Vertex
+from chempy.pattern cimport AtomPattern, AtomType, BondPattern, MoleculePattern
 
 ################################################################################
 
