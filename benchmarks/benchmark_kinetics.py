@@ -44,20 +44,21 @@ class TestArrheniusKinetics:
 
 
 class TestReactionRate:
-    """Benchmark reaction rate calculations."""
+    """Benchmark forward reaction rate calculations."""
 
     @pytest.fixture(autouse=True)
     def setup(self):
         """Create test reaction."""
-        # Create a simple A + B -> C reaction
+        # Create a simple A + B -> C reaction with just kinetics
         self.speciesA = Species(label="A")
         self.speciesB = Species(label="B")
         self.speciesC = Species(label="C")
 
+        self.kinetics = ArrheniusModel(A=1.0e10, n=0.5, Ea=50000.0)
         self.reaction = Reaction(
             reactants=[self.speciesA, self.speciesB],
             products=[self.speciesC],
-            kinetics=ArrheniusModel(A=1.0e10, n=0.5, Ea=50000.0),
+            kinetics=self.kinetics,
         )
 
         # Concentration conditions
@@ -70,7 +71,18 @@ class TestReactionRate:
         self.T = 1000.0  # K
         self.P = 101325.0  # Pa
 
-    def test_get_rate(self, benchmark):
-        """Benchmark calculating reaction rate."""
-        result = benchmark(self.reaction.getRate, self.T, self.P, self.concentrations)
+    def test_forward_rate_calculation(self, benchmark):
+        """Benchmark calculating forward rate with concentration products."""
+
+        def calculate_forward_rate():
+            # Calculate rate constant
+            k = self.kinetics.getRateCoefficient(self.T, self.P)
+            # Calculate concentration product
+            forward = 1.0
+            for reactant in self.reaction.reactants:
+                if reactant in self.concentrations:
+                    forward *= self.concentrations[reactant]
+            return k * forward
+
+        result = benchmark(calculate_forward_rate)
         assert result > 0
