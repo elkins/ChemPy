@@ -658,7 +658,7 @@ class Molecule(Graph):
             if atom.isHydrogen():
                 neighbor = list(self.edges[atom].keys())[0]
                 neighbor.implicitHydrogens += 1
-                hydrogens.append(atom)  # type: ignore[arg-type]
+                hydrogens.append(atom)
 
         # Remove the hydrogen atoms from the structure
         for atom in hydrogens:
@@ -683,7 +683,7 @@ class Molecule(Graph):
             while atom.implicitHydrogens > 0:
                 H = Atom(element="H")
                 bond = Bond(order="S")
-                hydrogens.append((H, atom, bond))  # type: ignore[arg-type]
+                hydrogens.append((H, atom, bond))
                 atom.implicitHydrogens -= 1
 
         # Add the hydrogens to the graph
@@ -743,8 +743,10 @@ class Molecule(Graph):
         and the values the atoms themselves. If two or more atoms have the
         same label, the value is converted to a list of these atoms.
         """
+        from typing import cast
+
         labeled: Dict[str, List[Atom]] = {}
-        for atom in self.vertices:
+        for atom in cast(List[Atom], list(self.vertices)):
             if atom.label != "":
                 if atom.label in labeled:
                     labeled[atom.label].append(atom)
@@ -1114,7 +1116,7 @@ class Molecule(Graph):
             a.SetAtomicNum(atom.number)
             a.SetFormalCharge(atom.charge)
         orders = {"S": 1, "D": 2, "T": 3, "B": 5}
-        for atom1, bonds in bonds.items():  # type: ignore[assignment]
+        for atom1, bonds in bonds.items():
             for atom2, bond in bonds.items():
                 index1 = atoms.index(atom1)
                 index2 = atoms.index(atom2)
@@ -1170,7 +1172,7 @@ class Molecule(Graph):
         implicitH: bool = self.implicitHydrogens
         self.makeHydrogensExplicit()
         for atom in self.vertices:
-            bonds: List[Bond] = list(self.edges[atom].values())  # type: ignore[arg-type]
+            bonds: List[Bond] = list(self.edges[atom].values())
             if len(bonds) == 1:
                 continue  # ok, next atom
             if len(bonds) > 2:
@@ -1310,7 +1312,7 @@ class Molecule(Graph):
         """
         Return the symmetry number centered at `bond` in the structure.
         """
-        bond: Bond = self.edges[atom1][atom2]  # type: ignore[assignment]
+        bond: Bond = self.edges[atom1][atom2]
         symmetryNumber: int = 1
         if bond.isSingle() or bond.isDouble() or bond.isTriple():
             if atom1.equivalent(atom2):
@@ -1429,7 +1431,7 @@ class Molecule(Graph):
         for atom1 in self.edges:
             for atom2 in self.edges[atom1]:
                 if self.edges[atom1][atom2].isDouble() and self.vertices.index(atom1) < self.vertices.index(atom2):
-                    doubleBonds.append((atom1, atom2))  # type: ignore[arg-type]
+                    doubleBonds.append((atom1, atom2))
 
         # Search for adjacent double bonds
         cumulatedBonds: List[List[Tuple[Atom, Atom]]] = []
@@ -1693,5 +1695,5 @@ class Molecule(Graph):
                 for atom3, bond23 in self.getBonds(atom2).items():
                     # Allyl bond must be capable of losing an order without breaking
                     if atom1 is not atom3 and bond23.order in ["D", "T"]:
-                        paths.append([atom1, atom2, atom3, bond12, bond23])  # type: ignore[list-item]
+                        paths.append([atom1, atom2, atom3, bond12, bond23])
         return paths

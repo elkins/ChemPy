@@ -1368,6 +1368,7 @@ def fromAdjacencyList(adjlist: str, pattern: bool = False, addH: bool = False, w
                 spinMultiplicity.append(5)
 
         # Create a new atom based on the above information
+        atom_obj: Any
         if pattern:
             atom_obj = AtomPattern(
                 atomType_tokens,
@@ -1389,17 +1390,17 @@ def fromAdjacencyList(adjlist: str, pattern: bool = False, addH: bool = False, w
             # so strip them just in case
             datum = datum.strip(",")
 
-            aid2, comma, bond_order_str = datum[1:-1].partition(",")
-            aid2 = int(aid2)
+            aid2_str, comma, bond_order_str = datum[1:-1].partition(",")
+            aid2_int = int(aid2_str)
 
             if bond_order_str[0] == "{":
                 bond_order = bond_order_str[1:-1].split(",")
             else:
                 bond_order = [bond_order_str]
 
-            if aid2 in atomdict_any:
+            if aid2_int in atomdict_any:
                 bond_obj = BondPattern(bond_order) if pattern else Bond(bond_order[0])
-                a2 = atomdict_any[aid2]
+                a2 = atomdict_any[aid2_int]
                 bonds_any[atom_obj][a2] = bond_obj
                 bonds_any[a2][atom_obj] = bond_obj
 
