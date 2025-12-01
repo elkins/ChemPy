@@ -9,7 +9,9 @@ ChemPy uses a hybrid approach where:
 - The same `.py` files can be compiled with Cython for performance improvements
 - A compatibility layer (`_cython_compat.py`) allows graceful fallback when Cython is unavailable
 
-This benchmarking suite measures the actual performance difference between these modes.
+**Note:** As of December 2025, the codebase is not compatible with Cython 3.x (requires extensive refactoring). To compile with Cython, use `pip install "cython<3"` to install Cython 2.x.
+
+This benchmarking suite measures performance in pure Python mode. For Cython comparisons, compile locally with Cython 2.x.
 
 ## Structure
 
