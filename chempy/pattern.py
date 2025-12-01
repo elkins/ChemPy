@@ -112,9 +112,14 @@ We define the following reaction recipe actions:
 
 """
 
+from typing import TYPE_CHECKING, Any, Dict, List, Literal, Tuple, cast, overload
+
 from chempy._cython_compat import cython
 from chempy.exception import ChemPyError
 from chempy.graph import Edge, Graph, Vertex
+
+if TYPE_CHECKING:
+    from chempy.molecule import Atom, Bond
 
 ################################################################################
 
@@ -1167,7 +1172,11 @@ class MoleculePattern(Graph):
         Skips the first line (assuming it's a label) unless `withLabel` is
         ``False``.
         """
-        self.vertices, self.edges = fromAdjacencyList(adjlist, pattern=True, addH=False, withLabel=withLabel)
+        from typing import cast
+
+        atoms_pat, bonds_pat = fromAdjacencyList(adjlist, pattern=True, addH=False, withLabel=withLabel)
+        self.vertices = cast(List[Vertex], atoms_pat)
+        self.edges = cast(Dict[Vertex, Dict[Vertex, Edge]], bonds_pat)
         self.updateConnectivityValues()
         return self
 
@@ -1263,7 +1272,19 @@ class InvalidAdjacencyListError(Exception):
     pass
 
 
-def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
+@overload
+def fromAdjacencyList(
+    adjlist: str, pattern: Literal[False] = False, addH: bool = False, withLabel: bool = True
+) -> Tuple[List["Atom"], Dict["Atom", Dict["Atom", "Bond"]]]: ...
+
+
+@overload
+def fromAdjacencyList(
+    adjlist: str, pattern: Literal[True], addH: bool = False, withLabel: bool = True
+) -> Tuple[List[AtomPattern], Dict[AtomPattern, Dict[AtomPattern, BondPattern]]]: ...
+
+
+def fromAdjacencyList(adjlist: str, pattern: bool = False, addH: bool = False, withLabel: bool = True):
     """
     Convert a string adjacency list `adjlist` into a set of :class:`Atom` and
     :class:`Bond` objects (if `pattern` is ``False``) or a set of
@@ -1274,9 +1295,9 @@ def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
 
     from chempy.molecule import Atom, Bond
 
-    atoms = []
-    atomdict = {}
-    bonds: dict = {}
+    atoms_any: List[Any] = []
+    atomdict_any: Dict[int, Any] = {}
+    bonds_any: Dict[Any, Dict[Any, Any]] = {}
 
     lines = adjlist.splitlines()
     # Skip the first line if it contains a label
@@ -1305,21 +1326,23 @@ def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
 
         # Next is the element or functional group element
         # A list can be specified with the {,} syntax
-        atomType = data[index]
-        if atomType[0] == "{":
-            atomType = atomType[1:-1].split(",")
+        atom_type_token = data[index]
+        atomType_tokens: List[str]
+        if atom_type_token[0] == "{":
+            atomType_tokens = atom_type_token[1:-1].split(",")
         else:
-            atomType = [atomType]
+            atomType_tokens = [atom_type_token]
 
         # Next is the electron state
         radicalElectrons = []
         spinMultiplicity = []
-        elecState = data[index + 1].upper()
-        if elecState[0] == "{":
-            elecState = elecState[1:-1].split(",")
+        elec_state_token = data[index + 1].upper()
+        elecState_tokens: List[str]
+        if elec_state_token[0] == "{":
+            elecState_tokens = elec_state_token[1:-1].split(",")
         else:
-            elecState = [elecState]
-        for e in elecState:
+            elecState_tokens = [elec_state_token]
+        for e in elecState_tokens:
             if e == "0":
                 radicalElectrons.append(0)
                 spinMultiplicity.append(1)
@@ -1346,75 +1369,82 @@ def fromAdjacencyList(adjlist, pattern=False, addH=False, withLabel=True):
 
         # Create a new atom based on the above information
         if pattern:
-            atom = AtomPattern(atomType, radicalElectrons, spinMultiplicity, [0 for e in radicalElectrons], label)
+            atom_obj = AtomPattern(
+                atomType_tokens,
+                radicalElectrons,
+                spinMultiplicity,
+                [0 for _ in radicalElectrons],
+                label,
+            )
         else:
-            atom = Atom(atomType[0], radicalElectrons[0], spinMultiplicity[0], 0, 0, label)
-
-        # Add the atom to the list
-        atoms.append(atom)
-        atomdict[aid] = atom
+            atom_obj = Atom(atomType_tokens[0], radicalElectrons[0], spinMultiplicity[0], 0, 0, label)
+        atoms_any.append(atom_obj)
+        atomdict_any[aid] = atom_obj
+        bonds_any[atom_obj] = {}
 
         # Process list of bonds
-        bonds[atom] = {}
         for datum in data[index + 2 :]:
 
             # Sometimes commas are used to delimit bonds in the bond list,
             # so strip them just in case
             datum = datum.strip(",")
 
-            aid2, comma, order = datum[1:-1].partition(",")
+            aid2, comma, bond_order_str = datum[1:-1].partition(",")
             aid2 = int(aid2)
 
-            if order[0] == "{":
-                order = order[1:-1].split(",")
+            if bond_order_str[0] == "{":
+                bond_order = bond_order_str[1:-1].split(",")
             else:
-                order = [order]
+                bond_order = [bond_order_str]
 
-            if aid2 in atomdict:
-                if pattern:
-                    bond = BondPattern(order)
-                else:
-                    bond = Bond(order[0])
-                bonds[atom][atomdict[aid2]] = bond
-                bonds[atomdict[aid2]][atom] = bond
+            if aid2 in atomdict_any:
+                bond_obj = BondPattern(bond_order) if pattern else Bond(bond_order[0])
+                a2 = atomdict_any[aid2]
+                bonds_any[atom_obj][a2] = bond_obj
+                bonds_any[a2][atom_obj] = bond_obj
 
     # Check consistency using bonddict
-    for atom1 in bonds:
-        for atom2 in bonds[atom1]:
-            if atom2 not in bonds:
+    for atom1 in bonds_any:
+        for atom2 in bonds_any[atom1]:
+            if atom2 not in bonds_any:
                 raise ChemPyError(label)
-            elif atom1 not in bonds[atom2]:
+            elif atom1 not in bonds_any[atom2]:
                 raise ChemPyError(label)
-            elif bonds[atom1][atom2] != bonds[atom2][atom1]:
+            elif bonds_any[atom1][atom2] != bonds_any[atom2][atom1]:
                 raise ChemPyError(label)
 
     # Add explicit hydrogen atoms to complete structure if desired
     if addH and not pattern:
-        valences = {"H": 1, "C": 4, "O": 2}
-        orders = {"S": 1, "D": 2, "T": 3, "B": 1.5}
-        newAtoms = []
-        for atom in atoms:
+        valences: Dict[str, int] = {"H": 1, "C": 4, "O": 2}
+        orders: Dict[str, float] = {"S": 1, "D": 2, "T": 3, "B": 1.5}
+        newAtoms: List[Atom] = []
+        atoms_mol = cast(List[Atom], atoms_any)
+        bonds_mol = cast(Dict[Atom, Dict[Atom, Bond]], bonds_any)
+        for atom in atoms_mol:
             try:
                 valence = valences[atom.symbol]
             except KeyError:
                 raise ChemPyError(
                     'Cannot add hydrogens to adjacency list: Unknown valence for atom "%s".' % atom.symbol
                 )
-            radical = atom.radicalElectrons
-            order = 0
-            for atom2, bond in bonds[atom].items():  # type: ignore[union-attr]
+            radical: int = atom.radicalElectrons
+            total_bond_order: float = 0.0
+            for atom2, bond in bonds_mol[atom].items():
                 # add up bond orders for valence check
-                order += orders[bond.order]
-            count = valence - int(radical) - int(order)
+                total_bond_order += orders[bond.order]
+            count: int = valence - radical - int(total_bond_order)
             for i in range(count):
-                a = Atom("H", 0, 1, 0, 0, "")
-                b = Bond("S")
+                a: Atom = Atom("H", 0, 1, 0, 0, "")
+                b: Bond = Bond("S")
                 newAtoms.append(a)
-                bonds[atom][a] = b  # type: ignore[index]
-                bonds[a] = {atom: b}
-        atoms.extend(newAtoms)  # type: ignore[arg-type]
+                bonds_mol[atom][a] = b
+                bonds_mol[a] = {atom: b}
+            atoms_mol.extend(newAtoms)
 
-    return atoms, bonds
+    if pattern:
+        return cast(Tuple[List[AtomPattern], Dict[AtomPattern, Dict[AtomPattern, BondPattern]]], (atoms_any, bonds_any))
+    else:
+        return cast(Tuple[List[Atom], Dict[Atom, Dict[Atom, Bond]]], (atoms_any, bonds_any))
 
 
 def toAdjacencyList(molecule, label="", pattern=False, removeH=False):

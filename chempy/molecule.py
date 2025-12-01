@@ -743,18 +743,13 @@ class Molecule(Graph):
         and the values the atoms themselves. If two or more atoms have the
         same label, the value is converted to a list of these atoms.
         """
-        labeled: Dict[str, Union[Atom, List[Atom]]] = {}
+        labeled: Dict[str, List[Atom]] = {}
         for atom in self.vertices:
             if atom.label != "":
                 if atom.label in labeled:
-                    # Convert single Atom to a list on second occurrence
-                    prev = labeled[atom.label]
-                    if isinstance(prev, Atom):
-                        labeled[atom.label] = [prev, atom]
-                    else:
-                        prev.append(atom)  # type: ignore[union-attr]
+                    labeled[atom.label].append(atom)
                 else:
-                    labeled[atom.label] = atom
+                    labeled[atom.label] = [atom]
         return labeled
 
     def isIsomorphic(self, other, initialMap=None):
@@ -966,8 +961,10 @@ class Molecule(Graph):
         cython.declare(radicalElectrons=cython.int, spinMultiplicity=cython.int, charge=cython.int)
         cython.declare(atom=Atom, atom1=Atom, atom2=Atom, bond=Bond)
 
-        self.vertices = []
-        self.edges = {}
+        from typing import cast
+
+        self.vertices = cast(List[Vertex], [])
+        self.edges = cast(Dict[Vertex, Dict[Vertex, Edge]], {})
 
         # Add hydrogen atoms to complete molecule if needed
         obmol.AddHydrogens()
@@ -1043,7 +1040,11 @@ class Molecule(Graph):
         Skips the first line (assuming it's a label) unless `withLabel` is
         ``False``.
         """
-        self.vertices, self.edges = fromAdjacencyList(adjlist, False, True, withLabel)
+        from typing import cast
+
+        atoms_mol, bonds_mol = fromAdjacencyList(adjlist, False, True, withLabel)
+        self.vertices = cast(List[Vertex], atoms_mol)
+        self.edges = cast(Dict[Vertex, Dict[Vertex, Edge]], bonds_mol)
         self.updateConnectivityValues()
         self.updateAtomTypes()
         self.makeHydrogensImplicit()
