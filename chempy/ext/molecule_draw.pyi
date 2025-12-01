@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import Any, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Optional, Tuple
 
-import chempy
+if TYPE_CHECKING:
+    from chempy.molecule import Molecule
 
 def createNewSurface(
     type: str,
@@ -11,7 +12,7 @@ def createNewSurface(
     height: int = ...,
 ) -> Any: ...
 def drawMolecule(
-    molecule: "chempy.molecule.Molecule",
+    molecule: Molecule,
     path: Optional[str] = ...,
     surface: str = ...,
 ) -> Tuple[Any, Any, Tuple[int, int, int, int]]: ...
