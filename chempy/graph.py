@@ -247,7 +247,7 @@ class Graph:
                     other.addEdge(vertex1, vertex2, self.edges[vertex1][vertex2])
         from typing import cast
 
-        return cast("Graph", other)  # type: ignore[redundant-cast]
+        return cast("Graph", other)
 
     def merge(self, other: "Graph") -> "Graph":
         """
@@ -274,7 +274,7 @@ class Graph:
 
         from typing import cast
 
-        return cast("Graph", new)  # type: ignore[redundant-cast]
+        return cast("Graph", new)
 
     def split(self) -> List["Graph"]:
         """
@@ -493,7 +493,7 @@ class Graph:
         cycleList = self.__exploreCyclesRecursively(chain, cycleList)
         from typing import List, cast
 
-        return cast(List[List[Vertex]], cycleList)  # type: ignore[redundant-cast]
+        return cast(List[List[Vertex]], cycleList)
 
     def __exploreCyclesRecursively(self, chain: List[Vertex], cycleList: List[List[Vertex]]) -> List[List[Vertex]]:
         """

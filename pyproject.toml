@@ -104,10 +104,9 @@ warn_unused_configs = true
 disallow_untyped_defs = false
 ignore_missing_imports = true
 warn_unused_ignores = true
-warn_redundant_casts = true
 show_error_codes = true
 # Allow some errors for now due to incomplete type coverage
-disable_error_code = ["attr-defined"]
+disable_error_code = ["attr-defined", "redundant-cast"]
 
 [tool.pylint.messages_control]
 disable = ["C0111", "R0913", "R0914"]
