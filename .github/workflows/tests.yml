@@ -57,7 +57,7 @@ jobs:
 
     - name: Run tests with pytest
       run: |
-        pytest unittest/ --cov=chempy --cov-report=xml -v --tb=short
+        pytest -q
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4

@@ -7,7 +7,7 @@
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
 [![Lint & Test](https://github.com/elkins/ChemPy/actions/workflows/lint-and-test.yml/badge.svg?branch=master)](https://github.com/elkins/ChemPy/actions/workflows/lint-and-test.yml)
 [![Tests](https://github.com/elkins/ChemPy/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/elkins/ChemPy/actions/workflows/tests.yml)
-[![codecov](https://codecov.io/gh/elkins/ChemPy/branch/master/graph/badge.svg)](https://codecov.io/gh/elkins/ChemPy)
+[![Codecov](https://codecov.io/gh/elkins/ChemPy/branch/master/graph/badge.svg)](https://codecov.io/gh/elkins/ChemPy)
 [![PEP 561 Compliant](https://img.shields.io/badge/pep-561-blue.svg)](https://www.python.org/dev/peps/pep-0561/)
 [![Benchmarks](https://github.com/elkins/ChemPy/actions/workflows/benchmarks.yml/badge.svg?branch=master)](https://github.com/elkins/ChemPy/actions/workflows/benchmarks.yml?query=branch%3Amaster)
 
@@ -182,10 +182,8 @@ documentation/             # Sphinx documentation source
 
 ## Documentation
 
-- [Development Guide](DEVELOPMENT.md) - Setup and development workflow
-- [Contributing Guide](CONTRIBUTING.md) - How to contribute
-- [Structure Overview](STRUCTURE.md) - Project organization
-- [Modernization Notes](MODERNIZATION_STRUCTURE.md) - Recent updates
+ The Sphinx docs homepage includes a Codecov badge; see `documentation/build/html/index.html` after building.
+ The contents page also shows the badge for quick visibility.
 
 ## Manual CI
 

@@ -25,9 +25,10 @@ MoleculePattern Objects
 Working with Atom Types
 =======================
 
-.. autofunction:: chempy.pattern.atomTypesEquivalent
-
-.. autofunction:: chempy.pattern.atomTypesSpecificCaseOf
+.. note::
+    The previous references to ``atomTypesEquivalent`` and
+    ``atomTypesSpecificCaseOf`` have been removed as these
+    functions are not part of the public API.
 
 .. autofunction:: chempy.pattern.getAtomType
 

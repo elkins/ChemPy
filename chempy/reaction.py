@@ -380,8 +380,7 @@ class Reaction:
         where :math:`Q^\\ddagger` is the partition function of the transition state,
         :math:`Q^\\mathrm{A}` and :math:`Q^\\mathrm{B}` are the partition function
         of the reactants, :math:`E_0` is the ground-state energy difference from
-        the transition state to the reactants, :math:`T` is the absolute
-                correction.
+        the transition state to the reactants, :math:`T` is the absolute temperature.
         """
         cython.declare(E0=cython.double)
         # Determine barrier height

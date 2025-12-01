@@ -47,10 +47,12 @@ We define the following basic atom types:
     ----------------------------------------------------------------------------
     ``C``           carbon atom with any local bond structure
     ``Cs``          carbon atom with four single bonds
-    ``Cd``          carbon atom with one double bond (to carbon) and two single bonds
+    ``Cd``          carbon atom with one double bond (to carbon)
+                    and two single bonds
     ``Cdd``         carbon atom with two double bonds
     ``Ct``          carbon atom with one triple bond and one single bond
-    ``CO``          carbon atom with one double bond (to oxygen) and two single bonds
+    ``CO``          carbon atom with one double bond (to oxygen)
+                    and two single bonds
     ``Cb``          carbon atom with two benzene bonds and one single bond
     ``Cbf``         carbon atom with three benzene bonds
     *Hydrogen atom types*
@@ -66,10 +68,12 @@ We define the following basic atom types:
     ----------------------------------------------------------------------------
     ``Si``          silicon atom with any local bond structure
     ``Sis``         silicon atom with four single bonds
-    ``Sid``         silicon atom with one double bond (to carbon) and two single bonds
+    ``Sid``         silicon atom with one double bond (to carbon)
+                    and two single bonds
     ``Sidd``        silicon atom with two double bonds
     ``Sit``         silicon atom with one triple bond and one single bond
-    ``SiO``         silicon atom with one double bond (to oxygen) and two single bonds
+    ``SiO``         silicon atom with one double bond (to oxygen)
+                    and two single bonds
     ``Sib``         silicon atom with two benzene bonds and one single bond
     ``Sibf``        silicon atom with three benzene bonds
     *Sulfur atom types*
@@ -97,18 +101,12 @@ We define the following bond types:
 
 We define the following reaction recipe actions:
 
-    ============= ============================= ================================
-    Action name   Arguments                     Action
-    ============= ============================= ================================
-    CHANGE_BOND   `center1`, `order`, `center2` change the bond order of the
-                  bond between `center1` and `center2` by `order`; do not
-                  break or form bonds
-    FORM_BOND     `center1`, `order`, `center2` form a new bond between `center1` and `center2` of type `order`
-    BREAK_BOND    `center1`, `order`, `center2` break the bond between
-                  `center1` and `center2`, which should be of type `order`
-    GAIN_RADICAL  `center`, `radical`           increase the number of free electrons on `center` by `radical`
-    LOSE_RADICAL  `center`, `radical`           decrease the number of free electrons on `center` by `radical`
-    ============= ============================= ================================
+        - CHANGE_BOND (`center1`, `order`, `center2`): change the bond order of the
+            bond between `center1` and `center2` by `order`; do not break or form bonds
+        - FORM_BOND (`center1`, `order`, `center2`): form a new bond between `center1` and `center2` of type `order`
+        - BREAK_BOND (`center1`, `order`, `center2`): break the bond between `center1` and `center2`, which should be of type `order`
+        - GAIN_RADICAL (`center`, `radical`): increase the number of free electrons on `center` by `radical`
+        - LOSE_RADICAL (`center`, `radical`): decrease the number of free electrons on `center` by `radical`
 
 """
 
@@ -629,7 +627,15 @@ class AtomPattern(Vertex):
         """
         Return a representation that can be used to reconstruct the object.
         """
-        return "AtomPattern(atomType=%s, radicalElectrons=%s, spinMultiplicity=%s, charge=%s, label='%s')" % (
+        return (
+            "AtomPattern("
+            "atomType=%s, "
+            "radicalElectrons=%s, "
+            "spinMultiplicity=%s, "
+            "charge=%s, "
+            "label='%s'"
+            ")"
+        ) % (
             self.atomType,
             self.radicalElectrons,
             self.spinMultiplicity,

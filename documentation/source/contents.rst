@@ -4,6 +4,10 @@
 ChemPy documentation contents
 *****************************
 
+.. image:: https://codecov.io/gh/elkins/ChemPy/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/elkins/ChemPy
+    :alt: Codecov Coverage
+
 .. toctree::
     :maxdepth: 2
     :numbered:
