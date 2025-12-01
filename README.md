@@ -214,6 +214,9 @@ If you use ChemPy in your research, please cite:
 - Type checking: If mypy reports undefined names in `.pyi` files, ensure referenced modules are imported in the stubs (e.g., add `import chempy`).
 - Lint/format: Run `black`, `isort`, and `flake8` locally to reproduce CI styling errors.
 - Windows: CI does not run unit tests on Windows at present; contributions to restore Windows testing are welcome.
+
+## License
+
 ChemPy is licensed under the MIT License - see [LICENSE](LICENSE) for details.
 
 ## Related Projects
