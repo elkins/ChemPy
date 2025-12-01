@@ -103,8 +103,10 @@ We define the following reaction recipe actions:
 
         - CHANGE_BOND (`center1`, `order`, `center2`): change the bond order of the
             bond between `center1` and `center2` by `order`; do not break or form bonds
-        - FORM_BOND (`center1`, `order`, `center2`): form a new bond between `center1` and `center2` of type `order`
-        - BREAK_BOND (`center1`, `order`, `center2`): break the bond between `center1` and `center2`, which should be of type `order`
+                - FORM_BOND (`center1`, `order`, `center2`): form a new bond between
+                    `center1` and `center2` of type `order`
+                - BREAK_BOND (`center1`, `order`, `center2`): break the bond between
+                    `center1` and `center2`, which should be of type `order`
         - GAIN_RADICAL (`center`, `radical`): increase the number of free electrons on `center` by `radical`
         - LOSE_RADICAL (`center`, `radical`): decrease the number of free electrons on `center` by `radical`
 
