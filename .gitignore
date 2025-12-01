@@ -44,9 +44,14 @@ venv.bak/
 .pytest_cache/
 .coverage
 .coverage.*
+coverage.xml
 htmlcov/
 .tox/
 .hypothesis/
+
+# Debug and temporary test files
+debug_test.py
+test_runner.sh
 
 # Type checking
 .mypy_cache/
