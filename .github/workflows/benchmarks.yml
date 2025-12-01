@@ -5,31 +5,91 @@ on:
     branches: [ master ]
     paths:
       - 'chempy/**'
+      - 'benchmarks/**'
       - 'unittest/benchmarksTest.py'
       - 'pyproject.toml'
       - '.github/workflows/benchmarks.yml'
+  workflow_dispatch:  # Manual trigger
 
 jobs:
   benchmark:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.12']
+        build-type: ['pure-python', 'cython']
+
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python 3.12
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+
+    - name: Install base dependencies
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
+        pip install numpy scipy openbabel-wheel pytest pytest-benchmark
+        pip install -e ".[dev]"
+
+    - name: Install Cython and build extensions
+      if: matrix.build-type == 'cython'
+      run: |
+        pip install cython
+        python setup.py build_ext --inplace
+
+    - name: Run legacy benchmarks
+      run: |
+        pytest -q unittest/benchmarksTest.py --benchmark-only --benchmark-min-rounds=1 --benchmark-autosave
+
+    - name: Run new benchmarks (${{ matrix.build-type }})
+      run: |
+        pytest benchmarks/ --benchmark-only --benchmark-json=benchmark-${{ matrix.build-type }}.json
+
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v4
+      with:
+        name: benchmark-results-${{ matrix.build-type }}-py${{ matrix.python-version }}
+        path: |
+          benchmark-${{ matrix.build-type }}.json
+          .benchmarks/**
+        if-no-files-found: ignore
+
+  compare:
+    needs: benchmark
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.12'
-        cache: 'pip'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip setuptools wheel
-        pip install numpy scipy openbabel-wheel
-        pip install -e ".[dev]"
-    - name: Run benchmarks (autosave, quiet)
-      run: |
-        pytest -q unittest/benchmarksTest.py --benchmark-only --benchmark-min-rounds=1 --benchmark-autosave
-    - name: Upload benchmark artifacts
-      uses: actions/upload-artifact@v4
+
+    - name: Download pure Python results
+      uses: actions/download-artifact@v4
       with:
-        name: benchmark-results-${{ runner.os }}-py312
-        path: .benchmarks/**
-        if-no-files-found: ignore
+        name: benchmark-results-pure-python-py3.12
+        path: ./results
+
+    - name: Download Cython results
+      uses: actions/download-artifact@v4
+      with:
+        name: benchmark-results-cython-py3.12
+        path: ./results
+
+    - name: Install comparison tools
+      run: |
+        pip install pytest-benchmark
+
+    - name: Compare results
+      run: |
+        echo "## Benchmark Comparison: Pure Python vs Cython" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        if [ -f benchmarks/compare_benchmarks.py ]; then
+          python benchmarks/compare_benchmarks.py results/benchmark-pure-python.json results/benchmark-cython.json >> $GITHUB_STEP_SUMMARY || echo "Comparison script failed or not yet implemented" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "Comparison script not yet implemented. Raw results uploaded as artifacts." >> $GITHUB_STEP_SUMMARY
+        fi
