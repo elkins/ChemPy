@@ -17,10 +17,11 @@
 
 - 📖 **[Documentation](https://chempy.readthedocs.io)** - Full documentation and API reference
 - 🐛 **[Issue Tracker](https://github.com/elkins/ChemPy/issues)** - Report bugs and request features
-- 📝 **[Contributing](CONTRIBUTING.md)** - How to contribute
-- 📋 **[Changelog](CHANGELOG.md)** - Version history and releases
-- 🔐 **[Security](SECURITY.md)** - Security policy and reporting
-- 👨‍💻 **[Development](DEVELOPMENT.md)** - Development setup and guidelines
+- 📝 **[Contributing](CONTRIBUTING.md)** - How to contribute to ChemPy
+- 📋 **[Changelog](CHANGELOG.md)** - Version history and release notes
+- 🔐 **[Security](SECURITY.md)** - Security policy and vulnerability reporting
+- 🔧 **[TODO](TODO.md)** - Future improvements and known issues
+- 👨‍💻 **[Developer Docs](docs/)** - Development guides and technical documentation
 
 ## Features
 
@@ -32,8 +33,6 @@
 - GitHub Actions CI/CD: Automated linting and testing across Python 3.8–3.13.
 - NumPy compatibility: Addressed array-to-scalar deprecations.
 - Modern packaging: PEP 517/518 with `pyproject.toml`.
-
-See `MODERNIZATION_COMPLETE.md` for detailed migration notes.
 
 ## Platform Support
 
@@ -208,12 +207,13 @@ If you use ChemPy in your research, please cite:
 ## License
 
 
-## Troubleshooting CI
+## Troubleshooting
 
-- Coverage uploads: Set `CODECOV_TOKEN` in GitHub repository secrets to enable Codecov and silence warnings.
-- Type checking: If mypy reports undefined names in `.pyi` files, ensure referenced modules are imported in the stubs (e.g., add `import chempy`).
-- Lint/format: Run `black`, `isort`, and `flake8` locally to reproduce CI styling errors.
-- Windows: CI does not run unit tests on Windows at present; contributions to restore Windows testing are welcome.
+See the [Developer Documentation](docs/DEVELOPMENT.md) for detailed troubleshooting, including:
+- Coverage uploads and Codecov configuration
+- Type checking with mypy
+- Lint and formatting tools
+- CI debugging
 
 ## License
 

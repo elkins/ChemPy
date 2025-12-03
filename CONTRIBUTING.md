@@ -4,6 +4,8 @@ Thank you for your interest in contributing to ChemPy! We welcome contributions 
 
 ## Getting Started
 
+For detailed development setup instructions, see the [Developer Documentation](docs/DEVELOPMENT.md).
+
 ### 1. Set Up Your Development Environment
 
 ```bash
