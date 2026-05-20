@@ -44,7 +44,7 @@ from chempy._cython_compat import cython
 ################################################################################
 
 
-class ThermoError:
+class ThermoError(Exception):
     """
     An exception class for errors that occur while working with thermodynamics
     models. Pass a string describing the circumstances that caused the
