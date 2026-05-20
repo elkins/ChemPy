@@ -325,7 +325,14 @@ impl<V: Vertex, E: Edge> Graph<V, E> {
         }
         let mut mapping = HashMap::new();
         let mut reverse_mapping = HashMap::new();
-        other.vf2_all_matches(self, &mut mapping, &mut reverse_mapping, 0, true, &mut mappings);
+        other.vf2_all_matches(
+            self,
+            &mut mapping,
+            &mut reverse_mapping,
+            0,
+            true,
+            &mut mappings,
+        );
         mappings
     }
 
@@ -343,7 +350,9 @@ impl<V: Vertex, E: Edge> Graph<V, E> {
 
         let v1 = depth;
         for v2 in 0..other.vertices.len() {
-            if !reverse_mapping.contains_key(&v2) && self.is_feasible(v1, v2, other, mapping, subgraph) {
+            if !reverse_mapping.contains_key(&v2)
+                && self.is_feasible(v1, v2, other, mapping, subgraph)
+            {
                 mapping.insert(v1, v2);
                 reverse_mapping.insert(v2, v1);
 
@@ -374,11 +383,20 @@ impl<V: Vertex, E: Edge> Graph<V, E> {
 
         let v1 = depth;
         for v2 in 0..other.vertices.len() {
-            if !reverse_mapping.contains_key(&v2) && self.is_feasible(v1, v2, other, mapping, subgraph) {
+            if !reverse_mapping.contains_key(&v2)
+                && self.is_feasible(v1, v2, other, mapping, subgraph)
+            {
                 mapping.insert(v1, v2);
                 reverse_mapping.insert(v2, v1);
 
-                self.vf2_all_matches(other, mapping, reverse_mapping, depth + 1, subgraph, mappings);
+                self.vf2_all_matches(
+                    other,
+                    mapping,
+                    reverse_mapping,
+                    depth + 1,
+                    subgraph,
+                    mappings,
+                );
 
                 mapping.remove(&v1);
                 reverse_mapping.remove(&v2);
@@ -489,7 +507,9 @@ mod tests {
         //   |
         //   5
         let mut g = Graph::<BaseVertex, BaseEdge>::new();
-        let vertices: Vec<usize> = (0..6).map(|_| g.add_vertex(BaseVertex::default())).collect();
+        let vertices: Vec<usize> = (0..6)
+            .map(|_| g.add_vertex(BaseVertex::default()))
+            .collect();
         g.add_edge(vertices[0], vertices[1], BaseEdge::default());
         g.add_edge(vertices[1], vertices[2], BaseEdge::default());
         g.add_edge(vertices[2], vertices[3], BaseEdge::default());
@@ -512,7 +532,9 @@ mod tests {
     #[test]
     fn test_split() {
         let mut g = Graph::<BaseVertex, BaseEdge>::new();
-        let v: Vec<usize> = (0..6).map(|_| g.add_vertex(BaseVertex::default())).collect();
+        let v: Vec<usize> = (0..6)
+            .map(|_| g.add_vertex(BaseVertex::default()))
+            .collect();
         g.add_edge(v[0], v[1], BaseEdge::default());
         g.add_edge(v[1], v[2], BaseEdge::default());
         g.add_edge(v[2], v[3], BaseEdge::default());
@@ -528,11 +550,15 @@ mod tests {
     #[test]
     fn test_merge() {
         let mut g1 = Graph::<BaseVertex, BaseEdge>::new();
-        let v1: Vec<usize> = (0..4).map(|_| g1.add_vertex(BaseVertex::default())).collect();
+        let v1: Vec<usize> = (0..4)
+            .map(|_| g1.add_vertex(BaseVertex::default()))
+            .collect();
         g1.add_edge(v1[0], v1[1], BaseEdge::default());
 
         let mut g2 = Graph::<BaseVertex, BaseEdge>::new();
-        let v2: Vec<usize> = (0..3).map(|_| g2.add_vertex(BaseVertex::default())).collect();
+        let v2: Vec<usize> = (0..3)
+            .map(|_| g2.add_vertex(BaseVertex::default()))
+            .collect();
         g2.add_edge(v2[0], v2[1], BaseEdge::default());
 
         let g = g1.merge(&g2);
@@ -542,14 +568,18 @@ mod tests {
     #[test]
     fn test_subgraph_isomorphism() {
         let mut g1 = Graph::<BaseVertex, BaseEdge>::new();
-        let v1: Vec<usize> = (0..6).map(|_| g1.add_vertex(BaseVertex::default())).collect();
+        let v1: Vec<usize> = (0..6)
+            .map(|_| g1.add_vertex(BaseVertex::default()))
+            .collect();
         // Path graph 0-1-2-3-4-5
         for i in 0..5 {
             g1.add_edge(v1[i], v1[i + 1], BaseEdge::default());
         }
 
         let mut g2 = Graph::<BaseVertex, BaseEdge>::new();
-        let v2: Vec<usize> = (0..2).map(|_| g2.add_vertex(BaseVertex::default())).collect();
+        let v2: Vec<usize> = (0..2)
+            .map(|_| g2.add_vertex(BaseVertex::default()))
+            .collect();
         g2.add_edge(v2[0], v2[1], BaseEdge::default());
 
         assert!(g1.is_subgraph_isomorphic(&g2));

@@ -132,7 +132,12 @@ impl Molecule {
     pub fn to_adjacency_list(&self) -> String {
         let mut result = String::new();
         for (i, atom) in self.graph.vertices.iter().enumerate() {
-            let mut line = format!("{} {} {}", i + 1, atom.element.symbol, atom.radical_electrons);
+            let mut line = format!(
+                "{} {} {}",
+                i + 1,
+                atom.element.symbol,
+                atom.radical_electrons
+            );
             let mut neighbors: Vec<_> = self.graph.edges[i].keys().collect();
             neighbors.sort();
             for &neighbor in neighbors {
@@ -267,7 +272,10 @@ impl Molecule {
         self.graph.is_subgraph_isomorphic(&other.graph)
     }
 
-    pub fn find_subgraph_isomorphisms(&self, other: &Molecule) -> Vec<std::collections::HashMap<usize, usize>> {
+    pub fn find_subgraph_isomorphisms(
+        &self,
+        other: &Molecule,
+    ) -> Vec<std::collections::HashMap<usize, usize>> {
         self.graph.find_subgraph_isomorphisms(&other.graph)
     }
 }
@@ -320,17 +328,21 @@ mod tests {
     #[test]
     fn test_subgraph_isomorphism() {
         let mut mol = Molecule::new();
-        mol.from_adjacency_list("
+        mol.from_adjacency_list(
+            "
         1 C 0 {2,D}
         2 C 0 {1,D} {3,S}
         3 C 0 {2,S}
-        ");
+        ",
+        );
 
         let mut pattern = Molecule::new();
-        pattern.from_adjacency_list("
+        pattern.from_adjacency_list(
+            "
         1 C 0 {2,D}
         2 C 0 {1,D}
-        ");
+        ",
+        );
 
         assert!(mol.is_subgraph_isomorphic(&pattern));
         let mappings = mol.find_subgraph_isomorphisms(&pattern);
@@ -340,26 +352,32 @@ mod tests {
     #[test]
     fn test_is_linear() {
         let mut mol = Molecule::new();
-        mol.from_adjacency_list("
+        mol.from_adjacency_list(
+            "
         1 O 0 {2,D}
         2 O 0 {1,D}
-        ");
+        ",
+        );
         assert!(mol.is_linear());
 
         let mut mol2 = Molecule::new();
-        mol2.from_adjacency_list("
+        mol2.from_adjacency_list(
+            "
         1 O 0 {2,D}
         2 C 0 {1,D} {3,D}
         3 O 0 {2,D}
-        ");
+        ",
+        );
         assert!(mol2.is_linear());
 
         let mut mol3 = Molecule::new();
-        mol3.from_adjacency_list("
+        mol3.from_adjacency_list(
+            "
         1 C 0 {2,S} {3,S}
         2 H 0 {1,S}
         3 H 0 {1,S}
-        ");
+        ",
+        );
         assert!(!mol3.is_linear());
     }
 }

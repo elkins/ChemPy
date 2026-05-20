@@ -166,11 +166,7 @@ mod tests {
     fn test_ethylene_modes() {
         let t = 298.15;
         let trans = Translation::new(0.02803);
-        let rot = RigidRotor::new(
-            false,
-            vec![5.6952e-47, 2.7758e-46, 3.3454e-46],
-            1,
-        );
+        let rot = RigidRotor::new(false, vec![5.6952e-47, 2.7758e-46, 3.3454e-46], 1);
         let vib = HarmonicOscillator::new(vec![
             834.50, 973.31, 975.37, 1067.1, 1238.5, 1379.5, 1472.3, 1691.3, 3121.6, 3136.7, 3192.5,
             3221.0,
