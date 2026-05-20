@@ -295,20 +295,20 @@ class PDepArrheniusModel(KineticsModel):
         if P in self.pressures:
             arrh = self.arrhenius[self.pressures.index(P)]
             return P, P, arrh, arrh
+        elif P < self.pressures[0]:
+            return self.pressures[0], self.pressures[0], self.arrhenius[0], self.arrhenius[0]
+        elif P > self.pressures[-1]:
+            return self.pressures[-1], self.pressures[-1], self.arrhenius[-1], self.arrhenius[-1]
         else:
             ilow = 0
             ihigh = -1
-            Plow = self.pressures[0]
-            Phigh = 0.0
             for i in range(1, len(self.pressures)):
                 if self.pressures[i] <= P:
                     ilow = i
-                    Plow = P
-                if self.pressures[i] > P and ihigh is None:
+                if self.pressures[i] > P and ihigh == -1:
                     ihigh = i
-                    Phigh = P
 
-            return Plow, Phigh, self.arrhenius[ilow], self.arrhenius[ihigh]
+            return self.pressures[ilow], self.pressures[ihigh], self.arrhenius[ilow], self.arrhenius[ihigh]
 
     def getRateCoefficient(self, T, P):
         """
