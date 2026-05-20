@@ -11,6 +11,12 @@
 [![PEP 561 Compliant](https://img.shields.io/badge/pep-561-blue.svg)](https://www.python.org/dev/peps/pep-0561/)
 [![Benchmarks](https://github.com/elkins/ChemPy/actions/workflows/benchmarks.yml/badge.svg?branch=master)](https://github.com/elkins/ChemPy/actions/workflows/benchmarks.yml?query=branch%3Amaster)
 
+> [!NOTE]
+> **Project Status & RMG-Py Integration**
+> This repository represents the foundational toolkit originally developed by Joshua W. Allen. While this standalone version remains a stable and lightweight library for molecular graphs, thermodynamics, and kinetics, it has effectively been integrated into and superseded by the **[RMG-Py (Reaction Mechanism Generator)](https://github.com/ReactionMechanismGenerator/RMG-Py)** ecosystem.
+>
+> Most active development, including new thermodynamics models and kinetics solvers, now takes place within the RMG-Py project. If you are looking for the most feature-rich and actively maintained version of these tools, we recommend using [RMG-Py](https://github.com/ReactionMechanismGenerator/RMG-Py).
+
 **ChemPy Toolkit** is a free, open-source Python toolkit for chemistry, chemical engineering, and materials science applications, with a focus on molecular structures, thermodynamics, and chemical kinetics.
 
 > [!IMPORTANT]

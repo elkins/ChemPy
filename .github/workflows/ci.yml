@@ -32,15 +32,15 @@ jobs:
 
       - name: Run tests and save benchmarks
         run: |
-          pytest -q --benchmark-autosave
+          pytest -v --benchmark-autosave
 
       - name: Upload benchmark artifacts
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: benchmarks-json
-          path: .benchmarks/**
-          if-no-files-found: ignore
+          path: .benchmarks/
+          if-no-files-found: error
 
   compare-artifacts:
     runs-on: macos-latest
