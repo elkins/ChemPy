@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: benchmarks-json
-          path: .benchmarks/**/**/*.json
+          path: .benchmarks/**
           if-no-files-found: ignore
 
   compare-artifacts:
