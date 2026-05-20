@@ -83,3 +83,12 @@ make.inc
 .cache/
 *.egg-info
 .pytest_cache/
+
+
+# Added by cargo
+
+/target
+
+# Rust
+target/
+Cargo.lock
