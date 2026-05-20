@@ -57,7 +57,11 @@ jobs:
 
     - name: Run tests with pytest
       run: |
-        pytest -q
+        if [[ "${{ matrix.os }}" == "ubuntu-latest" && "${{ matrix.python-version }}" == "3.12" ]]; then
+          pytest -v --cov=chempy --cov-report=xml
+        else
+          pytest -q
+        fi
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4

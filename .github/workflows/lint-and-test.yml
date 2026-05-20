@@ -42,7 +42,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest -q
+          pytest -v --cov=chempy --cov-report=xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
