@@ -34,7 +34,7 @@ efficient isomorphism functions.
 """
 
 import logging
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, cast
 
 from chempy._cython_compat import cython
 
@@ -481,8 +481,8 @@ class Graph:
         Given a starting vertex, returns a list of all the cycles containing
         that vertex.
         """
-        chain = cython.declare(list)
-        cycleList = cython.declare(list)
+        chain: List[Vertex] = cython.declare(list)
+        cycleList: List[List[Vertex]] = cython.declare(list)
 
         cycleList = list()
         chain = [startingVertex]
@@ -491,9 +491,8 @@ class Graph:
         # print "Starting at %s in graph: %s"%(self.keys().index(startingVertex),chainLabels)
 
         cycleList = self.__exploreCyclesRecursively(chain, cycleList)
-        from typing import List, cast
 
-        return cast(List[List[Vertex]], cycleList)
+        return cycleList
 
     def __exploreCyclesRecursively(self, chain: List[Vertex], cycleList: List[List[Vertex]]) -> List[List[Vertex]]:
         """
@@ -541,8 +540,8 @@ class Graph:
 
         graph = cython.declare(Graph)
         done = cython.declare(cython.bint)
-        verticesToRemove = cython.declare(list)
-        cycleList = cython.declare(list)
+        verticesToRemove: List[Vertex] = cython.declare(list)
+        cycleList: List[List[Vertex]] = cython.declare(list)
         cycles = cython.declare(list)
         vertex = cython.declare(Vertex)
         rootVertex = cython.declare(Vertex)
@@ -587,11 +586,9 @@ class Graph:
             while len(graph.vertices) > 0:
 
                 # Choose root vertex as vertex with smallest number of edges
-                rootVertex = None
+                rootVertex = graph.vertices[0]
                 for vertex in graph.vertices:
-                    if rootVertex is None:
-                        rootVertex = vertex
-                    elif len(graph.edges[vertex]) < len(graph.edges[rootVertex]):
+                    if len(graph.edges[vertex]) < len(graph.edges[rootVertex]):
                         rootVertex = vertex
 
                 # Get all cycles involving the root vertex

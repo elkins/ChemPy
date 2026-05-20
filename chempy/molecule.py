@@ -36,7 +36,7 @@ describe the corresponding atom or bond.
 """
 
 import warnings
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Tuple, Union, cast
 
 from chempy import element as elements
 from chempy._cython_compat import cython
@@ -654,9 +654,10 @@ class Molecule(Graph):
         # Count the hydrogen atoms on each non-hydrogen atom and set the
         # `implicitHydrogens` attribute accordingly
         hydrogens: List[Atom] = []
-        for atom in self.vertices:
+        for v in self.vertices:
+            atom = cast(Atom, v)
             if atom.isHydrogen():
-                neighbor = list(self.edges[atom].keys())[0]
+                neighbor = cast(Atom, list(self.edges[atom].keys())[0])
                 neighbor.implicitHydrogens += 1
                 hydrogens.append(atom)
 
@@ -679,7 +680,8 @@ class Molecule(Graph):
 
         # Create new hydrogen atoms for each implicit hydrogen
         hydrogens: List[Tuple[Atom, Atom, Bond]] = []
-        for atom in self.vertices:
+        for v in self.vertices:
+            atom = cast(Atom, v)
             while atom.implicitHydrogens > 0:
                 H = Atom(element="H")
                 bond = Bond(order="S")
@@ -708,7 +710,8 @@ class Molecule(Graph):
         to ensure they are correct (i.e. accurately describe their local bond
         environment) and complete (i.e. are as detailed as possible).
         """
-        for atom in self.vertices:
+        for v in self.vertices:
+            atom = cast(Atom, v)
             atom.atomType = getAtomType(atom, self.edges[atom])
 
     def clearLabeledAtoms(self):
@@ -743,10 +746,9 @@ class Molecule(Graph):
         and the values the atoms themselves. If two or more atoms have the
         same label, the value is converted to a list of these atoms.
         """
-        from typing import cast
-
         labeled: Dict[str, List[Atom]] = {}
-        for atom in cast(List[Atom], list(self.vertices)):
+        for v in self.vertices:
+            atom = cast(Atom, v)
             if atom.label != "":
                 if atom.label in labeled:
                     labeled[atom.label].append(atom)
@@ -1042,8 +1044,6 @@ class Molecule(Graph):
         Skips the first line (assuming it's a label) unless `withLabel` is
         ``False``.
         """
-        from typing import cast
-
         atoms_mol, bonds_mol = fromAdjacencyList(adjlist, False, True, withLabel)
         self.vertices = cast(List[Vertex], atoms_mol)
         self.edges = cast(Dict[Vertex, Dict[Vertex, Edge]], bonds_mol)
@@ -1107,8 +1107,8 @@ class Molecule(Graph):
         # between different runs
         self.sortAtoms()
 
-        atoms = self.vertices
-        bonds = self.edges
+        atoms = cast(List[Atom], self.vertices)
+        bonds = cast(Dict[Atom, Dict[Atom, Bond]], self.edges)
 
         obmol = openbabel.OBMol()
         for atom in atoms:
@@ -1159,10 +1159,12 @@ class Molecule(Graph):
 
         # True if all bonds are double bonds (e.g. O=C=O)
         allDoubleBonds: bool = True
-        for atom1 in self.edges:
+        for v1 in self.edges:
+            atom1 = cast(Atom, v1)
             if atom1.implicitHydrogens > 0:
                 allDoubleBonds = False
-            for bond in self.edges[atom1].values():
+            for e in self.edges[atom1].values():
+                bond = cast(Bond, e)
                 if not bond.isDouble():
                     allDoubleBonds = False
         if allDoubleBonds:
@@ -1172,8 +1174,9 @@ class Molecule(Graph):
         # This test requires explicit hydrogen atoms
         implicitH: bool = self.implicitHydrogens
         self.makeHydrogensExplicit()
-        for atom in self.vertices:
-            bonds: List[Bond] = list(self.edges[atom].values())
+        for v in self.vertices:
+            atom = cast(Atom, v)
+            bonds: List[Bond] = cast(List[Bond], list(self.edges[atom].values()))
             if len(bonds) == 1:
                 continue  # ok, next atom
             if len(bonds) > 2:
@@ -1201,9 +1204,11 @@ class Molecule(Graph):
         are considered to be internal rotors.
         """
         count: int = 0
-        for atom1 in self.edges:
-            for atom2 in self.edges[atom1]:
-                bond = self.edges[atom1][atom2]
+        for v1 in self.edges:
+            atom1 = cast(Atom, v1)
+            for v2 in self.edges[atom1]:
+                atom2 = cast(Atom, v2)
+                bond = cast(Bond, self.edges[atom1][atom2])
                 if (
                     self.vertices.index(atom1) < self.vertices.index(atom2)
                     and bond.isSingle()
@@ -1314,7 +1319,7 @@ class Molecule(Graph):
         """
         Return the symmetry number centered at `bond` in the structure.
         """
-        bond: Bond = self.edges[atom1][atom2]
+        bond: Bond = cast(Bond, self.edges[atom1][atom2])
         symmetryNumber: int = 1
         if bond.isSingle() or bond.isDouble() or bond.isTriple():
             if atom1.equivalent(atom2):
@@ -1430,9 +1435,12 @@ class Molecule(Graph):
 
         # List all double bonds in the structure
         doubleBonds: List[Tuple[Atom, Atom]] = []
-        for atom1 in self.edges:
-            for atom2 in self.edges[atom1]:
-                if self.edges[atom1][atom2].isDouble() and self.vertices.index(atom1) < self.vertices.index(atom2):
+        for v1 in self.edges:
+            atom1 = cast(Atom, v1)
+            for v2 in self.edges[atom1]:
+                atom2 = cast(Atom, v2)
+                bond = cast(Bond, self.edges[atom1][atom2])
+                if bond.isDouble() and self.vertices.index(atom1) < self.vertices.index(atom2):
                     doubleBonds.append((atom1, atom2))
 
         # Search for adjacent double bonds
@@ -1472,8 +1480,9 @@ class Molecule(Graph):
             # Find terminal atoms in axis
             # Terminal atoms labelled T:  T=C=C=C=T
             axis: List[Atom] = []
-            for bond in bonds:
-                axis.extend(bond)
+            for atom1, atom2 in bonds:
+                axis.append(atom1)
+                axis.append(atom2)
             terminalAtoms: List[Atom] = []
             for atom in axis:
                 if axis.count(atom) == 1:
@@ -1691,14 +1700,16 @@ class Molecule(Graph):
 
         # Find all delocalization paths
         paths: List[List[Union[Atom, Bond]]] = []
-        for atom2 in self.edges[atom1]:
-            bond12 = self.edges[atom1][atom2]
+        for v2 in self.edges[atom1]:
+            atom2 = cast(Atom, v2)
+            bond12 = cast(Bond, self.edges[atom1][atom2])
             # Vinyl bond must be capable of gaining an order
             if bond12.order in ["S", "D"]:
                 atom2Bonds = self.getBonds(atom2)
-                for atom3 in atom2Bonds:
-                    bond23 = atom2Bonds[atom3]
+                for v3 in atom2Bonds:
+                    atom3 = cast(Atom, v3)
+                    bond23 = cast(Bond, atom2Bonds[atom3])
                     # Allyl bond must be capable of losing an order without breaking
                     if atom1 is not atom3 and bond23.order in ["D", "T"]:
-                        paths.append([atom1, atom2, atom3, bond12, bond23])
+                        paths.append([cast(Union[Atom, Bond], atom1), atom2, atom3, bond12, bond23])
         return paths
