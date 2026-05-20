@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ master ]
 
+permissions:
+  contents: read
+  actions: read
+
 jobs:
   test-and-type:
     runs-on: macos-latest
