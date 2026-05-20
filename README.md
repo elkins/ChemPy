@@ -28,6 +28,22 @@ Run tests with:
 cargo test
 ```
 
+## Python Comparison (Legacy)
+The original Python implementation is preserved in the `python/` directory for behavioral and performance comparison.
+
+To run the original Python tests:
+```bash
+cd python
+pip install -e .
+pytest unittest/
+```
+
+To run original Python benchmarks:
+```bash
+cd python
+pytest unittest/benchmarksTest.py --benchmark-only
+```
+
 ## License
 ChemPy is licensed under the MIT License - see [LICENSE](LICENSE) for details.
 
