@@ -245,8 +245,6 @@ class Graph:
                     )
                 else:
                     other.addEdge(vertex1, vertex2, self.edges[vertex1][vertex2])
-        from typing import cast
-
         return cast("Graph", other)
 
     def merge(self, other):
