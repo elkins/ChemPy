@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>13. chempy.reaction — Chemical Reactions &#8212; ChemPy Toolkit 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="12. chempy.species — Chemical Species" href="species.html" /> 
+  </head><body>
+    <div class="header">
+         <img src="_static/chempy_logo.png" alt="ChemPy logo" />
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="species.html" title="12. chempy.species — Chemical Species"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Home</a> |&nbsp;</li>
+        <li><a href="contents.html">Documentation</a> &raquo;</li>
+
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">13. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.reaction</span></code> — Chemical Reactions</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-chempy.reaction">
+<span id="chempy-reaction-chemical-reactions"></span><h1><span class="section-number">13. </span><a class="reference internal" href="#module-chempy.reaction" title="chempy.reaction"><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.reaction</span></code></a> — Chemical Reactions<a class="headerlink" href="#module-chempy.reaction" title="Link to this heading">¶</a></h1>
+<p>This module contains classes and functions for working with chemical reactions.</p>
+<p>From the <a class="reference external" href="http://dx.doi.org/10.1351/goldbook">IUPAC Compendium of Chemical Terminology</a>, a chemical reaction is “a process that
+results in the interconversion of chemical species”.</p>
+<p>In ChemPy, a chemical reaction is called a Reaction object and is represented in
+memory as an instance of the <a class="reference internal" href="#chempy.reaction.Reaction" title="chempy.reaction.Reaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reaction</span></code></a> class.</p>
+<section id="reaction-objects">
+<h2><span class="section-number">13.1. </span>Reaction Objects<a class="headerlink" href="#reaction-objects" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.reaction.</span></span><span class="sig-name descname"><span class="pre">Reaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reactants</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="species.html#chempy.species.Species" title="chempy.species.Species"><span class="pre">Species</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">products</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="species.html#chempy.species.Species" title="chempy.species.Species"><span class="pre">Species</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kinetics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="kinetics.html#chempy.kinetics.KineticsModel" title="chempy.kinetics.KineticsModel"><span class="pre">KineticsModel</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reversible</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transitionState</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TransitionState</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thirdBody</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction" title="Link to this definition">¶</a></dt>
+<dd><p>A chemical reaction.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>index</cite></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>A unique nonnegative integer index</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>reactants</cite></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></p></td>
+<td><p>The reactant species (as <code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code> objects)</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>products</cite></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></p></td>
+<td><p>The product species (as <code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code> objects)</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>kinetics</cite></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">KineticsModel</span></code></p></td>
+<td><p>The kinetics model to use for the reaction</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>reversible</cite></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the reaction is reversible, <code class="docutils literal notranslate"><span class="pre">False</span></code> if not</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>transitionState</cite></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TransitionState</span></code></p></td>
+<td><p>The transition state</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>thirdBody</cite></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if the reaction kinetics imply a third body,
+<code class="docutils literal notranslate"><span class="pre">False</span></code> if not</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.calculateEckartTunnelingCorrection">
+<span class="sig-name descname"><span class="pre">calculateEckartTunnelingCorrection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction.calculateEckartTunnelingCorrection" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate and return the value of the Eckart tunneling correction for
+the reaction with corresponding transition state <cite>TS</cite> at the list of
+temperatures <cite>Tlist</cite> in K. The Eckart formula is</p>
+<div class="math notranslate nohighlight">
+\[\kappa(T) = e^{\beta \Delta V_1} \int_0^\infty\
+\left[ 1 - \frac{\cosh (2 \pi a - 2 \pi b) + \cosh (2 \pi d)}{\cosh (2 \pi a + 2 \pi b) \
++ \cosh (2 \pi d)} \right]\
+e^{- \beta E} \ d(\beta E)\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[2 \pi a = \frac{2 \sqrt{\alpha_1 \xi}}{\alpha_1^{-1/2} + \alpha_2^{-1/2}}\]</div>
+<div class="math notranslate nohighlight">
+\[2 \pi b = \frac{2 \sqrt{| (\xi - 1) \alpha_1 + \alpha_2|}}{\alpha_1^{-1/2} + \alpha_2^{-1/2}}\]</div>
+<div class="math notranslate nohighlight">
+\[2 \pi d = 2 \sqrt{| \alpha_1 \alpha_2 - 4 \pi^2 / 16|}\]</div>
+<div class="math notranslate nohighlight">
+\[\alpha_1 = 2 \pi \frac{\Delta V_1}{h | \nu_\mathrm{TS} |}\]</div>
+<div class="math notranslate nohighlight">
+\[\alpha_2 = 2 \pi \frac{\Delta V_2}{h | \nu_\mathrm{TS} |}\]</div>
+<div class="math notranslate nohighlight">
+\[\xi = \frac{E}{\Delta V_1}\]</div>
+<p><span class="math notranslate nohighlight">\(\Delta V_1\)</span> and <span class="math notranslate nohighlight">\(\Delta V_2\)</span> are the thermal energy
+difference between the transition state and the reactants and products,
+respectively; <span class="math notranslate nohighlight">\(\nu_\mathrm{TS}\)</span> is the negative frequency,
+<span class="math notranslate nohighlight">\(h\)</span> is the Planck constant, <span class="math notranslate nohighlight">\(k_\mathrm{B}\)</span> is the
+Boltzmann constant, and <span class="math notranslate nohighlight">\(T\)</span> is the absolute temperature. If
+product data is not available, then it is assumed that
+<span class="math notranslate nohighlight">\(\alpha_2 \approx \alpha_1\)</span>.
+The Eckart correction requires information about the reactants as well
+as the transition state. For best results, information about the
+products should also be given. (The former is called the symmetric
+Eckart correction, the latter the asymmetric Eckart correction.) This
+extra information allows the Eckart correction to generally give a
+better result than the Wignet correction.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.calculateTSTRateCoefficient">
+<span class="sig-name descname"><span class="pre">calculateTSTRateCoefficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tunneling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction.calculateTSTRateCoefficient" title="Link to this definition">¶</a></dt>
+<dd><p>Evaluate the forward rate coefficient for the reaction with
+corresponding transition state <cite>TS</cite> at temperature <cite>T</cite> in K using
+(canonical) transition state theory. The TST equation is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}k(T) = \\kappa(T) \\frac{k_\\mathrm{B} T}{h} \\
+\\frac{Q^\\ddagger(T)}{Q^\\mathrm{A}(T) Q^\\mathrm{B}(T)} \\
+\exp \\left( -\\frac{E_0}{k_\\mathrm{B} T} \\right)\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(Q^\\ddagger\)</span> is the partition function of the transition state,
+<span class="math notranslate nohighlight">\(Q^\\mathrm{A}\)</span> and <span class="math notranslate nohighlight">\(Q^\\mathrm{B}\)</span> are the partition function
+of the reactants, <span class="math notranslate nohighlight">\(E_0\)</span> is the ground-state energy difference from
+the transition state to the reactants, <span class="math notranslate nohighlight">\(T\)</span> is the absolute temperature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.calculateWignerTunnelingCorrection">
+<span class="sig-name descname"><span class="pre">calculateWignerTunnelingCorrection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction.calculateWignerTunnelingCorrection" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate and return the value of the Wigner tunneling correction for
+the reaction with corresponding transition state <cite>TS</cite> at the list of
+temperatures <cite>Tlist</cite> in K. The Wigner formula is</p>
+<div class="math notranslate nohighlight">
+\[\kappa(T) = 1 + \frac{1}{24} \left( \frac{h | \nu_\mathrm{TS} |}{ k_\mathrm{B} T} \right)^2\]</div>
+<p>where <span class="math notranslate nohighlight">\(h\)</span> is the Planck constant, <span class="math notranslate nohighlight">\(\nu_\mathrm{TS}\)</span> is the
+negative frequency, <span class="math notranslate nohighlight">\(k_\mathrm{B}\)</span> is the Boltzmann constant, and
+<span class="math notranslate nohighlight">\(T\)</span> is the absolute temperature.
+The Wigner correction only requires information about the transition
+state, not the reactants or products, but is also generally less
+accurate than the Eckart correction.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.generateReverseRateCoefficient">
+<span class="sig-name descname"><span class="pre">generateReverseRateCoefficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Tlist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction.generateReverseRateCoefficient" title="Link to this definition">¶</a></dt>
+<dd><p>Generate and return a rate coefficient model for the reverse reaction
+using a supplied set of temperatures <cite>Tlist</cite>. Currently this only
+works if the <cite>kinetics</cite> attribute is an <code class="xref py py-class docutils literal notranslate"><span class="pre">ArrheniusModel</span></code> object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.getEnthalpiesOfReaction">
+<span class="sig-name descname"><span class="pre">getEnthalpiesOfReaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Tlist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction.getEnthalpiesOfReaction" title="Link to this definition">¶</a></dt>
+<dd><p>Return the enthalpies of reaction in J/mol evaluated at temperatures
+<cite>Tlist</cite> in K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.getEnthalpyOfReaction">
+<span class="sig-name descname"><span class="pre">getEnthalpyOfReaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction.getEnthalpyOfReaction" title="Link to this definition">¶</a></dt>
+<dd><p>Return the enthalpy of reaction in J/mol evaluated at temperature
+<cite>T</cite> in K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.getEntropiesOfReaction">
+<span class="sig-name descname"><span class="pre">getEntropiesOfReaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Tlist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction.getEntropiesOfReaction" title="Link to this definition">¶</a></dt>
+<dd><p>Return the entropies of reaction in J/mol*K evaluated at temperatures
+<cite>Tlist</cite> in K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.getEntropyOfReaction">
+<span class="sig-name descname"><span class="pre">getEntropyOfReaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction.getEntropyOfReaction" title="Link to this definition">¶</a></dt>
+<dd><p>Return the entropy of reaction in J/mol*K evaluated at temperature <cite>T</cite>
+in K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.getEquilibriumConstant">
+<span class="sig-name descname"><span class="pre">getEquilibriumConstant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Kc'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction.getEquilibriumConstant" title="Link to this definition">¶</a></dt>
+<dd><p>Return the equilibrium constant for the reaction at the specified
+temperature <cite>T</cite> in K. The <cite>type</cite> parameter lets you specify the
+quantities used in the equilibrium constant: <code class="docutils literal notranslate"><span class="pre">Ka</span></code> for activities,
+<code class="docutils literal notranslate"><span class="pre">Kc</span></code> for concentrations (default), or <code class="docutils literal notranslate"><span class="pre">Kp</span></code> for pressures. Note that
+this function currently assumes an ideal gas mixture.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.getEquilibriumConstants">
+<span class="sig-name descname"><span class="pre">getEquilibriumConstants</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Tlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Kc'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction.getEquilibriumConstants" title="Link to this definition">¶</a></dt>
+<dd><p>Return the equilibrium constants for the reaction at the specified
+temperatures <cite>Tlist</cite> in K. The <cite>type</cite> parameter lets you specify the
+quantities used in the equilibrium constant: <code class="docutils literal notranslate"><span class="pre">Ka</span></code> for activities,
+<code class="docutils literal notranslate"><span class="pre">Kc</span></code> for concentrations (default), or <code class="docutils literal notranslate"><span class="pre">Kp</span></code> for pressures. Note that
+this function currently assumes an ideal gas mixture.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.getFreeEnergiesOfReaction">
+<span class="sig-name descname"><span class="pre">getFreeEnergiesOfReaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Tlist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction.getFreeEnergiesOfReaction" title="Link to this definition">¶</a></dt>
+<dd><p>Return the Gibbs free energies of reaction in J/mol evaluated at
+temperatures <cite>Tlist</cite> in K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.getFreeEnergyOfReaction">
+<span class="sig-name descname"><span class="pre">getFreeEnergyOfReaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction.getFreeEnergyOfReaction" title="Link to this definition">¶</a></dt>
+<dd><p>Return the Gibbs free energy of reaction in J/mol evaluated at
+temperature <cite>T</cite> in K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.getRate">
+<span class="sig-name descname"><span class="pre">getRate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalConc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction.getRate" title="Link to this definition">¶</a></dt>
+<dd><p>Return the net rate of reaction at temperature <cite>T</cite> and pressure <cite>P</cite>. The
+parameter <cite>conc</cite> is a map with species as keys and concentrations as
+values. A reactant not found in the <cite>conc</cite> map is treated as having zero
+concentration.</p>
+<p>If passed a <cite>totalConc</cite>, it won’t bother recalculating it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.getStoichiometricCoefficient">
+<span class="sig-name descname"><span class="pre">getStoichiometricCoefficient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.reaction.Reaction.getStoichiometricCoefficient" title="Link to this definition">¶</a></dt>
+<dd><p>Return the stoichiometric coefficient of species <cite>spec</cite> in the reaction.
+The stoichiometric coefficient is increased by one for each time <cite>spec</cite>
+appears as a product and decreased by one for each time <cite>spec</cite> appears
+as a reactant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.reaction.Reaction.hasTemplate">
+<span class="sig-name descname"><span class="pre">hasTemplate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reactants</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="species.html#chempy.species.Species" title="chempy.species.Species"><span class="pre">Species</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">products</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="species.html#chempy.species.Species" title="chempy.species.Species"><span class="pre">Species</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#chempy.reaction.Reaction.hasTemplate" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the reaction matches the template of <cite>reactants</cite>
+and <cite>products</cite>, which are both lists of <code class="xref py py-class docutils literal notranslate"><span class="pre">Species</span></code> objects, or
+<code class="docutils literal notranslate"><span class="pre">False</span></code> if not.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="contents.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">13. <code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.reaction</span></code> — Chemical Reactions</a><ul>
+<li><a class="reference internal" href="#reaction-objects">13.1. Reaction Objects</a><ul>
+<li><a class="reference internal" href="#chempy.reaction.Reaction"><code class="docutils literal notranslate"><span class="pre">Reaction</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.calculateEckartTunnelingCorrection"><code class="docutils literal notranslate"><span class="pre">Reaction.calculateEckartTunnelingCorrection()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.calculateTSTRateCoefficient"><code class="docutils literal notranslate"><span class="pre">Reaction.calculateTSTRateCoefficient()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.calculateWignerTunnelingCorrection"><code class="docutils literal notranslate"><span class="pre">Reaction.calculateWignerTunnelingCorrection()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.generateReverseRateCoefficient"><code class="docutils literal notranslate"><span class="pre">Reaction.generateReverseRateCoefficient()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.getEnthalpiesOfReaction"><code class="docutils literal notranslate"><span class="pre">Reaction.getEnthalpiesOfReaction()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.getEnthalpyOfReaction"><code class="docutils literal notranslate"><span class="pre">Reaction.getEnthalpyOfReaction()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.getEntropiesOfReaction"><code class="docutils literal notranslate"><span class="pre">Reaction.getEntropiesOfReaction()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.getEntropyOfReaction"><code class="docutils literal notranslate"><span class="pre">Reaction.getEntropyOfReaction()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.getEquilibriumConstant"><code class="docutils literal notranslate"><span class="pre">Reaction.getEquilibriumConstant()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.getEquilibriumConstants"><code class="docutils literal notranslate"><span class="pre">Reaction.getEquilibriumConstants()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.getFreeEnergiesOfReaction"><code class="docutils literal notranslate"><span class="pre">Reaction.getFreeEnergiesOfReaction()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.getFreeEnergyOfReaction"><code class="docutils literal notranslate"><span class="pre">Reaction.getFreeEnergyOfReaction()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.getRate"><code class="docutils literal notranslate"><span class="pre">Reaction.getRate()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.getStoichiometricCoefficient"><code class="docutils literal notranslate"><span class="pre">Reaction.getStoichiometricCoefficient()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.reaction.Reaction.hasTemplate"><code class="docutils literal notranslate"><span class="pre">Reaction.hasTemplate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="species.html"
+                          title="previous chapter"><span class="section-number">12. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.species</span></code> — Chemical Species</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/reaction.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="species.html" title="12. chempy.species — Chemical Species"
+             >previous</a> |</li>
+        <li><a href="index.html">Home</a> |&nbsp;</li>
+        <li><a href="contents.html">Documentation</a> &raquo;</li>
+
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">13. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.reaction</span></code> — Chemical Reactions</a></li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Joshua W. Allen.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>10. chempy.molecule — Structure and Properties of Molecules &#8212; ChemPy Toolkit 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="11. chempy.pattern — Molecular Substructure Pattern Matching" href="pattern.html" />
+    <link rel="prev" title="9. chempy.graph — Graph Data Type" href="graph.html" /> 
+  </head><body>
+    <div class="header">
+         <img src="_static/chempy_logo.png" alt="ChemPy logo" />
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pattern.html" title="11. chempy.pattern — Molecular Substructure Pattern Matching"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="graph.html" title="9. chempy.graph — Graph Data Type"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Home</a> |&nbsp;</li>
+        <li><a href="contents.html">Documentation</a> &raquo;</li>
+
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">10. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.molecule</span></code> — Structure and Properties of Molecules</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-chempy.molecule">
+<span id="chempy-molecule-structure-and-properties-of-molecules"></span><h1><span class="section-number">10. </span><a class="reference internal" href="#module-chempy.molecule" title="chempy.molecule"><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.molecule</span></code></a> — Structure and Properties of Molecules<a class="headerlink" href="#module-chempy.molecule" title="Link to this heading">¶</a></h1>
+<p>This module provides classes and methods for working with molecules and
+molecular configurations. A molecule is represented internally using a graph
+data type, where atoms correspond to vertices and bonds correspond to edges.
+Both <a class="reference internal" href="#chempy.molecule.Atom" title="chempy.molecule.Atom"><code class="xref py py-class docutils literal notranslate"><span class="pre">Atom</span></code></a> and <a class="reference internal" href="#chempy.molecule.Bond" title="chempy.molecule.Bond"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bond</span></code></a> objects store semantic information that
+describe the corresponding atom or bond.</p>
+<section id="atom-objects">
+<h2><span class="section-number">10.1. </span>Atom Objects<a class="headerlink" href="#atom-objects" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.molecule.Atom">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.molecule.</span></span><span class="sig-name descname"><span class="pre">Atom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radicalElectrons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spinMultiplicity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implicitHydrogens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Atom" title="Link to this definition">¶</a></dt>
+<dd><p>An atom. The attributes are:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>element</cite></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></p></td>
+<td><p>The chemical element the atom represents</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>radicalElectrons</cite></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">short</span></code></p></td>
+<td><p>The number of radical electrons</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>spinMultiplicity</cite></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">short</span></code></p></td>
+<td><p>The spin multiplicity of the atom</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>implicitHydrogens</cite></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">short</span></code></p></td>
+<td><p>The number of implicit hydrogen atoms bonded to this atom</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>charge</cite></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">short</span></code></p></td>
+<td><p>The formal charge of the atom</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>label</cite></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>A string label that can be used to tag individual atoms</p></td>
+</tr>
+</tbody>
+</table>
+<p>Additionally, the <code class="docutils literal notranslate"><span class="pre">mass</span></code>, <code class="docutils literal notranslate"><span class="pre">number</span></code>, and <code class="docutils literal notranslate"><span class="pre">symbol</span></code> attributes of the
+atom’s element can be read (but not written) directly from the atom object,
+e.g. <code class="docutils literal notranslate"><span class="pre">atom.symbol</span></code> instead of <code class="docutils literal notranslate"><span class="pre">atom.element.symbol</span></code>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Atom.applyAction">
+<span class="sig-name descname"><span class="pre">applyAction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Atom.applyAction" title="Link to this definition">¶</a></dt>
+<dd><p>Update the atom pattern as a result of applying <cite>action</cite>, a tuple
+containing the name of the reaction recipe action along with any
+required parameters. The available actions can be found
+<a class="reference internal" href="pattern.html#reaction-recipe-actions"><span class="std std-ref">here</span></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Atom.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Atom.copy" title="Link to this definition">¶</a></dt>
+<dd><p>Generate a deep copy of the current atom. Modifying the
+attributes of the copy will not affect the original.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Atom.decrementRadical">
+<span class="sig-name descname"><span class="pre">decrementRadical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Atom.decrementRadical" title="Link to this definition">¶</a></dt>
+<dd><p>Update the atom pattern as a result of applying a LOSE_RADICAL action,
+where <cite>radical</cite> specifies the number of radical electrons to remove.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Atom.equivalent">
+<span class="sig-name descname"><span class="pre">equivalent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Atom.equivalent" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <cite>other</cite> is indistinguishable from this atom, or
+<code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. If <cite>other</cite> is an <a class="reference internal" href="#chempy.molecule.Atom" title="chempy.molecule.Atom"><code class="xref py py-class docutils literal notranslate"><span class="pre">Atom</span></code></a> object, then all
+attributes except <cite>label</cite> must match exactly. If <cite>other</cite> is an
+<code class="xref py py-class docutils literal notranslate"><span class="pre">AtomPattern</span></code> object, then the atom must match any of the
+combinations in the atom pattern.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Atom.incrementRadical">
+<span class="sig-name descname"><span class="pre">incrementRadical</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Atom.incrementRadical" title="Link to this definition">¶</a></dt>
+<dd><p>Update the atom pattern as a result of applying a GAIN_RADICAL action,
+where <cite>radical</cite> specifies the number of radical electrons to add.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Atom.isCarbon">
+<span class="sig-name descname"><span class="pre">isCarbon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Atom.isCarbon" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the atom represents a carbon atom or <code class="docutils literal notranslate"><span class="pre">False</span></code> if
+not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Atom.isHydrogen">
+<span class="sig-name descname"><span class="pre">isHydrogen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Atom.isHydrogen" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the atom represents a hydrogen atom or <code class="docutils literal notranslate"><span class="pre">False</span></code> if
+not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Atom.isNonHydrogen">
+<span class="sig-name descname"><span class="pre">isNonHydrogen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Atom.isNonHydrogen" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the atom does not represent a hydrogen atom or
+<code class="docutils literal notranslate"><span class="pre">False</span></code> if not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Atom.isOxygen">
+<span class="sig-name descname"><span class="pre">isOxygen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Atom.isOxygen" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the atom represents an oxygen atom or <code class="docutils literal notranslate"><span class="pre">False</span></code> if
+not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Atom.isSpecificCaseOf">
+<span class="sig-name descname"><span class="pre">isSpecificCaseOf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Atom.isSpecificCaseOf" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <cite>self</cite> is a specific case of <cite>other</cite>, or <code class="docutils literal notranslate"><span class="pre">False</span></code>
+otherwise. If <cite>other</cite> is an <a class="reference internal" href="#chempy.molecule.Atom" title="chempy.molecule.Atom"><code class="xref py py-class docutils literal notranslate"><span class="pre">Atom</span></code></a> object, then this is the same
+as the <a class="reference internal" href="#chempy.molecule.Atom.equivalent" title="chempy.molecule.Atom.equivalent"><code class="xref py py-meth docutils literal notranslate"><span class="pre">equivalent()</span></code></a> method. If <cite>other</cite> is an
+<code class="xref py py-class docutils literal notranslate"><span class="pre">AtomPattern</span></code> object, then the atom must match or be more
+specific than any of the combinations in the atom pattern.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="bond-objects">
+<h2><span class="section-number">10.2. </span>Bond Objects<a class="headerlink" href="#bond-objects" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.molecule.Bond">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.molecule.</span></span><span class="sig-name descname"><span class="pre">Bond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Bond" title="Link to this definition">¶</a></dt>
+<dd><p>A chemical bond. The attributes are:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>order</cite></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>The bond order (<code class="docutils literal notranslate"><span class="pre">S</span></code> = single,
+<code class="docutils literal notranslate"><span class="pre">D</span></code> = double,
+<code class="docutils literal notranslate"><span class="pre">T</span></code> = triple,
+<code class="docutils literal notranslate"><span class="pre">B</span></code> = benzene)</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Bond.applyAction">
+<span class="sig-name descname"><span class="pre">applyAction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Bond.applyAction" title="Link to this definition">¶</a></dt>
+<dd><p>Update the bond as a result of applying <cite>action</cite>, a tuple
+containing the name of the reaction recipe action along with any
+required parameters. The available actions can be found
+<a class="reference internal" href="pattern.html#reaction-recipe-actions"><span class="std std-ref">here</span></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Bond.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Bond.copy" title="Link to this definition">¶</a></dt>
+<dd><p>Generate a deep copy of the current bond. Modifying the
+attributes of the copy will not affect the original.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Bond.decrementOrder">
+<span class="sig-name descname"><span class="pre">decrementOrder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Bond.decrementOrder" title="Link to this definition">¶</a></dt>
+<dd><p>Update the bond as a result of applying a CHANGE_BOND action to
+decrease the order by one.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Bond.equivalent">
+<span class="sig-name descname"><span class="pre">equivalent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Bond.equivalent" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <cite>other</cite> is indistinguishable from this bond, or
+<code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. <cite>other</cite> can be either a <a class="reference internal" href="#chempy.molecule.Bond" title="chempy.molecule.Bond"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bond</span></code></a> or a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">BondPattern</span></code> object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Bond.incrementOrder">
+<span class="sig-name descname"><span class="pre">incrementOrder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Bond.incrementOrder" title="Link to this definition">¶</a></dt>
+<dd><p>Update the bond as a result of applying a CHANGE_BOND action to
+increase the order by one.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Bond.isBenzene">
+<span class="sig-name descname"><span class="pre">isBenzene</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Bond.isBenzene" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the bond represents a benzene bond or <code class="docutils literal notranslate"><span class="pre">False</span></code> if
+not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Bond.isDouble">
+<span class="sig-name descname"><span class="pre">isDouble</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Bond.isDouble" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the bond represents a double bond or <code class="docutils literal notranslate"><span class="pre">False</span></code> if
+not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Bond.isSingle">
+<span class="sig-name descname"><span class="pre">isSingle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Bond.isSingle" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the bond represents a single bond or <code class="docutils literal notranslate"><span class="pre">False</span></code> if
+not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Bond.isSpecificCaseOf">
+<span class="sig-name descname"><span class="pre">isSpecificCaseOf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Bond.isSpecificCaseOf" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <cite>self</cite> is a specific case of <cite>other</cite>, or <code class="docutils literal notranslate"><span class="pre">False</span></code>
+otherwise. <cite>other</cite> can be either a <a class="reference internal" href="#chempy.molecule.Bond" title="chempy.molecule.Bond"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bond</span></code></a> or a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">BondPattern</span></code> object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Bond.isTriple">
+<span class="sig-name descname"><span class="pre">isTriple</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Bond.isTriple" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the bond represents a triple bond or <code class="docutils literal notranslate"><span class="pre">False</span></code> if
+not.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="molecule-objects">
+<h2><span class="section-number">10.3. </span>Molecule Objects<a class="headerlink" href="#molecule-objects" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.molecule.</span></span><span class="sig-name descname"><span class="pre">Molecule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bonds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SMILES</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">InChI</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implicitH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule" title="Link to this definition">¶</a></dt>
+<dd><p>A representation of a molecular structure using a graph data type, extending
+the <code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code> class. The <cite>atoms</cite> and <cite>bonds</cite> attributes are aliases
+for the <cite>vertices</cite> and <cite>edges</cite> attributes. Corresponding alias methods have
+also been provided.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.addAtom">
+<span class="sig-name descname"><span class="pre">addAtom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.addAtom" title="Link to this definition">¶</a></dt>
+<dd><p>Add an <cite>atom</cite> to the graph. The atom is initialized with no bonds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.addBond">
+<span class="sig-name descname"><span class="pre">addBond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bond</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.addBond" title="Link to this definition">¶</a></dt>
+<dd><p>Add a <cite>bond</cite> to the graph as an edge connecting the two atoms <cite>atom1</cite>
+and <cite>atom2</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.calculateAtomSymmetryNumber">
+<span class="sig-name descname"><span class="pre">calculateAtomSymmetryNumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.calculateAtomSymmetryNumber" title="Link to this definition">¶</a></dt>
+<dd><p>Return the symmetry number centered at <cite>atom</cite> in the structure. The
+<cite>atom</cite> of interest must not be in a cycle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.calculateAxisSymmetryNumber">
+<span class="sig-name descname"><span class="pre">calculateAxisSymmetryNumber</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.calculateAxisSymmetryNumber" title="Link to this definition">¶</a></dt>
+<dd><p>Get the axis symmetry number correction. The “axis” refers to a series
+of two or more cumulated double bonds (e.g. C=C=C, etc.). Corrections
+for single C=C bonds are handled in getBondSymmetryNumber().</p>
+<p>Each axis (C=C=C) has the potential to double the symmetry number.
+If an end has 0 or 1 groups (eg. =C=CJJ or =C=C-R) then it cannot
+alter the axis symmetry and is disregarded:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">A</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">..</span>        <span class="n">A</span><span class="o">-</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">-</span><span class="n">A</span>
+
+  <span class="n">s</span><span class="o">=</span><span class="mi">1</span>                <span class="n">s</span><span class="o">=</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p>If an end has 2 groups that are different then it breaks the symmetry
+and the symmetry for that axis is 1, no matter what’s at the other end:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">A</span>\               <span class="n">A</span>\         <span class="o">/</span><span class="n">A</span>
+  <span class="n">T</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">-</span><span class="n">A</span>      <span class="n">T</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">T</span>
+<span class="n">B</span><span class="o">/</span>               <span class="n">A</span><span class="o">/</span>         \<span class="n">B</span>
+      <span class="n">s</span><span class="o">=</span><span class="mi">1</span>             <span class="n">s</span><span class="o">=</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p>If you have one or more ends with 2 groups, and neither end breaks the
+symmetry, then you have an axis symmetry number of 2:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">A</span>\         <span class="o">/</span><span class="n">B</span>      <span class="n">A</span>\
+  <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">C</span>          <span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="o">-</span><span class="n">B</span>
+<span class="n">A</span><span class="o">/</span>         \<span class="n">B</span>      <span class="n">A</span><span class="o">/</span>
+      <span class="n">s</span><span class="o">=</span><span class="mi">2</span>                <span class="n">s</span><span class="o">=</span><span class="mi">2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.calculateBondSymmetryNumber">
+<span class="sig-name descname"><span class="pre">calculateBondSymmetryNumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.calculateBondSymmetryNumber" title="Link to this definition">¶</a></dt>
+<dd><p>Return the symmetry number centered at <cite>bond</cite> in the structure.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.calculateCyclicSymmetryNumber">
+<span class="sig-name descname"><span class="pre">calculateCyclicSymmetryNumber</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.calculateCyclicSymmetryNumber" title="Link to this definition">¶</a></dt>
+<dd><p>Get the symmetry number correction for cyclic regions of a molecule.
+For complicated fused rings the smallest set of smallest rings is used.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.calculateSymmetryNumber">
+<span class="sig-name descname"><span class="pre">calculateSymmetryNumber</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.calculateSymmetryNumber" title="Link to this definition">¶</a></dt>
+<dd><p>Return the symmetry number for the structure. The symmetry number
+includes both external and internal modes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.clearLabeledAtoms">
+<span class="sig-name descname"><span class="pre">clearLabeledAtoms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.clearLabeledAtoms" title="Link to this definition">¶</a></dt>
+<dd><p>Remove the labels from all atoms in the molecule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.containsLabeledAtom">
+<span class="sig-name descname"><span class="pre">containsLabeledAtom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.containsLabeledAtom" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if the molecule contains an atom with the label
+<cite>label</cite> and <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.copy" title="Link to this definition">¶</a></dt>
+<dd><p>Create a copy of the current graph. If <cite>deep</cite> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, a deep copy
+is made: copies of the vertices and edges are used in the new graph.
+If <cite>deep</cite> is <code class="docutils literal notranslate"><span class="pre">False</span></code> or not specified, a shallow copy is made: the
+original vertices and edges are used in the new graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.countInternalRotors">
+<span class="sig-name descname"><span class="pre">countInternalRotors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.countInternalRotors" title="Link to this definition">¶</a></dt>
+<dd><p>Determine the number of internal rotors in the structure. Any single
+bond not in a cycle and between two atoms that also have other bonds
+are considered to be internal rotors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.draw" title="Link to this definition">¶</a></dt>
+<dd><p>Generate a pictorial representation of the chemical graph using the
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">ext.molecule_draw</span></code> module. Use <cite>path</cite> to specify the file to save
+the generated image to; the image type is automatically determined by
+extension. Valid extensions are <code class="docutils literal notranslate"><span class="pre">.png</span></code>, <code class="docutils literal notranslate"><span class="pre">.svg</span></code>, <code class="docutils literal notranslate"><span class="pre">.pdf</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">.ps</span></code>; of these, the first is a raster format and the remainder are
+vector formats.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.findAllDelocalizationPaths">
+<span class="sig-name descname"><span class="pre">findAllDelocalizationPaths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.findAllDelocalizationPaths" title="Link to this definition">¶</a></dt>
+<dd><p>Find all the delocalization paths allyl to the radical center indicated
+by <cite>atom1</cite>. Used to generate resonance isomers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.findIsomorphism">
+<span class="sig-name descname"><span class="pre">findIsomorphism</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialMap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.findIsomorphism" title="Link to this definition">¶</a></dt>
+<dd><p>Returns <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if <cite>other</cite> is isomorphic and <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code>
+otherwise, and the matching mapping. The <cite>initialMap</cite> attribute can be
+used to specify a required mapping from <cite>self</cite> to <cite>other</cite> (i.e. the
+atoms of <cite>self</cite> are the keys, while the atoms of <cite>other</cite> are the
+values). The returned mapping also uses the atoms of <cite>self</cite> for the keys
+and the atoms of <cite>other</cite> for the values. The <cite>other</cite> parameter must
+be a <a class="reference internal" href="#chempy.molecule.Molecule" title="chempy.molecule.Molecule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molecule</span></code></a> object, or a <code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code> is raised.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.findSubgraphIsomorphisms">
+<span class="sig-name descname"><span class="pre">findSubgraphIsomorphisms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialMap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.findSubgraphIsomorphisms" title="Link to this definition">¶</a></dt>
+<dd><p>Returns <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if <cite>other</cite> is subgraph isomorphic and <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code>
+otherwise. Also returns the lists all of valid mappings. The
+<cite>initialMap</cite> attribute can be used to specify a required mapping from
+<cite>self</cite> to <cite>other</cite> (i.e. the atoms of <cite>self</cite> are the keys, while the
+atoms of <cite>other</cite> are the values). The returned mappings also use the
+atoms of <cite>self</cite> for the keys and the atoms of <cite>other</cite> for the values.
+The <cite>other</cite> parameter must be a <code class="xref py py-class docutils literal notranslate"><span class="pre">MoleculePattern</span></code> object, or a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code> is raised.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.fromAdjacencyList">
+<span class="sig-name descname"><span class="pre">fromAdjacencyList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withLabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.fromAdjacencyList" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a string adjacency list <cite>adjlist</cite> to a molecular structure.
+Skips the first line (assuming it’s a label) unless <cite>withLabel</cite> is
+<code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.fromCML">
+<span class="sig-name descname"><span class="pre">fromCML</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmlstr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implicitH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.fromCML" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a string of CML <cite>cmlstr</cite> to a molecular structure. Uses
+OpenBabel 3.x API to perform the conversion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.fromInChI">
+<span class="sig-name descname"><span class="pre">fromInChI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inchistr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implicitH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.fromInChI" title="Link to this definition">¶</a></dt>
+<dd><p>Convert an InChI string <cite>inchistr</cite> to a molecular structure. Uses
+OpenBabel 3.x API to perform the conversion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.fromOBMol">
+<span class="sig-name descname"><span class="pre">fromOBMol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obmol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implicitH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.fromOBMol" title="Link to this definition">¶</a></dt>
+<dd><p>Convert an OpenBabel OBMol object <cite>obmol</cite> to a molecular structure. Uses
+<a class="reference external" href="http://openbabel.org/">OpenBabel</a> to perform the conversion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.fromSMILES">
+<span class="sig-name descname"><span class="pre">fromSMILES</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smilesstr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implicitH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.fromSMILES" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a SMILES string <cite>smilesstr</cite> to a molecular structure. Uses
+OpenBabel 3.x API to perform the conversion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.getAdjacentResonanceIsomers">
+<span class="sig-name descname"><span class="pre">getAdjacentResonanceIsomers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.getAdjacentResonanceIsomers" title="Link to this definition">¶</a></dt>
+<dd><p>Generate all of the resonance isomers formed by one allyl radical shift.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.getBond">
+<span class="sig-name descname"><span class="pre">getBond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.getBond" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the bond connecting atoms <cite>atom1</cite> and <cite>atom2</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.getBonds">
+<span class="sig-name descname"><span class="pre">getBonds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.getBonds" title="Link to this definition">¶</a></dt>
+<dd><p>Return a list of the bonds involving the specified <cite>atom</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.getFormula">
+<span class="sig-name descname"><span class="pre">getFormula</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.getFormula" title="Link to this definition">¶</a></dt>
+<dd><p>Return the molecular formula for the molecule.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.getLabeledAtom">
+<span class="sig-name descname"><span class="pre">getLabeledAtom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.getLabeledAtom" title="Link to this definition">¶</a></dt>
+<dd><p>Return the atoms in the molecule that are labeled.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.getLabeledAtoms">
+<span class="sig-name descname"><span class="pre">getLabeledAtoms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.getLabeledAtoms" title="Link to this definition">¶</a></dt>
+<dd><p>Return the labeled atoms as a <code class="docutils literal notranslate"><span class="pre">dict</span></code> with the keys being the labels
+and the values the atoms themselves. If two or more atoms have the
+same label, the value is converted to a list of these atoms.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.getMolecularWeight">
+<span class="sig-name descname"><span class="pre">getMolecularWeight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.getMolecularWeight" title="Link to this definition">¶</a></dt>
+<dd><p>Return the molecular weight of the molecule in kg/mol.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.hasAtom">
+<span class="sig-name descname"><span class="pre">hasAtom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.hasAtom" title="Link to this definition">¶</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if <cite>atom</cite> is an atom in the graph, or <code class="docutils literal notranslate"><span class="pre">False</span></code> if
+not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.hasBond">
+<span class="sig-name descname"><span class="pre">hasBond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.hasBond" title="Link to this definition">¶</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if atoms <cite>atom1</cite> and <cite>atom2</cite> are connected
+by an bond, or <code class="docutils literal notranslate"><span class="pre">False</span></code> if not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.isAtomInCycle">
+<span class="sig-name descname"><span class="pre">isAtomInCycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.isAtomInCycle" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if <cite>atom</cite> is in one or more cycles in the structure,
+and <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code> if not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.isBondInCycle">
+<span class="sig-name descname"><span class="pre">isBondInCycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.isBondInCycle" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if the bond between atoms <cite>atom1</cite> and <cite>atom2</cite>
+is in one or more cycles in the graph, or <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code> if not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.isIsomorphic">
+<span class="sig-name descname"><span class="pre">isIsomorphic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialMap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.isIsomorphic" title="Link to this definition">¶</a></dt>
+<dd><p>Returns <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if two graphs are isomorphic and <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code>
+otherwise. The <cite>initialMap</cite> attribute can be used to specify a required
+mapping from <cite>self</cite> to <cite>other</cite> (i.e. the atoms of <cite>self</cite> are the keys,
+while the atoms of <cite>other</cite> are the values). The <cite>other</cite> parameter must
+be a <a class="reference internal" href="#chempy.molecule.Molecule" title="chempy.molecule.Molecule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molecule</span></code></a> object, or a <code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code> is raised.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.isLinear">
+<span class="sig-name descname"><span class="pre">isLinear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.isLinear" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if the structure is linear and <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code>
+otherwise.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.isSubgraphIsomorphic">
+<span class="sig-name descname"><span class="pre">isSubgraphIsomorphic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialMap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.isSubgraphIsomorphic" title="Link to this definition">¶</a></dt>
+<dd><p>Returns <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if <cite>other</cite> is subgraph isomorphic and <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code>
+otherwise. The <cite>initialMap</cite> attribute can be used to specify a required
+mapping from <cite>self</cite> to <cite>other</cite> (i.e. the atoms of <cite>self</cite> are the keys,
+while the atoms of <cite>other</cite> are the values). The <cite>other</cite> parameter must
+be a <code class="xref py py-class docutils literal notranslate"><span class="pre">MoleculePattern</span></code> object, or a <code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code> is raised.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.makeHydrogensExplicit">
+<span class="sig-name descname"><span class="pre">makeHydrogensExplicit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.makeHydrogensExplicit" title="Link to this definition">¶</a></dt>
+<dd><p>Convert all implicitly stored hydrogen atoms to be stored explicitly.
+An explicit hydrogen atom is stored as its own atom in the graph, with
+a single bond to the heavy atom it is attached to. This consumes more
+memory, but may be required for certain tasks (e.g. subgraph matching).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.makeHydrogensImplicit">
+<span class="sig-name descname"><span class="pre">makeHydrogensImplicit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.makeHydrogensImplicit" title="Link to this definition">¶</a></dt>
+<dd><p>Convert all explicitly stored hydrogen atoms to be stored implicitly.
+An implicit hydrogen atom is stored on the heavy atom it is connected
+to as a single integer counter. This is done to save memory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.merge">
+<span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.merge" title="Link to this definition">¶</a></dt>
+<dd><p>Merge two molecules so as to store them in a single <a class="reference internal" href="#chempy.molecule.Molecule" title="chempy.molecule.Molecule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molecule</span></code></a>
+object. The merged <a class="reference internal" href="#chempy.molecule.Molecule" title="chempy.molecule.Molecule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molecule</span></code></a> object is returned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.removeAtom">
+<span class="sig-name descname"><span class="pre">removeAtom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.removeAtom" title="Link to this definition">¶</a></dt>
+<dd><p>Remove <cite>atom</cite> and all bonds associated with it from the graph. Does
+not remove atoms that no longer have any bonds as a result of this
+removal.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.removeBond">
+<span class="sig-name descname"><span class="pre">removeBond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.removeBond" title="Link to this definition">¶</a></dt>
+<dd><p>Remove the bond between atoms <cite>atom1</cite> and <cite>atom2</cite> from the graph.
+Does not remove atoms that no longer have any bonds as a result of
+this removal.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.sortAtoms">
+<span class="sig-name descname"><span class="pre">sortAtoms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.sortAtoms" title="Link to this definition">¶</a></dt>
+<dd><p>Sort the atoms in the graph. This can make certain operations, e.g.
+the isomorphism functions, much more efficient.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.split">
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.split" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a single <a class="reference internal" href="#chempy.molecule.Molecule" title="chempy.molecule.Molecule"><code class="xref py py-class docutils literal notranslate"><span class="pre">Molecule</span></code></a> object containing two or more
+unconnected molecules into separate class:<cite>Molecule</cite> objects.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.toAdjacencyList">
+<span class="sig-name descname"><span class="pre">toAdjacencyList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.toAdjacencyList" title="Link to this definition">¶</a></dt>
+<dd><p>Convert the molecular structure to a string adjacency list.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.toCML">
+<span class="sig-name descname"><span class="pre">toCML</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.toCML" title="Link to this definition">¶</a></dt>
+<dd><p>Convert the molecular structure to CML. Uses
+<a class="reference external" href="http://openbabel.org/">OpenBabel</a> to perform the conversion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.toInChI">
+<span class="sig-name descname"><span class="pre">toInChI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.toInChI" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a molecular structure to an InChI string. Uses
+<a class="reference external" href="http://openbabel.org/">OpenBabel</a> to perform the conversion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.toOBMol">
+<span class="sig-name descname"><span class="pre">toOBMol</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.toOBMol" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a molecular structure to an OpenBabel OBMol object. Uses
+<a class="reference external" href="http://openbabel.org/">OpenBabel</a> to perform the conversion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.toSMILES">
+<span class="sig-name descname"><span class="pre">toSMILES</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.toSMILES" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a molecular structure to an SMILES string. Uses
+<a class="reference external" href="http://openbabel.org/">OpenBabel</a> to perform the conversion.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.molecule.Molecule.updateAtomTypes">
+<span class="sig-name descname"><span class="pre">updateAtomTypes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.molecule.Molecule.updateAtomTypes" title="Link to this definition">¶</a></dt>
+<dd><p>Iterate through the atoms in the structure, checking their atom types
+to ensure they are correct (i.e. accurately describe their local bond
+environment) and complete (i.e. are as detailed as possible).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="contents.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">10. <code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.molecule</span></code> — Structure and Properties of Molecules</a><ul>
+<li><a class="reference internal" href="#atom-objects">10.1. Atom Objects</a><ul>
+<li><a class="reference internal" href="#chempy.molecule.Atom"><code class="docutils literal notranslate"><span class="pre">Atom</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.molecule.Atom.applyAction"><code class="docutils literal notranslate"><span class="pre">Atom.applyAction()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Atom.copy"><code class="docutils literal notranslate"><span class="pre">Atom.copy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Atom.decrementRadical"><code class="docutils literal notranslate"><span class="pre">Atom.decrementRadical()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Atom.equivalent"><code class="docutils literal notranslate"><span class="pre">Atom.equivalent()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Atom.incrementRadical"><code class="docutils literal notranslate"><span class="pre">Atom.incrementRadical()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Atom.isCarbon"><code class="docutils literal notranslate"><span class="pre">Atom.isCarbon()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Atom.isHydrogen"><code class="docutils literal notranslate"><span class="pre">Atom.isHydrogen()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Atom.isNonHydrogen"><code class="docutils literal notranslate"><span class="pre">Atom.isNonHydrogen()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Atom.isOxygen"><code class="docutils literal notranslate"><span class="pre">Atom.isOxygen()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Atom.isSpecificCaseOf"><code class="docutils literal notranslate"><span class="pre">Atom.isSpecificCaseOf()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bond-objects">10.2. Bond Objects</a><ul>
+<li><a class="reference internal" href="#chempy.molecule.Bond"><code class="docutils literal notranslate"><span class="pre">Bond</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.molecule.Bond.applyAction"><code class="docutils literal notranslate"><span class="pre">Bond.applyAction()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Bond.copy"><code class="docutils literal notranslate"><span class="pre">Bond.copy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Bond.decrementOrder"><code class="docutils literal notranslate"><span class="pre">Bond.decrementOrder()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Bond.equivalent"><code class="docutils literal notranslate"><span class="pre">Bond.equivalent()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Bond.incrementOrder"><code class="docutils literal notranslate"><span class="pre">Bond.incrementOrder()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Bond.isBenzene"><code class="docutils literal notranslate"><span class="pre">Bond.isBenzene()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Bond.isDouble"><code class="docutils literal notranslate"><span class="pre">Bond.isDouble()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Bond.isSingle"><code class="docutils literal notranslate"><span class="pre">Bond.isSingle()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Bond.isSpecificCaseOf"><code class="docutils literal notranslate"><span class="pre">Bond.isSpecificCaseOf()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Bond.isTriple"><code class="docutils literal notranslate"><span class="pre">Bond.isTriple()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#molecule-objects">10.3. Molecule Objects</a><ul>
+<li><a class="reference internal" href="#chempy.molecule.Molecule"><code class="docutils literal notranslate"><span class="pre">Molecule</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.addAtom"><code class="docutils literal notranslate"><span class="pre">Molecule.addAtom()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.addBond"><code class="docutils literal notranslate"><span class="pre">Molecule.addBond()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.calculateAtomSymmetryNumber"><code class="docutils literal notranslate"><span class="pre">Molecule.calculateAtomSymmetryNumber()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.calculateAxisSymmetryNumber"><code class="docutils literal notranslate"><span class="pre">Molecule.calculateAxisSymmetryNumber()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.calculateBondSymmetryNumber"><code class="docutils literal notranslate"><span class="pre">Molecule.calculateBondSymmetryNumber()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.calculateCyclicSymmetryNumber"><code class="docutils literal notranslate"><span class="pre">Molecule.calculateCyclicSymmetryNumber()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.calculateSymmetryNumber"><code class="docutils literal notranslate"><span class="pre">Molecule.calculateSymmetryNumber()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.clearLabeledAtoms"><code class="docutils literal notranslate"><span class="pre">Molecule.clearLabeledAtoms()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.containsLabeledAtom"><code class="docutils literal notranslate"><span class="pre">Molecule.containsLabeledAtom()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.copy"><code class="docutils literal notranslate"><span class="pre">Molecule.copy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.countInternalRotors"><code class="docutils literal notranslate"><span class="pre">Molecule.countInternalRotors()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.draw"><code class="docutils literal notranslate"><span class="pre">Molecule.draw()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.findAllDelocalizationPaths"><code class="docutils literal notranslate"><span class="pre">Molecule.findAllDelocalizationPaths()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.findIsomorphism"><code class="docutils literal notranslate"><span class="pre">Molecule.findIsomorphism()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.findSubgraphIsomorphisms"><code class="docutils literal notranslate"><span class="pre">Molecule.findSubgraphIsomorphisms()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.fromAdjacencyList"><code class="docutils literal notranslate"><span class="pre">Molecule.fromAdjacencyList()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.fromCML"><code class="docutils literal notranslate"><span class="pre">Molecule.fromCML()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.fromInChI"><code class="docutils literal notranslate"><span class="pre">Molecule.fromInChI()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.fromOBMol"><code class="docutils literal notranslate"><span class="pre">Molecule.fromOBMol()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.fromSMILES"><code class="docutils literal notranslate"><span class="pre">Molecule.fromSMILES()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.getAdjacentResonanceIsomers"><code class="docutils literal notranslate"><span class="pre">Molecule.getAdjacentResonanceIsomers()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.getBond"><code class="docutils literal notranslate"><span class="pre">Molecule.getBond()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.getBonds"><code class="docutils literal notranslate"><span class="pre">Molecule.getBonds()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.getFormula"><code class="docutils literal notranslate"><span class="pre">Molecule.getFormula()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.getLabeledAtom"><code class="docutils literal notranslate"><span class="pre">Molecule.getLabeledAtom()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.getLabeledAtoms"><code class="docutils literal notranslate"><span class="pre">Molecule.getLabeledAtoms()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.getMolecularWeight"><code class="docutils literal notranslate"><span class="pre">Molecule.getMolecularWeight()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.hasAtom"><code class="docutils literal notranslate"><span class="pre">Molecule.hasAtom()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.hasBond"><code class="docutils literal notranslate"><span class="pre">Molecule.hasBond()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.isAtomInCycle"><code class="docutils literal notranslate"><span class="pre">Molecule.isAtomInCycle()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.isBondInCycle"><code class="docutils literal notranslate"><span class="pre">Molecule.isBondInCycle()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.isIsomorphic"><code class="docutils literal notranslate"><span class="pre">Molecule.isIsomorphic()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.isLinear"><code class="docutils literal notranslate"><span class="pre">Molecule.isLinear()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.isSubgraphIsomorphic"><code class="docutils literal notranslate"><span class="pre">Molecule.isSubgraphIsomorphic()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.makeHydrogensExplicit"><code class="docutils literal notranslate"><span class="pre">Molecule.makeHydrogensExplicit()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.makeHydrogensImplicit"><code class="docutils literal notranslate"><span class="pre">Molecule.makeHydrogensImplicit()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.merge"><code class="docutils literal notranslate"><span class="pre">Molecule.merge()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.removeAtom"><code class="docutils literal notranslate"><span class="pre">Molecule.removeAtom()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.removeBond"><code class="docutils literal notranslate"><span class="pre">Molecule.removeBond()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.sortAtoms"><code class="docutils literal notranslate"><span class="pre">Molecule.sortAtoms()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.split"><code class="docutils literal notranslate"><span class="pre">Molecule.split()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.toAdjacencyList"><code class="docutils literal notranslate"><span class="pre">Molecule.toAdjacencyList()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.toCML"><code class="docutils literal notranslate"><span class="pre">Molecule.toCML()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.toInChI"><code class="docutils literal notranslate"><span class="pre">Molecule.toInChI()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.toOBMol"><code class="docutils literal notranslate"><span class="pre">Molecule.toOBMol()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.toSMILES"><code class="docutils literal notranslate"><span class="pre">Molecule.toSMILES()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.molecule.Molecule.updateAtomTypes"><code class="docutils literal notranslate"><span class="pre">Molecule.updateAtomTypes()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="graph.html"
+                          title="previous chapter"><span class="section-number">9. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.graph</span></code> — Graph Data Type</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="pattern.html"
+                          title="next chapter"><span class="section-number">11. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.pattern</span></code> — Molecular Substructure Pattern Matching</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/molecule.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pattern.html" title="11. chempy.pattern — Molecular Substructure Pattern Matching"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="graph.html" title="9. chempy.graph — Graph Data Type"
+             >previous</a> |</li>
+        <li><a href="index.html">Home</a> |&nbsp;</li>
+        <li><a href="contents.html">Documentation</a> &raquo;</li>
+
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">10. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.molecule</span></code> — Structure and Properties of Molecules</a></li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Joshua W. Allen.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

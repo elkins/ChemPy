@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>7. chempy.states — Molecular Degrees of Freedom &#8212; ChemPy Toolkit 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="8. chempy.kinetics — Kinetics Models" href="kinetics.html" />
+    <link rel="prev" title="6. chempy.thermo — Thermodynamics Models" href="thermo.html" /> 
+  </head><body>
+    <div class="header">
+         <img src="_static/chempy_logo.png" alt="ChemPy logo" />
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="kinetics.html" title="8. chempy.kinetics — Kinetics Models"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="thermo.html" title="6. chempy.thermo — Thermodynamics Models"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Home</a> |&nbsp;</li>
+        <li><a href="contents.html">Documentation</a> &raquo;</li>
+
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.states</span></code> — Molecular Degrees of Freedom</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-chempy.states">
+<span id="chempy-states-molecular-degrees-of-freedom"></span><h1><span class="section-number">7. </span><a class="reference internal" href="#module-chempy.states" title="chempy.states"><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.states</span></code></a> — Molecular Degrees of Freedom<a class="headerlink" href="#module-chempy.states" title="Link to this heading">¶</a></h1>
+<p>Each atom in a molecular configuration has three spatial dimensions in which it
+can move. Thus, a molecular configuration consisting of <span class="math notranslate nohighlight">\(N\)</span> atoms has
+<span class="math notranslate nohighlight">\(3N\)</span> degrees of freedom. We can distinguish between those modes that
+involve movement of atoms relative to the molecular center of mass (called
+<em>internal</em> modes) and those that do not (called <em>external</em> modes). Of the
+external degrees of freedom, three involve translation of the entire molecular
+configuration, while either three (for a nonlinear molecule) or two (for a
+linear molecule) involve rotation of the entire molecular configuration
+around the center of mass. The remaining <span class="math notranslate nohighlight">\(3N-6\)</span> (nonlinear) or
+<span class="math notranslate nohighlight">\(3N-5\)</span> (linear) degrees of freedom are the internal modes, and can be
+divided into those that involve vibrational motions (symmetric and asymmetric
+stretches, bends, etc.) and those that involve torsional rotation around single
+bonds between nonterminal heavy atoms.</p>
+<p>The mathematical description of these degrees of freedom falls under the purview
+of quantum chemistry, and involves the solution of the time-independent
+Schrodinger equation:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\hat{H} \psi = E \psi\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(\hat{H}\)</span> is the Hamiltonian, <span class="math notranslate nohighlight">\(\hat{H}\)</span> is the wavefunction,
+and <span class="math notranslate nohighlight">\(E\)</span> is the energy. The exact form of the Hamiltonian varies depending
+on the degree of freedom you are modeling. Since this is a quantum system, the
+energy can only take on discrete values. Once the allowed energy levels are
+known, the partition function <span class="math notranslate nohighlight">\(Q(\beta)\)</span> can be computed using the
+summation</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[Q(\beta) = \sum_i g_i e^{-\beta E_i}\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(g_i\)</span> is the degeneracy of energy level <span class="math notranslate nohighlight">\(i\)</span> (i.e. the number
+of energy states at that energy level) and
+<span class="math notranslate nohighlight">\(\beta \equiv (k_\mathrm{B} T)^{-1}\)</span>.</p>
+<p>The partition function is an immensely useful quantity, as all sorts of
+thermodynamic parameters can be evaluated using the partition function:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[A = - k_\mathrm{B} T \ln Q\]</div>
+<div class="math notranslate nohighlight">
+\[U = - \frac{\partial \ln Q}{\partial \beta}\]</div>
+<div class="math notranslate nohighlight">
+\[S = \frac{\partial}{\partial T} \left( k_\mathrm{B} T \ln Q \right)\]</div>
+<div class="math notranslate nohighlight">
+\[C_\mathrm{v} = \frac{1}{k_\mathrm{B} T} \frac{\partial^2 \ln Q}{\partial \beta^2}\]</div>
+</div></blockquote>
+<p>Above, <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(U\)</span>, <span class="math notranslate nohighlight">\(S\)</span>, and <span class="math notranslate nohighlight">\(C_\mathrm{v}\)</span> are the
+Helmholtz free energy, internal energy, entropy, and constant-volume heat
+capacity, respectively.</p>
+<p>The partition function for a molecular configuration is the product of the
+partition functions for each invidual degree of freedom:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[Q = Q_\mathrm{trans} Q_\mathrm{rot} Q_\mathrm{vib} Q_\mathrm{tors} Q_\mathrm{elec}\]</div>
+</div></blockquote>
+<p>This means that the contributions to each thermodynamic quantity from each
+molecular degree of freedom are additive.</p>
+<p>This module contains models for various molecular degrees of freedom. All such
+models derive from the <a class="reference internal" href="#chempy.states.Mode" title="chempy.states.Mode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mode</span></code></a> base class. A list of molecular degrees of
+freedom can be stored in a <a class="reference internal" href="#chempy.states.StatesModel" title="chempy.states.StatesModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">StatesModel</span></code></a> object.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.states.StatesModel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.states.</span></span><span class="sig-name descname"><span class="pre">StatesModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spinMultiplicity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.StatesModel" title="Link to this definition">¶</a></dt>
+<dd><p>A set of molecular degrees of freedom data for a given molecule, comprising
+the results of a quantum chemistry calculation.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>modes</cite></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list</span></code></p></td>
+<td><p>A list of the degrees of freedom</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>spinMultiplicity</cite></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>The spin multiplicity of the molecule</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.StatesModel.getDensityOfStates">
+<span class="sig-name descname"><span class="pre">getDensityOfStates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Elist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.StatesModel.getDensityOfStates" title="Link to this definition">¶</a></dt>
+<dd><p>Return the value of the density of states in mol/J at the specified
+energies <cite>Elist</cite> in J/mol above the ground state. An active K-rotor is
+automatically included if there are no external rotational modes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.StatesModel.getDensityOfStatesILT">
+<span class="sig-name descname"><span class="pre">getDensityOfStatesILT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Elist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.StatesModel.getDensityOfStatesILT" title="Link to this definition">¶</a></dt>
+<dd><p>Return the value of the density of states in mol/J at the specified
+energies <cite>Elist</cite> in J/mol above the ground state, calculated by
+numerical inverse Laplace transform of the partition function using
+the method of steepest descents. This method is generally slower than
+direct density of states calculation, but is guaranteed to correspond
+with the partition function. The optional <cite>order</cite> attribute controls
+the order of the steepest descents approximation applied (1 = first,
+2 = second); the first-order approximation is slightly less accurate,
+smoother, and faster to calculate than the second-order approximation.
+This method is adapted from the discussion in Forst <a class="reference internal" href="#forst2003" id="id1"><span>[Forst2003]</span></a>.</p>
+<div role="list" class="citation-list">
+<div class="citation" id="forst2003" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">Forst2003</a><span class="fn-bracket">]</span></span>
+<p>W. Forst.
+<em>Unimolecular Reactions: A Concise Introduction.</em>
+Cambridge University Press (2003).
+<a class="reference external" href="http://www.cambridge.org/9780521529228">isbn:978-0-52-152922-8</a></p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.StatesModel.getEnthalpy">
+<span class="sig-name descname"><span class="pre">getEnthalpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.StatesModel.getEnthalpy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the enthalpy in J/mol at the specified temperatures <cite>Tlist</cite> in K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.StatesModel.getEntropy">
+<span class="sig-name descname"><span class="pre">getEntropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.StatesModel.getEntropy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the entropy in J/mol*K at the specified temperatures <cite>Tlist</cite> in
+K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.StatesModel.getHeatCapacity">
+<span class="sig-name descname"><span class="pre">getHeatCapacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.StatesModel.getHeatCapacity" title="Link to this definition">¶</a></dt>
+<dd><p>Return the constant-pressure heat capacity in J/mol*K at the specified
+temperatures <cite>Tlist</cite> in K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.StatesModel.getPartitionFunction">
+<span class="sig-name descname"><span class="pre">getPartitionFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.StatesModel.getPartitionFunction" title="Link to this definition">¶</a></dt>
+<dd><p>Return the the partition function at the specified temperatures
+<cite>Tlist</cite> in K. An active K-rotor is automatically included if there are
+no external rotational modes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.StatesModel.getSumOfStates">
+<span class="sig-name descname"><span class="pre">getSumOfStates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Elist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.StatesModel.getSumOfStates" title="Link to this definition">¶</a></dt>
+<dd><p>Return the value of the sum of states at the specified energies <cite>Elist</cite>
+in J/mol above the ground state. The sum of states is computed via
+numerical integration of the density of states.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.states.Mode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.states.</span></span><span class="sig-name descname"><span class="pre">Mode</span></span><a class="headerlink" href="#chempy.states.Mode" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<section id="external-degrees-of-freedom">
+<h2><span class="section-number">7.1. </span>External Degrees of Freedom<a class="headerlink" href="#external-degrees-of-freedom" title="Link to this heading">¶</a></h2>
+<section id="translation">
+<h3><span class="section-number">7.1.1. </span>Translation<a class="headerlink" href="#translation" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.states.Translation">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.states.</span></span><span class="sig-name descname"><span class="pre">Translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.Translation" title="Link to this definition">¶</a></dt>
+<dd><p>A representation of translational motion in three dimensions for an ideal
+gas. The <cite>mass</cite> attribute is the molar mass of the molecule in kg/mol. The
+quantities that depend on volume/pressure (partition function and entropy)
+are evaluated at a standard pressure of 1 bar.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.Translation.getDensityOfStates">
+<span class="sig-name descname"><span class="pre">getDensityOfStates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Elist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.Translation.getDensityOfStates" title="Link to this definition">¶</a></dt>
+<dd><p>Return the density of states at the specified energlies <cite>Elist</cite> in J/mol
+above the ground state. The formula is</p>
+<div class="math notranslate nohighlight">
+\[\rho(E) = \left( \frac{2 \pi m}{h^2} \right)^{3/2} \frac{E^{3/2}}{\Gamma(5/2)} \frac{1}{P}\]</div>
+<p>where <span class="math notranslate nohighlight">\(E\)</span> is energy, <span class="math notranslate nohighlight">\(m\)</span> is mass, <span class="math notranslate nohighlight">\(k_\mathrm{B}\)</span> is
+the Boltzmann constant, and <span class="math notranslate nohighlight">\(R\)</span> is the gas law constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.Translation.getEnthalpy">
+<span class="sig-name descname"><span class="pre">getEnthalpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.Translation.getEnthalpy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the contribution to the enthalpy due to translation in J/mol
+at the specified temperatures <cite>Tlist</cite> in K. The formula is</p>
+<div class="math notranslate nohighlight">
+\[\frac{H^\mathrm{trans}(T)}{RT} = \frac{3}{2}\]</div>
+<p>where <span class="math notranslate nohighlight">\(T\)</span> is temperature and <span class="math notranslate nohighlight">\(R\)</span> is the gas law constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.Translation.getEntropy">
+<span class="sig-name descname"><span class="pre">getEntropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.Translation.getEntropy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the contribution to the entropy due to translation in J/mol*K
+at the specified temperatures <cite>Tlist</cite> in K. The formula is</p>
+<div class="math notranslate nohighlight">
+\[\frac{S^\mathrm{trans}(T)}{R} = \ln q_\mathrm{trans}(T) + \frac{3}{2} + 1\]</div>
+<p>where <span class="math notranslate nohighlight">\(T\)</span> is temperature, <span class="math notranslate nohighlight">\(q_\mathrm{trans}\)</span> is the
+partition function, and <span class="math notranslate nohighlight">\(R\)</span> is the gas law constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.Translation.getHeatCapacity">
+<span class="sig-name descname"><span class="pre">getHeatCapacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.Translation.getHeatCapacity" title="Link to this definition">¶</a></dt>
+<dd><p>Return the contribution to the heat capacity due to translation in
+J/mol*K at the specified temperatures <cite>Tlist</cite> in K. The formula is</p>
+<div class="math notranslate nohighlight">
+\[\frac{C_\mathrm{v}^\mathrm{trans}(T)}{R} = \frac{3}{2}\]</div>
+<p>where <span class="math notranslate nohighlight">\(T\)</span> is temperature and <span class="math notranslate nohighlight">\(R\)</span> is the gas law constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.Translation.getPartitionFunction">
+<span class="sig-name descname"><span class="pre">getPartitionFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.Translation.getPartitionFunction" title="Link to this definition">¶</a></dt>
+<dd><p>Return the value of the partition function at the specified temperatures
+<cite>Tlist</cite> in K. The formula is</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[q_\mathrm{trans}(T) = \left( \frac{2 \pi m k_\mathrm{B} T}{h^2} \right)^{3/2} \
+\frac{k_\mathrm{B} T}{P}\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(T\)</span> is temperature, <span class="math notranslate nohighlight">\(V\)</span> is volume, <span class="math notranslate nohighlight">\(m\)</span> is mass,
+<span class="math notranslate nohighlight">\(d\)</span> is dimensionality, <span class="math notranslate nohighlight">\(k_\mathrm{B}\)</span> is the Boltzmann
+constant, and <span class="math notranslate nohighlight">\(h\)</span> is the Planck constant.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="rotation">
+<h3><span class="section-number">7.1.2. </span>Rotation<a class="headerlink" href="#rotation" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.states.RigidRotor">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.states.</span></span><span class="sig-name descname"><span class="pre">RigidRotor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inertia</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symmetry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.RigidRotor" title="Link to this definition">¶</a></dt>
+<dd><p>A rigid rotor approximation of (external) rotational modes. The <cite>linear</cite>
+attribute is <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if the associated molecule is linear, and
+<code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code> if nonlinear. For a linear molecule, <cite>inertia</cite> stores a
+list with one moment of inertia in kg*m^2. For a nonlinear molecule,
+<cite>frequencies</cite> stores a list of the three moments of inertia, even if two or
+three are equal, in kg*m^2. The symmetry number of the rotation is stored
+in the <cite>symmetry</cite> attribute.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.RigidRotor.getDensityOfStates">
+<span class="sig-name descname"><span class="pre">getDensityOfStates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Elist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.RigidRotor.getDensityOfStates" title="Link to this definition">¶</a></dt>
+<dd><p>Return the density of states at the specified energlies <cite>Elist</cite> in J/mol
+above the ground state in mol/J. The formula is</p>
+<div class="math notranslate nohighlight">
+\[\rho(E) = \frac{8 \pi^2 I}{\sigma h^2}\]</div>
+<p>for linear rotors and</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\rho(E) = \frac{\sqrt{\pi}}{\sigma} \left( \frac{8 \pi^2}{h^2} \right)^{3/2}\
+\sqrt{I_\mathrm{A} I_\mathrm{B} I_\mathrm{C}} \frac{E^{1/2}}{\frac{1}{2}!}\]</div>
+</div></blockquote>
+<p>for nonlinear rotors. Above, <span class="math notranslate nohighlight">\(E\)</span> is energy, <span class="math notranslate nohighlight">\(\sigma\)</span>
+is the symmetry number, <span class="math notranslate nohighlight">\(I\)</span> is the moment of inertia,
+<span class="math notranslate nohighlight">\(k_\mathrm{B}\)</span> is the Boltzmann constant, and <span class="math notranslate nohighlight">\(h\)</span> is the
+Planck constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.RigidRotor.getEnthalpy">
+<span class="sig-name descname"><span class="pre">getEnthalpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.RigidRotor.getEnthalpy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the contribution to the enthalpy due to rigid rotation in J/mol
+at the specified temperatures <cite>Tlist</cite> in K. The formula is</p>
+<div class="math notranslate nohighlight">
+\[\frac{H^\mathrm{rot}(T)}{RT} = 1\]</div>
+<p>for linear rotors and</p>
+<div class="math notranslate nohighlight">
+\[\frac{H^\mathrm{rot}(T)}{RT} = \frac{3}{2}\]</div>
+<p>for nonlinear rotors, where <span class="math notranslate nohighlight">\(T\)</span> is temperature and <span class="math notranslate nohighlight">\(R\)</span> is
+the gas law constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.RigidRotor.getEntropy">
+<span class="sig-name descname"><span class="pre">getEntropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.RigidRotor.getEntropy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the contribution to the entropy due to rigid rotation in J/mol*K
+at the specified temperatures <cite>Tlist</cite> in K. The formula is</p>
+<div class="math notranslate nohighlight">
+\[\frac{S^\mathrm{rot}(T)}{R} = \ln Q^\mathrm{rot} + 1\]</div>
+<p>for linear rotors and</p>
+<div class="math notranslate nohighlight">
+\[\frac{S^\mathrm{rot}(T)}{R} = \ln Q^\mathrm{rot} + \frac{3}{2}\]</div>
+<p>for nonlinear rotors, where <span class="math notranslate nohighlight">\(Q^\mathrm{rot}\)</span> is the partition
+function for a rigid rotor and <span class="math notranslate nohighlight">\(R\)</span> is the gas law constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.RigidRotor.getHeatCapacity">
+<span class="sig-name descname"><span class="pre">getHeatCapacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.RigidRotor.getHeatCapacity" title="Link to this definition">¶</a></dt>
+<dd><p>Return the contribution to the heat capacity due to rigid rotation
+in J/mol*K at the specified temperatures <cite>Tlist</cite> in K. The formula is</p>
+<div class="math notranslate nohighlight">
+\[\frac{C_\mathrm{v}^\mathrm{rot}(T)}{R} = 1\]</div>
+<p>if linear and</p>
+<div class="math notranslate nohighlight">
+\[\frac{C_\mathrm{v}^\mathrm{rot}(T)}{R} = \frac{3}{2}\]</div>
+<p>if nonlinear, where <span class="math notranslate nohighlight">\(T\)</span> is temperature and <span class="math notranslate nohighlight">\(R\)</span> is the gas
+law constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.RigidRotor.getPartitionFunction">
+<span class="sig-name descname"><span class="pre">getPartitionFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.RigidRotor.getPartitionFunction" title="Link to this definition">¶</a></dt>
+<dd><p>Return the value of the partition function at the specified temperatures
+<cite>Tlist</cite> in K. The formula is</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[q_\mathrm{rot}(T) = \frac{8 \pi^2 I k_\mathrm{B} T}{\sigma h^2} \
+\sqrt{I_\mathrm{A} I_\mathrm{B} I_\mathrm{C}}\]</div>
+</div></blockquote>
+<p>for linear rotors and</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[q_\mathrm{rot}(T) = \
+\frac{\sqrt{\pi}}{\sigma} \left( \frac{8 \pi^2 k_\mathrm{B} T}{h^2} \right)^{3/2}\
+\sqrt{I_\mathrm{A} I_\mathrm{B} I_\mathrm{C}}\]</div>
+</div></blockquote>
+<p>for nonlinear rotors.
+Above, <span class="math notranslate nohighlight">\(T\)</span> is temperature,
+<span class="math notranslate nohighlight">\(\sigma\)</span> is the symmetry
+number,
+<span class="math notranslate nohighlight">\(I\)</span> is the moment of inertia,
+<span class="math notranslate nohighlight">\(k_\mathrm{B}\)</span> is the Boltzmann constant,
+and <span class="math notranslate nohighlight">\(h\)</span> is the Planck constant.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="internal-degrees-of-freedom">
+<h2><span class="section-number">7.2. </span>Internal Degrees of Freedom<a class="headerlink" href="#internal-degrees-of-freedom" title="Link to this heading">¶</a></h2>
+<section id="vibration">
+<h3><span class="section-number">7.2.1. </span>Vibration<a class="headerlink" href="#vibration" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.states.HarmonicOscillator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.states.</span></span><span class="sig-name descname"><span class="pre">HarmonicOscillator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequencies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.HarmonicOscillator" title="Link to this definition">¶</a></dt>
+<dd><p>A representation of a set of vibrational modes as one-dimensional quantum
+harmonic oscillator. The oscillators are defined by their <cite>frequencies</cite> in
+cm^-1.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.HarmonicOscillator.getDensityOfStates">
+<span class="sig-name descname"><span class="pre">getDensityOfStates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Elist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.HarmonicOscillator.getDensityOfStates" title="Link to this definition">¶</a></dt>
+<dd><p>Return the density of states at the specified energies <cite>Elist</cite> in J/mol
+above the ground state. The Beyer-Swinehart method is used to
+efficiently convolve the vibrational density of states into the
+density of states of other modes. To be accurate, this requires a small
+(<span class="math notranslate nohighlight">\(1-10 \ \mathrm{cm^{-1}}\)</span> or so) energy spacing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.HarmonicOscillator.getEnthalpy">
+<span class="sig-name descname"><span class="pre">getEnthalpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.HarmonicOscillator.getEnthalpy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the contribution to the enthalpy due to vibration in J/mol at
+the specified temperatures <cite>Tlist</cite> in K. The formula is</p>
+<div class="math notranslate nohighlight">
+\[\frac{H^\mathrm{vib}(T)}{RT} = \sum_i \frac{\xi_i}{e^{\xi_i} - 1}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\xi_i \equiv h \nu_i / k_\mathrm{B} T\)</span>,
+<span class="math notranslate nohighlight">\(T\)</span> is temperature, <span class="math notranslate nohighlight">\(\nu_i\)</span> is the frequency of vibration
+<span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(k_\mathrm{B}\)</span> is the Boltzmann constant, <span class="math notranslate nohighlight">\(h\)</span>
+is the Planck constant, and <span class="math notranslate nohighlight">\(R\)</span> is the gas law constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.HarmonicOscillator.getEntropy">
+<span class="sig-name descname"><span class="pre">getEntropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.HarmonicOscillator.getEntropy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the contribution to the entropy due to vibration in J/mol*K at
+the specified temperatures <cite>Tlist</cite> in K. The formula is</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\frac{S^\mathrm{vib}(T)}{R} = \sum_i \left[ - \ln \left(1 - e^{-\xi_i} \right)\
++ \frac{\xi_i}{e^{\xi_i} - 1} \right]\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(\xi_i \equiv h \nu_i / k_\mathrm{B} T\)</span>,
+<span class="math notranslate nohighlight">\(T\)</span> is temperature, <span class="math notranslate nohighlight">\(\nu_i\)</span> is the frequency of vibration
+<span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(k_\mathrm{B}\)</span> is the Boltzmann constant, <span class="math notranslate nohighlight">\(h\)</span>
+is the Planck constant, and <span class="math notranslate nohighlight">\(R\)</span> is the gas law constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.HarmonicOscillator.getHeatCapacity">
+<span class="sig-name descname"><span class="pre">getHeatCapacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.HarmonicOscillator.getHeatCapacity" title="Link to this definition">¶</a></dt>
+<dd><p>Return the contribution to the heat capacity due to vibration
+in J/mol*K at the specified temperatures <cite>Tlist</cite> in K. The formula is</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\frac{C_\mathrm{v}^\mathrm{vib}(T)}{R} = \sum_i \xi_i^2\
+\frac{e^{\xi_i}}{\left( 1 - e^{\xi_i} \right)^2}\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(\xi_i \equiv h \nu_i / k_\mathrm{B} T\)</span>,
+<span class="math notranslate nohighlight">\(T\)</span> is temperature, <span class="math notranslate nohighlight">\(\nu_i\)</span> is the frequency of vibration
+<span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(k_\mathrm{B}\)</span> is the Boltzmann constant, <span class="math notranslate nohighlight">\(h\)</span>
+is the Planck constant, and <span class="math notranslate nohighlight">\(R\)</span> is the gas law constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.HarmonicOscillator.getPartitionFunction">
+<span class="sig-name descname"><span class="pre">getPartitionFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.HarmonicOscillator.getPartitionFunction" title="Link to this definition">¶</a></dt>
+<dd><p>Return the value of the partition function at the specified temperatures
+<cite>Tlist</cite> in K. The formula is</p>
+<div class="math notranslate nohighlight">
+\[q_\mathrm{vib}(T) = \prod_i \frac{1}{1 - e^{-\xi_i}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\xi_i \equiv h \nu_i / k_\mathrm{B} T\)</span>,
+<span class="math notranslate nohighlight">\(T\)</span> is temperature, <span class="math notranslate nohighlight">\(\nu_i\)</span> is the frequency of vibration
+<span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(k_\mathrm{B}\)</span> is the Boltzmann constant, <span class="math notranslate nohighlight">\(h\)</span>
+is the Planck constant, and <span class="math notranslate nohighlight">\(R\)</span> is the gas law constant. Note
+that we have chosen our zero of energy to be at the zero-point energy
+of the molecule, <em>not</em> the bottom of the potential well.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="torsion">
+<h3><span class="section-number">7.2.2. </span>Torsion<a class="headerlink" href="#torsion" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.states.HinderedRotor">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.states.</span></span><span class="sig-name descname"><span class="pre">HinderedRotor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inertia</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">barrier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symmetry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fourier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.HinderedRotor" title="Link to this definition">¶</a></dt>
+<dd><p>A one-dimensional hindered rotor using one of two potential functions:
+the the cosine potential function</p>
+<div class="math notranslate nohighlight">
+\[V(\phi) = \frac{1}{2} V_0 \left[1 - \cos \left( \sigma \phi \right) \right]\]</div>
+<p>where <span class="math notranslate nohighlight">\(V_0\)</span> is the height of the potential barrier and
+<span class="math notranslate nohighlight">\(\sigma\)</span> is the number of minima or maxima in one revolution of
+angle <span class="math notranslate nohighlight">\(\phi\)</span>, equivalent to the symmetry number of that rotor;
+or a Fourier series</p>
+<div class="math notranslate nohighlight">
+\[V(\phi) = A + \sum_{k=1}^C \left( a_k \cos k \phi + b_k \sin k \phi \right)\]</div>
+<p>For the cosine potential, the hindered rotor is described by the <cite>barrier</cite>
+height in J/mol. For the Fourier series potential, the potential is instead
+defined by a <span class="math notranslate nohighlight">\(C \times 2\)</span> array <cite>fourier</cite> containing the Fourier
+coefficients. Both forms require the reduced moment of <cite>inertia</cite> of the
+rotor in kg*m^2 and the <cite>symmetry</cite> number.
+If both sets of parameters are available, the Fourier series will be used,
+as it is more accurate. However, it is also significantly more
+computationally demanding.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.HinderedRotor.getDensityOfStates">
+<span class="sig-name descname"><span class="pre">getDensityOfStates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Elist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.HinderedRotor.getDensityOfStates" title="Link to this definition">¶</a></dt>
+<dd><p>Return the density of states at the specified energlies <cite>Elist</cite> in J/mol
+above the ground state. For the cosine potential, the formula is</p>
+<div class="math notranslate nohighlight">
+\[\rho(E) = \frac{2 q_\mathrm{1f}}{\pi^{3/2} V_0^{1/2}} \mathcal{K}(E / V_0) \hspace{20pt} E &lt; V_0\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\rho(E) = \frac{2 q_\mathrm{1f}}{\pi^{3/2} E^{1/2}} \mathcal{K}(V_0 / E) \hspace{20pt} E &gt; V_0\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[q_\mathrm{1f} = \frac{\pi^{1/2}}{\sigma} \left( \frac{8 \pi^2 I}{h^2} \right)^{1/2}\]</div>
+<p><span class="math notranslate nohighlight">\(E\)</span> is energy, <span class="math notranslate nohighlight">\(V_0\)</span> is barrier height, and
+<span class="math notranslate nohighlight">\(\mathcal{K}(x)\)</span> is the complete elliptic integral of the first
+kind. There is currently no functionality for using the Fourier series
+potential.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.HinderedRotor.getEnthalpy">
+<span class="sig-name descname"><span class="pre">getEnthalpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.HinderedRotor.getEnthalpy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the contribution to the heat capacity due to hindered rotation
+in J/mol at the specified temperatures <cite>Tlist</cite> in K. For the cosine
+potential, this is calculated numerically from the partition function.
+For the Fourier series potential, we solve the corresponding 1D
+Schrodinger equation to obtain the energy levels of the rotor and
+utilize the expression</p>
+<div class="math notranslate nohighlight">
+\[H^\mathrm{hind}(T) - H_0 = \frac{\sum_i E_i e^{-\beta E_i}}{\sum_i e^{-\beta E_i}}\]</div>
+<p>to obtain the enthalpy.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.HinderedRotor.getEntropy">
+<span class="sig-name descname"><span class="pre">getEntropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.HinderedRotor.getEntropy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the contribution to the heat capacity due to hindered rotation
+in J/mol*K at the specified temperatures <cite>Tlist</cite> in K. For the cosine
+potential, this is calculated numerically from the partition function.
+For the Fourier series potential, we solve the corresponding 1D
+Schrodinger equation to obtain the energy levels of the rotor and
+utilize the expression</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[S^\mathrm{hind}(T) = R \left( \ln q_\mathrm{hind}(T) + \frac{\sum_i E_i e^{-\beta E_i}}{RT\
+\sum_i e^{-\beta E_i}} \right)\]</div>
+</div></blockquote>
+<p>to obtain the entropy.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.HinderedRotor.getFrequency">
+<span class="sig-name descname"><span class="pre">getFrequency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.HinderedRotor.getFrequency" title="Link to this definition">¶</a></dt>
+<dd><p>Return the frequency of vibration corresponding to the limit of
+harmonic oscillation. The formula is</p>
+<div class="math notranslate nohighlight">
+\[\nu = \frac{\sigma}{2 \pi} \sqrt{\frac{V_0}{2 I}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\sigma\)</span> is the symmetry number, <span class="math notranslate nohighlight">\(V_0\)</span> the barrier
+height, and <span class="math notranslate nohighlight">\(I\)</span> the reduced moment of inertia of the rotor. The
+units of the returned frequency are cm^-1.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.HinderedRotor.getHeatCapacity">
+<span class="sig-name descname"><span class="pre">getHeatCapacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.HinderedRotor.getHeatCapacity" title="Link to this definition">¶</a></dt>
+<dd><p>Return the contribution to the heat capacity due to hindered rotation
+in J/mol*K at the specified temperatures <cite>Tlist</cite> in K.</p>
+<p>For the cosine potential, the formula is</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\frac{C_\mathrm{v}^\mathrm{hind}(T)}{R} = \
+\frac{C_\mathrm{v}^\mathrm{vib}(T)}{R} -\frac{1}{2} + \zeta^2\
+- \left[ \zeta \frac{I_1(\zeta)}{I_0(\zeta)} \right]^2\
+- \zeta \frac{I_1(\zeta)}{I_0(\zeta)}\]</div>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(\zeta \equiv V_0 / 2 k_\mathrm{B} T\)</span>,
+<span class="math notranslate nohighlight">\(T\)</span> is temperature, <span class="math notranslate nohighlight">\(V_0\)</span> is the barrier height,
+<span class="math notranslate nohighlight">\(k_\mathrm{B}\)</span> is the Boltzmann constant, and <span class="math notranslate nohighlight">\(R\)</span> is the
+gas law constant.</p>
+<p>For the Fourier series potential, we solve the corresponding 1D
+Schrodinger equation to obtain the energy levels of the rotor and
+utilize the expression</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\frac{C_\mathrm{v}^\mathrm{hind}(T)}{R} = \beta^2\
+\frac{\left( \sum_i E_i^2 e^{-\beta E_i} \right) \left( \sum_i e^{-\beta E_i} \right)\
+- \left( \sum_i E_i e^{-\beta E_i} \right)^2}{\left( \sum_i e^{-\beta E_i} \right)^2}\]</div>
+</div></blockquote>
+<p>to obtain the heat capacity.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.HinderedRotor.getPartitionFunction">
+<span class="sig-name descname"><span class="pre">getPartitionFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.HinderedRotor.getPartitionFunction" title="Link to this definition">¶</a></dt>
+<dd><p>Return the value of the partition function at the specified temperatures
+<cite>Tlist</cite> in K. For the cosine potential, the formula makes use of the
+Pitzer-Gwynn approximation:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[q_\mathrm{hind}(T) = \
+\frac{q_\mathrm{vib}^\mathrm{quant}(T)}{q_\mathrm{vib}^\mathrm{class}(T)}\
+q_\mathrm{hind}^\mathrm{class}(T)\]</div>
+</div></blockquote>
+<p>Substituting in for the right-hand side partition functions gives</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[q_\mathrm{hind}(T) = \frac{h \nu}{k_\mathrm{B} T}\
+\frac{1}{1 - \exp \left(- h \nu / k_\mathrm{B} T \right)}\
+\left( \frac{2 \pi I k_\mathrm{B} T}{h^2} \right)^{1/2}\
+\frac{2 \pi}{\sigma} \exp \left( -\frac{V_0}{2 k_\mathrm{B} T} \right)\
+I_0 \left( \frac{V_0}{2 k_\mathrm{B} T} \right)\]</div>
+</div></blockquote>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\nu = \frac{\sigma}{2 \pi} \sqrt{\frac{V_0}{2 I}}\]</div>
+<p><span class="math notranslate nohighlight">\(T\)</span> is temperature, <span class="math notranslate nohighlight">\(V_0\)</span> is the barrier height,
+<span class="math notranslate nohighlight">\(I\)</span> is the moment of inertia, <span class="math notranslate nohighlight">\(\sigma\)</span> is the symmetry
+number, <span class="math notranslate nohighlight">\(k_\mathrm{B}\)</span> is the Boltzmann constant, and <span class="math notranslate nohighlight">\(h\)</span>
+is the Planck constant. <span class="math notranslate nohighlight">\(I_0(x)\)</span> is the modified Bessel function
+of order zero for argument <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<p>For the Fourier series potential, we solve the corresponding 1D
+Schrodinger equation to obtain the energy levels of the rotor and
+utilize the expression</p>
+<div class="math notranslate nohighlight">
+\[q_\mathrm{hind}(T) = \frac{1}{\sigma} \sum_i e^{-\beta E_i}\]</div>
+<p>to obtain the partition function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.states.HinderedRotor.getPotential">
+<span class="sig-name descname"><span class="pre">getPotential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phi</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.states.HinderedRotor.getPotential" title="Link to this definition">¶</a></dt>
+<dd><p>Return the values of the hindered rotor potential <span class="math notranslate nohighlight">\(V(\phi)\)</span>
+in J/mol at the angles <cite>phi</cite> in radians.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="contents.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">7. <code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.states</span></code> — Molecular Degrees of Freedom</a><ul>
+<li><a class="reference internal" href="#chempy.states.StatesModel"><code class="docutils literal notranslate"><span class="pre">StatesModel</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.states.StatesModel.getDensityOfStates"><code class="docutils literal notranslate"><span class="pre">StatesModel.getDensityOfStates()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.StatesModel.getDensityOfStatesILT"><code class="docutils literal notranslate"><span class="pre">StatesModel.getDensityOfStatesILT()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.StatesModel.getEnthalpy"><code class="docutils literal notranslate"><span class="pre">StatesModel.getEnthalpy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.StatesModel.getEntropy"><code class="docutils literal notranslate"><span class="pre">StatesModel.getEntropy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.StatesModel.getHeatCapacity"><code class="docutils literal notranslate"><span class="pre">StatesModel.getHeatCapacity()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.StatesModel.getPartitionFunction"><code class="docutils literal notranslate"><span class="pre">StatesModel.getPartitionFunction()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.StatesModel.getSumOfStates"><code class="docutils literal notranslate"><span class="pre">StatesModel.getSumOfStates()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#chempy.states.Mode"><code class="docutils literal notranslate"><span class="pre">Mode</span></code></a></li>
+<li><a class="reference internal" href="#external-degrees-of-freedom">7.1. External Degrees of Freedom</a><ul>
+<li><a class="reference internal" href="#translation">7.1.1. Translation</a><ul>
+<li><a class="reference internal" href="#chempy.states.Translation"><code class="docutils literal notranslate"><span class="pre">Translation</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.states.Translation.getDensityOfStates"><code class="docutils literal notranslate"><span class="pre">Translation.getDensityOfStates()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.Translation.getEnthalpy"><code class="docutils literal notranslate"><span class="pre">Translation.getEnthalpy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.Translation.getEntropy"><code class="docutils literal notranslate"><span class="pre">Translation.getEntropy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.Translation.getHeatCapacity"><code class="docutils literal notranslate"><span class="pre">Translation.getHeatCapacity()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.Translation.getPartitionFunction"><code class="docutils literal notranslate"><span class="pre">Translation.getPartitionFunction()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rotation">7.1.2. Rotation</a><ul>
+<li><a class="reference internal" href="#chempy.states.RigidRotor"><code class="docutils literal notranslate"><span class="pre">RigidRotor</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.states.RigidRotor.getDensityOfStates"><code class="docutils literal notranslate"><span class="pre">RigidRotor.getDensityOfStates()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.RigidRotor.getEnthalpy"><code class="docutils literal notranslate"><span class="pre">RigidRotor.getEnthalpy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.RigidRotor.getEntropy"><code class="docutils literal notranslate"><span class="pre">RigidRotor.getEntropy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.RigidRotor.getHeatCapacity"><code class="docutils literal notranslate"><span class="pre">RigidRotor.getHeatCapacity()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.RigidRotor.getPartitionFunction"><code class="docutils literal notranslate"><span class="pre">RigidRotor.getPartitionFunction()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#internal-degrees-of-freedom">7.2. Internal Degrees of Freedom</a><ul>
+<li><a class="reference internal" href="#vibration">7.2.1. Vibration</a><ul>
+<li><a class="reference internal" href="#chempy.states.HarmonicOscillator"><code class="docutils literal notranslate"><span class="pre">HarmonicOscillator</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.states.HarmonicOscillator.getDensityOfStates"><code class="docutils literal notranslate"><span class="pre">HarmonicOscillator.getDensityOfStates()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.HarmonicOscillator.getEnthalpy"><code class="docutils literal notranslate"><span class="pre">HarmonicOscillator.getEnthalpy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.HarmonicOscillator.getEntropy"><code class="docutils literal notranslate"><span class="pre">HarmonicOscillator.getEntropy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.HarmonicOscillator.getHeatCapacity"><code class="docutils literal notranslate"><span class="pre">HarmonicOscillator.getHeatCapacity()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.HarmonicOscillator.getPartitionFunction"><code class="docutils literal notranslate"><span class="pre">HarmonicOscillator.getPartitionFunction()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#torsion">7.2.2. Torsion</a><ul>
+<li><a class="reference internal" href="#chempy.states.HinderedRotor"><code class="docutils literal notranslate"><span class="pre">HinderedRotor</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.states.HinderedRotor.getDensityOfStates"><code class="docutils literal notranslate"><span class="pre">HinderedRotor.getDensityOfStates()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.HinderedRotor.getEnthalpy"><code class="docutils literal notranslate"><span class="pre">HinderedRotor.getEnthalpy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.HinderedRotor.getEntropy"><code class="docutils literal notranslate"><span class="pre">HinderedRotor.getEntropy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.HinderedRotor.getFrequency"><code class="docutils literal notranslate"><span class="pre">HinderedRotor.getFrequency()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.HinderedRotor.getHeatCapacity"><code class="docutils literal notranslate"><span class="pre">HinderedRotor.getHeatCapacity()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.HinderedRotor.getPartitionFunction"><code class="docutils literal notranslate"><span class="pre">HinderedRotor.getPartitionFunction()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.states.HinderedRotor.getPotential"><code class="docutils literal notranslate"><span class="pre">HinderedRotor.getPotential()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="thermo.html"
+                          title="previous chapter"><span class="section-number">6. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.thermo</span></code> — Thermodynamics Models</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="kinetics.html"
+                          title="next chapter"><span class="section-number">8. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.kinetics</span></code> — Kinetics Models</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/states.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="kinetics.html" title="8. chempy.kinetics — Kinetics Models"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="thermo.html" title="6. chempy.thermo — Thermodynamics Models"
+             >previous</a> |</li>
+        <li><a href="index.html">Home</a> |&nbsp;</li>
+        <li><a href="contents.html">Documentation</a> &raquo;</li>
+
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.states</span></code> — Molecular Degrees of Freedom</a></li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Joshua W. Allen.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

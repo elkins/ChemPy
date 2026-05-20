@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>9. chempy.graph — Graph Data Type &#8212; ChemPy Toolkit 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="10. chempy.molecule — Structure and Properties of Molecules" href="molecule.html" />
+    <link rel="prev" title="8. chempy.kinetics — Kinetics Models" href="kinetics.html" /> 
+  </head><body>
+    <div class="header">
+         <img src="_static/chempy_logo.png" alt="ChemPy logo" />
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="molecule.html" title="10. chempy.molecule — Structure and Properties of Molecules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="kinetics.html" title="8. chempy.kinetics — Kinetics Models"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Home</a> |&nbsp;</li>
+        <li><a href="contents.html">Documentation</a> &raquo;</li>
+
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">9. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.graph</span></code> — Graph Data Type</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-chempy.graph">
+<span id="chempy-graph-graph-data-type"></span><h1><span class="section-number">9. </span><a class="reference internal" href="#module-chempy.graph" title="chempy.graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.graph</span></code></a> — Graph Data Type<a class="headerlink" href="#module-chempy.graph" title="Link to this heading">¶</a></h1>
+<p>This module contains an implementation of a graph data structure (the
+<a class="reference internal" href="#chempy.graph.Graph" title="chempy.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></a> class) and functions for manipulating that graph, including
+efficient isomorphism functions.</p>
+<section id="vertices-and-edges">
+<h2><span class="section-number">9.1. </span>Vertices and Edges<a class="headerlink" href="#vertices-and-edges" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.graph.Vertex">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.graph.</span></span><span class="sig-name descname"><span class="pre">Vertex</span></span><a class="headerlink" href="#chempy.graph.Vertex" title="Link to this definition">¶</a></dt>
+<dd><p>A base class for vertices in a graph. Contains several connectivity values
+useful for accelerating isomorphism searches, as proposed by
+<a class="reference external" href="http://dx.doi.org/10.1021/c160017a018">Morgan (1965)</a>.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>connectivity1</cite></p></td>
+<td><p>The number of nearest neighbors</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>connectivity2</cite></p></td>
+<td><p>The sum of the neighbors’ <cite>connectivity1</cite> values</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>connectivity3</cite></p></td>
+<td><p>The sum of the neighbors’ <cite>connectivity2</cite> values</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>sortingLabel</cite></p></td>
+<td><p>An integer used to sort the vertices</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Vertex.equivalent">
+<span class="sig-name descname"><span class="pre">equivalent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#chempy.graph.Vertex.equivalent" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if two vertices <cite>self</cite> and <cite>other</cite> are semantically
+equivalent, or <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code> if not. You should reimplement this
+function in a derived class if your vertices have semantic information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Vertex.isSpecificCaseOf">
+<span class="sig-name descname"><span class="pre">isSpecificCaseOf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#chempy.graph.Vertex.isSpecificCaseOf" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <cite>self</cite> is semantically more specific than <cite>other</cite>,
+or <code class="docutils literal notranslate"><span class="pre">False</span></code> if not. You should reimplement this function in a derived
+class if your edges have semantic information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Vertex.resetConnectivityValues">
+<span class="sig-name descname"><span class="pre">resetConnectivityValues</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#chempy.graph.Vertex.resetConnectivityValues" title="Link to this definition">¶</a></dt>
+<dd><p>Reset the cached structure information for this vertex.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.graph.Edge">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.graph.</span></span><span class="sig-name descname"><span class="pre">Edge</span></span><a class="headerlink" href="#chempy.graph.Edge" title="Link to this definition">¶</a></dt>
+<dd><p>A base class for edges in a graph. This class does <em>not</em> store the vertex
+pair that comprises the edge; that functionality would need to be included
+in the derived class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Edge.equivalent">
+<span class="sig-name descname"><span class="pre">equivalent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Edge" title="chempy.graph.Edge"><span class="pre">Edge</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#chempy.graph.Edge.equivalent" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if two edges <cite>self</cite> and <cite>other</cite> are semantically
+equivalent, or <code class="docutils literal notranslate"><span class="pre">False</span></code> if not. You should reimplement this
+function in a derived class if your edges have semantic information.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Edge.isSpecificCaseOf">
+<span class="sig-name descname"><span class="pre">isSpecificCaseOf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Edge" title="chempy.graph.Edge"><span class="pre">Edge</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#chempy.graph.Edge.isSpecificCaseOf" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <cite>self</cite> is semantically more specific than <cite>other</cite>,
+or <code class="docutils literal notranslate"><span class="pre">False</span></code> if not. You should reimplement this function in a derived
+class if your edges have semantic information.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="graph-objects">
+<h2><span class="section-number">9.2. </span>Graph Objects<a class="headerlink" href="#graph-objects" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.graph.Graph">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.graph.</span></span><span class="sig-name descname"><span class="pre">Graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#chempy.graph.Edge" title="chempy.graph.Edge"><span class="pre">Edge</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.graph.Graph" title="Link to this definition">¶</a></dt>
+<dd><p>A graph data type. The vertices of the graph are stored in a list
+<cite>vertices</cite>; this provides a consistent traversal order. The edges of the
+graph are stored in a dictionary of dictionaries <cite>edges</cite>. A single edge can
+be accessed using <code class="docutils literal notranslate"><span class="pre">graph.edges[vertex1][vertex2]</span></code> or the <a class="reference internal" href="#chempy.graph.Graph.getEdge" title="chempy.graph.Graph.getEdge"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getEdge()</span></code></a>
+method; in either case, an exception will be raised if the edge does not
+exist. All edges of a vertex can be accessed using <code class="docutils literal notranslate"><span class="pre">graph.edges[vertex]</span></code>
+or the <a class="reference internal" href="#chempy.graph.Graph.getEdges" title="chempy.graph.Graph.getEdges"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getEdges()</span></code></a> method.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.addEdge">
+<span class="sig-name descname"><span class="pre">addEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Edge" title="chempy.graph.Edge"><span class="pre">Edge</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#chempy.graph.Edge" title="chempy.graph.Edge"><span class="pre">Edge</span></a></span></span><a class="headerlink" href="#chempy.graph.Graph.addEdge" title="Link to this definition">¶</a></dt>
+<dd><p>Add an <cite>edge</cite> to the graph as an edge connecting the two vertices
+<cite>vertex1</cite> and <cite>vertex2</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.addVertex">
+<span class="sig-name descname"><span class="pre">addVertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></span><a class="headerlink" href="#chempy.graph.Graph.addVertex" title="Link to this definition">¶</a></dt>
+<dd><p>Add a <cite>vertex</cite> to the graph. The vertex is initialized with no edges.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#chempy.graph.Graph" title="chempy.graph.Graph"><span class="pre">Graph</span></a></span></span><a class="headerlink" href="#chempy.graph.Graph.copy" title="Link to this definition">¶</a></dt>
+<dd><p>Create a copy of the current graph. If <cite>deep</cite> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, a deep copy
+is made: copies of the vertices and edges are used in the new graph.
+If <cite>deep</cite> is <code class="docutils literal notranslate"><span class="pre">False</span></code> or not specified, a shallow copy is made: the
+original vertices and edges are used in the new graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.findIsomorphism">
+<span class="sig-name descname"><span class="pre">findIsomorphism</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Graph" title="chempy.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialMap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#chempy.graph.Graph.findIsomorphism" title="Link to this definition">¶</a></dt>
+<dd><p>Returns <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if <cite>other</cite> is subgraph isomorphic and <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code>
+otherwise, and the matching mapping.
+Uses the VF2 algorithm of Vento and Foggia.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.findSubgraphIsomorphisms">
+<span class="sig-name descname"><span class="pre">findSubgraphIsomorphisms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Graph" title="chempy.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialMap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#chempy.graph.Graph.findSubgraphIsomorphisms" title="Link to this definition">¶</a></dt>
+<dd><p>Returns <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if <cite>other</cite> is subgraph isomorphic and <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code>
+otherwise. Also returns the lists all of valid mappings.</p>
+<p>Uses the VF2 algorithm of Vento and Foggia.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.getAllCycles">
+<span class="sig-name descname"><span class="pre">getAllCycles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">startingVertex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#chempy.graph.Graph.getAllCycles" title="Link to this definition">¶</a></dt>
+<dd><p>Given a starting vertex, returns a list of all the cycles containing
+that vertex.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.getEdge">
+<span class="sig-name descname"><span class="pre">getEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#chempy.graph.Edge" title="chempy.graph.Edge"><span class="pre">Edge</span></a></span></span><a class="headerlink" href="#chempy.graph.Graph.getEdge" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the edge connecting vertices <cite>vertex1</cite> and <cite>vertex2</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.getEdges">
+<span class="sig-name descname"><span class="pre">getEdges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#chempy.graph.Edge" title="chempy.graph.Edge"><span class="pre">Edge</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#chempy.graph.Graph.getEdges" title="Link to this definition">¶</a></dt>
+<dd><p>Return a list of the edges involving the specified <cite>vertex</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.getSmallestSetOfSmallestRings">
+<span class="sig-name descname"><span class="pre">getSmallestSetOfSmallestRings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#chempy.graph.Graph.getSmallestSetOfSmallestRings" title="Link to this definition">¶</a></dt>
+<dd><p>Return a list of the smallest set of smallest rings in the graph. The
+algorithm implements was adapted from a description by Fan, Panaye,
+Doucet, and Barbu (doi: 10.1021/ci00015a002)</p>
+<p>B. T. Fan, A. Panaye, J. P. Doucet, and A. Barbu. “Ring Perception: A
+New Algorithm for Directly Finding the Smallest Set of Smallest Rings
+from a Connection Table.” <em>J. Chem. Inf. Comput. Sci.</em> <strong>33</strong>,
+p. 657-662 (1993).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.hasEdge">
+<span class="sig-name descname"><span class="pre">hasEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#chempy.graph.Graph.hasEdge" title="Link to this definition">¶</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if vertices <cite>vertex1</cite> and <cite>vertex2</cite> are connected
+by an edge, or <code class="docutils literal notranslate"><span class="pre">False</span></code> if not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.hasVertex">
+<span class="sig-name descname"><span class="pre">hasVertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#chempy.graph.Graph.hasVertex" title="Link to this definition">¶</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if <cite>vertex</cite> is a vertex in the graph, or <code class="docutils literal notranslate"><span class="pre">False</span></code> if
+not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.isCyclic">
+<span class="sig-name descname"><span class="pre">isCyclic</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#chempy.graph.Graph.isCyclic" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if one or more cycles are present in the structure
+and <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.isEdgeInCycle">
+<span class="sig-name descname"><span class="pre">isEdgeInCycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#chempy.graph.Graph.isEdgeInCycle" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if the edge between vertices <cite>vertex1</cite> and <cite>vertex2</cite>
+is in one or more cycles in the graph, or <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code> if not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.isIsomorphic">
+<span class="sig-name descname"><span class="pre">isIsomorphic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Graph" title="chempy.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialMap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#chempy.graph.Graph.isIsomorphic" title="Link to this definition">¶</a></dt>
+<dd><p>Returns <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if two graphs are isomorphic and <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code>
+otherwise. Uses the VF2 algorithm of Vento and Foggia.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.isSubgraphIsomorphic">
+<span class="sig-name descname"><span class="pre">isSubgraphIsomorphic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Graph" title="chempy.graph.Graph"><span class="pre">Graph</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialMap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#chempy.graph.Graph.isSubgraphIsomorphic" title="Link to this definition">¶</a></dt>
+<dd><p>Returns <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if <cite>other</cite> is subgraph isomorphic and <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code>
+otherwise. Uses the VF2 algorithm of Vento and Foggia.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.isVertexInCycle">
+<span class="sig-name descname"><span class="pre">isVertexInCycle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#chempy.graph.Graph.isVertexInCycle" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="xref py py-data docutils literal notranslate"><span class="pre">True</span></code> if <cite>vertex</cite> is in one or more cycles in the graph,
+or <code class="xref py py-data docutils literal notranslate"><span class="pre">False</span></code> if not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.merge">
+<span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.graph.Graph.merge" title="Link to this definition">¶</a></dt>
+<dd><p>Merge two graphs so as to store them in a single Graph object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.removeEdge">
+<span class="sig-name descname"><span class="pre">removeEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#chempy.graph.Graph.removeEdge" title="Link to this definition">¶</a></dt>
+<dd><p>Remove the edge having vertices <cite>vertex1</cite> and <cite>vertex2</cite> from the graph.
+Does not remove vertices that no longer have any edges as a result of
+this removal.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.removeVertex">
+<span class="sig-name descname"><span class="pre">removeVertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#chempy.graph.Vertex" title="chempy.graph.Vertex"><span class="pre">Vertex</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#chempy.graph.Graph.removeVertex" title="Link to this definition">¶</a></dt>
+<dd><p>Remove <cite>vertex</cite> and all edges associated with it from the graph. Does
+not remove vertices that no longer have any edges as a result of this
+removal.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.resetConnectivityValues">
+<span class="sig-name descname"><span class="pre">resetConnectivityValues</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#chempy.graph.Graph.resetConnectivityValues" title="Link to this definition">¶</a></dt>
+<dd><p>Reset any cached connectivity information. Call this method when you
+have modified the graph.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.sortVertices">
+<span class="sig-name descname"><span class="pre">sortVertices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#chempy.graph.Graph.sortVertices" title="Link to this definition">¶</a></dt>
+<dd><p>Sort the vertices in the graph. This can make certain operations, e.g.
+the isomorphism functions, much more efficient.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.split">
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#chempy.graph.Graph" title="chempy.graph.Graph"><span class="pre">Graph</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#chempy.graph.Graph.split" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a single Graph object containing two or more unconnected graphs
+into separate graphs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.Graph.updateConnectivityValues">
+<span class="sig-name descname"><span class="pre">updateConnectivityValues</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#chempy.graph.Graph.updateConnectivityValues" title="Link to this definition">¶</a></dt>
+<dd><p>Update the connectivity values for each vertex in the graph. These are
+used to accelerate the isomorphism checking.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="isomorphism-functions">
+<h2><span class="section-number">9.3. </span>Isomorphism Functions<a class="headerlink" href="#isomorphism-functions" title="Link to this heading">¶</a></h2>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.graph.VF2_isomorphism">
+<span class="sig-prename descclassname"><span class="pre">graph.</span></span><span class="sig-name descname"><span class="pre">VF2_isomorphism</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subgraph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">findAll</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialMap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.graph.VF2_isomorphism" title="Link to this definition">¶</a></dt>
+<dd><p>Determines if two <a class="reference internal" href="#chempy.graph.Graph" title="chempy.graph.Graph"><code class="xref py py-class docutils literal notranslate"><span class="pre">Graph</span></code></a> objects <cite>graph1</cite> and <cite>graph2</cite> are
+isomorphic. A number of options affect how the isomorphism check is
+performed:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>If <cite>subgraph</cite> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the isomorphism function will treat <cite>graph2</cite></dt><dd><p>as a subgraph of <cite>graph1</cite>. In this instance a subgraph can either mean a
+smaller graph (i.e. fewer vertices and/or edges) or a less specific graph.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>If <cite>findAll</cite> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, all valid isomorphisms will be found and</dt><dd><p>returned; otherwise only the first valid isomorphism will be returned.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>The <cite>initialMap</cite> parameter can be used to pass a previously-established</dt><dd><p>mapping. This mapping will be preserved in all returned valid
+isomorphisms.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>The isomorphism algorithm used is the VF2 algorithm of Vento and Foggia.
+The function returns a boolean <cite>isMatch</cite> indicating whether or not one or
+more valid isomorphisms have been found, and a list <cite>mapList</cite> of the valid
+isomorphisms, each consisting of a dictionary mapping from vertices of
+<cite>graph1</cite> to corresponding vertices of <cite>graph2</cite>.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="contents.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">9. <code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.graph</span></code> — Graph Data Type</a><ul>
+<li><a class="reference internal" href="#vertices-and-edges">9.1. Vertices and Edges</a><ul>
+<li><a class="reference internal" href="#chempy.graph.Vertex"><code class="docutils literal notranslate"><span class="pre">Vertex</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.graph.Vertex.equivalent"><code class="docutils literal notranslate"><span class="pre">Vertex.equivalent()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Vertex.isSpecificCaseOf"><code class="docutils literal notranslate"><span class="pre">Vertex.isSpecificCaseOf()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Vertex.resetConnectivityValues"><code class="docutils literal notranslate"><span class="pre">Vertex.resetConnectivityValues()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#chempy.graph.Edge"><code class="docutils literal notranslate"><span class="pre">Edge</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.graph.Edge.equivalent"><code class="docutils literal notranslate"><span class="pre">Edge.equivalent()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Edge.isSpecificCaseOf"><code class="docutils literal notranslate"><span class="pre">Edge.isSpecificCaseOf()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#graph-objects">9.2. Graph Objects</a><ul>
+<li><a class="reference internal" href="#chempy.graph.Graph"><code class="docutils literal notranslate"><span class="pre">Graph</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.graph.Graph.addEdge"><code class="docutils literal notranslate"><span class="pre">Graph.addEdge()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.addVertex"><code class="docutils literal notranslate"><span class="pre">Graph.addVertex()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.copy"><code class="docutils literal notranslate"><span class="pre">Graph.copy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.findIsomorphism"><code class="docutils literal notranslate"><span class="pre">Graph.findIsomorphism()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.findSubgraphIsomorphisms"><code class="docutils literal notranslate"><span class="pre">Graph.findSubgraphIsomorphisms()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.getAllCycles"><code class="docutils literal notranslate"><span class="pre">Graph.getAllCycles()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.getEdge"><code class="docutils literal notranslate"><span class="pre">Graph.getEdge()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.getEdges"><code class="docutils literal notranslate"><span class="pre">Graph.getEdges()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.getSmallestSetOfSmallestRings"><code class="docutils literal notranslate"><span class="pre">Graph.getSmallestSetOfSmallestRings()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.hasEdge"><code class="docutils literal notranslate"><span class="pre">Graph.hasEdge()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.hasVertex"><code class="docutils literal notranslate"><span class="pre">Graph.hasVertex()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.isCyclic"><code class="docutils literal notranslate"><span class="pre">Graph.isCyclic()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.isEdgeInCycle"><code class="docutils literal notranslate"><span class="pre">Graph.isEdgeInCycle()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.isIsomorphic"><code class="docutils literal notranslate"><span class="pre">Graph.isIsomorphic()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.isSubgraphIsomorphic"><code class="docutils literal notranslate"><span class="pre">Graph.isSubgraphIsomorphic()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.isVertexInCycle"><code class="docutils literal notranslate"><span class="pre">Graph.isVertexInCycle()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.merge"><code class="docutils literal notranslate"><span class="pre">Graph.merge()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.removeEdge"><code class="docutils literal notranslate"><span class="pre">Graph.removeEdge()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.removeVertex"><code class="docutils literal notranslate"><span class="pre">Graph.removeVertex()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.resetConnectivityValues"><code class="docutils literal notranslate"><span class="pre">Graph.resetConnectivityValues()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.sortVertices"><code class="docutils literal notranslate"><span class="pre">Graph.sortVertices()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.split"><code class="docutils literal notranslate"><span class="pre">Graph.split()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.graph.Graph.updateConnectivityValues"><code class="docutils literal notranslate"><span class="pre">Graph.updateConnectivityValues()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#isomorphism-functions">9.3. Isomorphism Functions</a><ul>
+<li><a class="reference internal" href="#chempy.graph.VF2_isomorphism"><code class="docutils literal notranslate"><span class="pre">graph.VF2_isomorphism()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="kinetics.html"
+                          title="previous chapter"><span class="section-number">8. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.kinetics</span></code> — Kinetics Models</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="molecule.html"
+                          title="next chapter"><span class="section-number">10. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.molecule</span></code> — Structure and Properties of Molecules</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/graph.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="molecule.html" title="10. chempy.molecule — Structure and Properties of Molecules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="kinetics.html" title="8. chempy.kinetics — Kinetics Models"
+             >previous</a> |</li>
+        <li><a href="index.html">Home</a> |&nbsp;</li>
+        <li><a href="contents.html">Documentation</a> &raquo;</li>
+
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">9. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.graph</span></code> — Graph Data Type</a></li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Joshua W. Allen.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

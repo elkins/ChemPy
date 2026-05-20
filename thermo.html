@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6. chempy.thermo — Thermodynamics Models &#8212; ChemPy Toolkit 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=2bf1fcf8" />
+    
+    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="7. chempy.states — Molecular Degrees of Freedom" href="states.html" />
+    <link rel="prev" title="5. chempy.geometry — Working With Molecular Geometries" href="geometry.html" /> 
+  </head><body>
+    <div class="header">
+         <img src="_static/chempy_logo.png" alt="ChemPy logo" />
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="states.html" title="7. chempy.states — Molecular Degrees of Freedom"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="geometry.html" title="5. chempy.geometry — Working With Molecular Geometries"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Home</a> |&nbsp;</li>
+        <li><a href="contents.html">Documentation</a> &raquo;</li>
+
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.thermo</span></code> — Thermodynamics Models</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-chempy.thermo">
+<span id="chempy-thermo-thermodynamics-models"></span><h1><span class="section-number">6. </span><a class="reference internal" href="#module-chempy.thermo" title="chempy.thermo"><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.thermo</span></code></a> — Thermodynamics Models<a class="headerlink" href="#module-chempy.thermo" title="Link to this heading">¶</a></h1>
+<p>This module contains the thermodynamics models that are available in ChemPy.
+All such models derive from the <a class="reference internal" href="#chempy.thermo.ThermoModel" title="chempy.thermo.ThermoModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThermoModel</span></code></a> base class.</p>
+<section id="thermodynamics-models">
+<h2><span class="section-number">6.1. </span>Thermodynamics Models<a class="headerlink" href="#thermodynamics-models" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.thermo.ThermoModel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.thermo.</span></span><span class="sig-name descname"><span class="pre">ThermoModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.ThermoModel" title="Link to this definition">¶</a></dt>
+<dd><p>A base class for thermodynamics models, containing several attributes
+common to all models:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>Tmin</cite></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p></td>
+<td><p>The minimum temperature in K at which the model is valid</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>Tmax</cite></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p></td>
+<td><p>The maximum temperature in K at which the model is valid</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>comment</cite></p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>A string containing information about the model (e.g. its source)</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.ThermoModel.isTemperatureValid">
+<span class="sig-name descname"><span class="pre">isTemperatureValid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.ThermoModel.isTemperatureValid" title="Link to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the temperature <cite>T</cite> in K is within the valid
+temperature range of the thermodynamic data, or <code class="docutils literal notranslate"><span class="pre">False</span></code> if not.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.thermo.WilhoitModel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.thermo.</span></span><span class="sig-name descname"><span class="pre">WilhoitModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cp0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpInf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a3</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.WilhoitModel" title="Link to this definition">¶</a></dt>
+<dd><p>A thermodynamics model based on the Wilhoit equation for heat capacity,</p>
+<div class="math notranslate nohighlight">
+\[C_\mathrm{p}(T) = C_\mathrm{p}(0) + \left[ C_\mathrm{p}(\infty) -
+C_\mathrm{p}(0) \right] y^2 \left[ 1 + (y - 1) \sum_{i=0}^3 a_i y^i \right]\]</div>
+<p>where <span class="math notranslate nohighlight">\(y \equiv \frac{T}{T + B}\)</span> is a scaled temperature that ranges
+from zero to one. (The characteristic temperature <span class="math notranslate nohighlight">\(B\)</span> is chosen by
+default to be 500 K.) This formulation has the advantage of correctly
+reproducting the heat capacity behavior as <span class="math notranslate nohighlight">\(T \rightarrow 0\)</span> and
+<span class="math notranslate nohighlight">\(T \rightarrow \infty\)</span>. The low-temperature limit
+<span class="math notranslate nohighlight">\(C_\mathrm{p}(0)\)</span> is taken to be <span class="math notranslate nohighlight">\(3.5R\)</span> for linear molecules
+and <span class="math notranslate nohighlight">\(4R\)</span> for nonlinear molecules. The high-temperature limit
+<span class="math notranslate nohighlight">\(C_\mathrm{p}(\infty)\)</span> is taken to be
+<span class="math notranslate nohighlight">\(\left[ 3 N_\mathrm{atoms} - 1.5 \right] R\)</span> for linear molecules and
+<span class="math notranslate nohighlight">\(\left[ 3 N_\mathrm{atoms} - (2 + 0.5 N_\mathrm{rotors}) \right] R\)</span>
+for nonlinear molecules, for a molecule composed of <span class="math notranslate nohighlight">\(N_\mathrm{atoms}\)</span>
+atoms and <span class="math notranslate nohighlight">\(N_\mathrm{rotors}\)</span> internal rotors.</p>
+<p>The Wilhoit parameters are stored in the attributes <cite>cp0</cite>, <cite>cpInf</cite>, <cite>a0</cite>,
+<cite>a1</cite>, <cite>a2</cite>, <cite>a3</cite>, and <cite>B</cite>. There are also integration constants <cite>H0</cite> and
+<cite>S0</cite> that are needed to evaluate the enthalpy and entropy, respectively.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.WilhoitModel.fitToData">
+<span class="sig-name descname"><span class="pre">fitToData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Tlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cplist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linear</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nFreq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nRotors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H298</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S298</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.WilhoitModel.fitToData" title="Link to this definition">¶</a></dt>
+<dd><p>Fit a Wilhoit model to the data points provided, allowing the
+characteristic temperature <cite>B</cite> to vary so as to improve the fit. This
+procedure requires an optimization, using the <code class="docutils literal notranslate"><span class="pre">fminbound</span></code> function
+in the <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code> module. The data consists of a set
+of dimensionless heat capacity points <cite>Cplist</cite> at a given set of
+temperatures <cite>Tlist</cite> in K. The linearity of the molecule, number of
+vibrational frequencies, and number of internal rotors (<cite>linear</cite>,
+<cite>nFreq</cite>, and <cite>nRotors</cite>, respectively) is used to set the limits at
+zero and infinite temperature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.WilhoitModel.fitToDataForConstantB">
+<span class="sig-name descname"><span class="pre">fitToDataForConstantB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Tlist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cplist</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linear</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nFreq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nRotors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H298</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S298</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.WilhoitModel.fitToDataForConstantB" title="Link to this definition">¶</a></dt>
+<dd><p>Fit a Wilhoit model to the data points provided using a specified value
+of the characteristic temperature <cite>B</cite>. The data consists of a set
+of dimensionless heat capacity points <cite>Cplist</cite> at a given set of
+temperatures <cite>Tlist</cite> in K. The linearity of the molecule, number of
+vibrational frequencies, and number of internal rotors (<cite>linear</cite>,
+<cite>nFreq</cite>, and <cite>nRotors</cite>, respectively) is used to set the limits at
+zero and infinite temperature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.WilhoitModel.getEnthalpy">
+<span class="sig-name descname"><span class="pre">getEnthalpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.WilhoitModel.getEnthalpy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the enthalpy in J/mol at the specified temperature <cite>T</cite> in
+K. The formula is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}H(T) &amp; = H_0 +
+C_\mathrm{p}(0) T + \left[ C_\mathrm{p}(\infty) - C_\mathrm{p}(0) \right] T \\
+&amp; \left\{ \left[ 2 + \sum_{i=0}^3 a_i \right]
+\left[ \frac{1}{2}y - 1 + \left( \frac{1}{y} - 1 \right) \ln \frac{T}{y} \right]
++ y^2 \sum_{i=0}^3 \frac{y^i}{(i+2)(i+3)} \sum_{j=0}^3 f_{ij} a_j
+\right\}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(f_{ij} = 3 + j\)</span> if <span class="math notranslate nohighlight">\(i = j\)</span>, <span class="math notranslate nohighlight">\(f_{ij} = 1\)</span> if
+<span class="math notranslate nohighlight">\(i &gt; j\)</span>, and <span class="math notranslate nohighlight">\(f_{ij} = 0\)</span> if <span class="math notranslate nohighlight">\(i &lt; j\)</span>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.WilhoitModel.getEntropy">
+<span class="sig-name descname"><span class="pre">getEntropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.WilhoitModel.getEntropy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the entropy in J/mol*K at the specified temperature <cite>T</cite> in
+K. The formula is</p>
+<div class="math notranslate nohighlight">
+\[S(T) = S_0 +
+C_\mathrm{p}(\infty) \ln T - \left[ C_\mathrm{p}(\infty) - C_\mathrm{p}(0) \right]
+\left[ \ln y + \left( 1 + y \sum_{i=0}^3 \frac{a_i y^i}{2+i} \right) y
+\right]\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.WilhoitModel.getFreeEnergy">
+<span class="sig-name descname"><span class="pre">getFreeEnergy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.WilhoitModel.getFreeEnergy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the Gibbs free energy in J/mol at the specified temperature
+<cite>T</cite> in K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.WilhoitModel.getHeatCapacity">
+<span class="sig-name descname"><span class="pre">getHeatCapacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.WilhoitModel.getHeatCapacity" title="Link to this definition">¶</a></dt>
+<dd><p>Return the constant-pressure heat capacity (Cp) in J/mol*K at the
+specified temperature <cite>T</cite> in K.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.thermo.NASAModel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.thermo.</span></span><span class="sig-name descname"><span class="pre">NASAModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polynomials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.NASAModel" title="Link to this definition">¶</a></dt>
+<dd><p>A set of thermodynamic parameters given by NASA polynomials. This class
+stores a list of <a class="reference internal" href="#chempy.thermo.NASAPolynomial" title="chempy.thermo.NASAPolynomial"><code class="xref py py-class docutils literal notranslate"><span class="pre">NASAPolynomial</span></code></a> objects in the <cite>polynomials</cite>
+attribute. When evaluating a thermodynamic quantity, a polynomial that
+contains the desired temperature within its valid range will be used.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.NASAModel.getEnthalpy">
+<span class="sig-name descname"><span class="pre">getEnthalpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.NASAModel.getEnthalpy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the enthalpy in J/mol at the specified temperatures <cite>Tlist</cite> in
+K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.NASAModel.getEntropy">
+<span class="sig-name descname"><span class="pre">getEntropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.NASAModel.getEntropy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the entropy in J/mol*K at the specified temperatures <cite>Tlist</cite> in
+K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.NASAModel.getFreeEnergy">
+<span class="sig-name descname"><span class="pre">getFreeEnergy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.NASAModel.getFreeEnergy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the Gibbs free energy in J/mol at the specified temperatures
+<cite>Tlist</cite> in K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.NASAModel.getHeatCapacity">
+<span class="sig-name descname"><span class="pre">getHeatCapacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.NASAModel.getHeatCapacity" title="Link to this definition">¶</a></dt>
+<dd><p>Return the constant-pressure heat capacity (Cp) in J/mol*K at the
+specified temperatures <cite>Tlist</cite> in K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.NASAModel.toCantera">
+<span class="sig-name descname"><span class="pre">toCantera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.NASAModel.toCantera" title="Link to this definition">¶</a></dt>
+<dd><p>Return a Cantera ctml_writer instance.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="other-classes">
+<h2><span class="section-number">6.2. </span>Other Classes<a class="headerlink" href="#other-classes" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="chempy.thermo.NASAPolynomial">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">chempy.thermo.</span></span><span class="sig-name descname"><span class="pre">NASAPolynomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeffs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.NASAPolynomial" title="Link to this definition">¶</a></dt>
+<dd><p>A single NASA polynomial for thermodynamic data. The <cite>coeffs</cite> attribute
+stores the seven polynomial coefficients
+<span class="math notranslate nohighlight">\(\mathbf{a} = \left[a_1\ a_2\ a_3\ a_4\ a_5\ a_6\ a_7 \right]\)</span>
+from which the relevant thermodynamic parameters are evaluated via the
+expressions</p>
+<div class="math notranslate nohighlight">
+\[\frac{C_\mathrm{p}(T)}{R} = a_1 + a_2 T + a_3 T^2 + a_4 T^3 + a_5 T^4\]</div>
+<div class="math notranslate nohighlight">
+\[\frac{H(T)}{RT} = a_1 + \frac{1}{2} a_2 T + \frac{1}{3} a_3 T^2 + \
+\frac{1}{4} a_4 T^3 + \frac{1}{5} a_5 T^4 + \frac{a_6}{T}\]</div>
+<div class="math notranslate nohighlight">
+\[\frac{S(T)}{R} = a_1 \ln T + a_2 T + \frac{1}{2} a_3 T^2 + \
+\frac{1}{3} a_4 T^3 + \frac{1}{4} a_5 T^4 + a_7\]</div>
+<p>The above was adapted from <a class="reference external" href="http://www.me.berkeley.edu/gri-mech/data/nasa_plnm.html">this page</a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.NASAPolynomial.getEnthalpy">
+<span class="sig-name descname"><span class="pre">getEnthalpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.NASAPolynomial.getEnthalpy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the enthalpy in J/mol at the specified temperature <cite>T</cite> in
+K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.NASAPolynomial.getEntropy">
+<span class="sig-name descname"><span class="pre">getEntropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.NASAPolynomial.getEntropy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the entropy in J/mol*K at the specified temperature <cite>T</cite> in
+K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.NASAPolynomial.getFreeEnergy">
+<span class="sig-name descname"><span class="pre">getFreeEnergy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.NASAPolynomial.getFreeEnergy" title="Link to this definition">¶</a></dt>
+<dd><p>Return the Gibbs free energy in J/mol at the specified temperature
+<cite>T</cite> in K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.NASAPolynomial.getHeatCapacity">
+<span class="sig-name descname"><span class="pre">getHeatCapacity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.NASAPolynomial.getHeatCapacity" title="Link to this definition">¶</a></dt>
+<dd><p>Return the constant-pressure heat capacity (Cp) in J/mol*K at the
+specified temperature <cite>T</cite> in K.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chempy.thermo.NASAPolynomial.toCantera">
+<span class="sig-name descname"><span class="pre">toCantera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#chempy.thermo.NASAPolynomial.toCantera" title="Link to this definition">¶</a></dt>
+<dd><p>Return a Cantera ctml_writer instance.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="contents.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.thermo</span></code> — Thermodynamics Models</a><ul>
+<li><a class="reference internal" href="#thermodynamics-models">6.1. Thermodynamics Models</a><ul>
+<li><a class="reference internal" href="#chempy.thermo.ThermoModel"><code class="docutils literal notranslate"><span class="pre">ThermoModel</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.thermo.ThermoModel.isTemperatureValid"><code class="docutils literal notranslate"><span class="pre">ThermoModel.isTemperatureValid()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#chempy.thermo.WilhoitModel"><code class="docutils literal notranslate"><span class="pre">WilhoitModel</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.thermo.WilhoitModel.fitToData"><code class="docutils literal notranslate"><span class="pre">WilhoitModel.fitToData()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.thermo.WilhoitModel.fitToDataForConstantB"><code class="docutils literal notranslate"><span class="pre">WilhoitModel.fitToDataForConstantB()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.thermo.WilhoitModel.getEnthalpy"><code class="docutils literal notranslate"><span class="pre">WilhoitModel.getEnthalpy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.thermo.WilhoitModel.getEntropy"><code class="docutils literal notranslate"><span class="pre">WilhoitModel.getEntropy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.thermo.WilhoitModel.getFreeEnergy"><code class="docutils literal notranslate"><span class="pre">WilhoitModel.getFreeEnergy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.thermo.WilhoitModel.getHeatCapacity"><code class="docutils literal notranslate"><span class="pre">WilhoitModel.getHeatCapacity()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#chempy.thermo.NASAModel"><code class="docutils literal notranslate"><span class="pre">NASAModel</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.thermo.NASAModel.getEnthalpy"><code class="docutils literal notranslate"><span class="pre">NASAModel.getEnthalpy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.thermo.NASAModel.getEntropy"><code class="docutils literal notranslate"><span class="pre">NASAModel.getEntropy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.thermo.NASAModel.getFreeEnergy"><code class="docutils literal notranslate"><span class="pre">NASAModel.getFreeEnergy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.thermo.NASAModel.getHeatCapacity"><code class="docutils literal notranslate"><span class="pre">NASAModel.getHeatCapacity()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.thermo.NASAModel.toCantera"><code class="docutils literal notranslate"><span class="pre">NASAModel.toCantera()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#other-classes">6.2. Other Classes</a><ul>
+<li><a class="reference internal" href="#chempy.thermo.NASAPolynomial"><code class="docutils literal notranslate"><span class="pre">NASAPolynomial</span></code></a><ul>
+<li><a class="reference internal" href="#chempy.thermo.NASAPolynomial.getEnthalpy"><code class="docutils literal notranslate"><span class="pre">NASAPolynomial.getEnthalpy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.thermo.NASAPolynomial.getEntropy"><code class="docutils literal notranslate"><span class="pre">NASAPolynomial.getEntropy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.thermo.NASAPolynomial.getFreeEnergy"><code class="docutils literal notranslate"><span class="pre">NASAPolynomial.getFreeEnergy()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.thermo.NASAPolynomial.getHeatCapacity"><code class="docutils literal notranslate"><span class="pre">NASAPolynomial.getHeatCapacity()</span></code></a></li>
+<li><a class="reference internal" href="#chempy.thermo.NASAPolynomial.toCantera"><code class="docutils literal notranslate"><span class="pre">NASAPolynomial.toCantera()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="geometry.html"
+                          title="previous chapter"><span class="section-number">5. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.geometry</span></code> — Working With Molecular Geometries</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="states.html"
+                          title="next chapter"><span class="section-number">7. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.states</span></code> — Molecular Degrees of Freedom</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/thermo.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="states.html" title="7. chempy.states — Molecular Degrees of Freedom"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="geometry.html" title="5. chempy.geometry — Working With Molecular Geometries"
+             >previous</a> |</li>
+        <li><a href="index.html">Home</a> |&nbsp;</li>
+        <li><a href="contents.html">Documentation</a> &raquo;</li>
+
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">chempy.thermo</span></code> — Thermodynamics Models</a></li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Joshua W. Allen.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>
