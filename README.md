@@ -23,7 +23,7 @@
 
 ## Quick Links
 
-- 📖 **[Documentation](https://chempy.readthedocs.io)** - Full documentation and API reference
+- 📖 **[Documentation](https://elkins.github.io/ChemPy)** - Full documentation and API reference
 - 🐛 **[Issue Tracker](https://github.com/elkins/ChemPy/issues)** - Report bugs and request features
 - 📝 **[Contributing](CONTRIBUTING.md)** - How to contribute to ChemPy
 - 📋 **[Changelog](CHANGELOG.md)** - Version history and release notes

@@ -53,7 +53,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/elkins/ChemPy"
 Repository = "https://github.com/elkins/ChemPy.git"
-Documentation = "https://chempy.readthedocs.io"
+Documentation = "https://elkins.github.io/ChemPy"
 "Bug Tracker" = "https://github.com/elkins/ChemPy/issues"
 Changelog = "https://github.com/elkins/ChemPy/blob/master/CHANGELOG.md"
 
