@@ -1,8 +1,8 @@
-# ChemPy Development Guide
+# ChemPy Toolkit Development Guide
 
 ## Project Overview
 
-ChemPy is a chemistry toolkit for Python with optimized performance through Cython extensions. This guide covers modern development practices and tooling.
+ChemPy Toolkit is a chemistry toolkit for Python with optimized performance through Cython extensions. This guide covers modern development practices and tooling.
 
 ## Quick Reference
 

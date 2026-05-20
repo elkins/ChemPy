@@ -1,11 +1,11 @@
 # Project Structure
 
-ChemPy follows modern Python project organization with clear separation of concerns.
+ChemPy Toolkit follows modern Python project organization with clear separation of concerns.
 
 ## Directory Structure
 
 ```
-ChemPy/
+ChemPyToolkit/
 ├── README.md                       # Project overview and quick start
 ├── CHANGELOG.md                    # Version history and release notes
 ├── TODO.md                         # Future improvements and known issues

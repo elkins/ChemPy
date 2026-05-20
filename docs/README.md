@@ -1,6 +1,6 @@
-# ChemPy Developer Documentation
+# ChemPy Toolkit Developer Documentation
 
-This directory contains technical documentation for ChemPy developers and contributors.
+This directory contains technical documentation for ChemPy Toolkit developers and contributors.
 
 ## Documentation Files
 

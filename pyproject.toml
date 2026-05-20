@@ -4,9 +4,9 @@ requires = ["setuptools>=64.0", "wheel", "numpy>=1.20.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ChemPy"
+name = "chempy-toolkit"
 version = "0.2.0"
-description = "A comprehensive chemistry toolkit for Python with support for molecular structures, thermodynamics, and chemical kinetics"
+description = "ChemPy Toolkit: A comprehensive chemistry toolkit for molecular structures, thermodynamics, and chemical kinetics (RMG-compatible)"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
@@ -16,7 +16,17 @@ authors = [
 maintainers = [
     {name = "Community Contributors"}
 ]
-keywords = ["chemistry", "chemical-engineering", "materials-science", "thermodynamics", "kinetics", "molecular"]
+keywords = [
+    "chemistry-toolkit",
+    "RMG",
+    "reaction-mechanism-generator",
+    "molecular-graphs",
+    "graph-isomorphism",
+    "thermodynamics",
+    "chemical-kinetics",
+    "molecular-structure",
+    "NASA-polynomials"
+]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",

@@ -7,7 +7,7 @@
 .PHONY: help build clean test lint format type-check docs install install-dev check-all structure tox
 
 help:
-	@echo "ChemPy development tasks:"
+	@echo "ChemPy Toolkit development tasks:"
 	@echo ""
 	@echo "Build & Installation:"
 	@echo "  make build          - Build Cython extensions"

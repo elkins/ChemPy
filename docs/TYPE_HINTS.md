@@ -1,10 +1,11 @@
-# Type Hints Guide for ChemPy
+# Type Hints Guide for ChemPy Toolkit
 
-This document provides guidelines for adding and maintaining type hints throughout the ChemPy codebase.
+This document provides guidelines for adding and maintaining type hints throughout the ChemPy Toolkit codebase.
 
 ## Overview
 
-ChemPy is committed to achieving PEP 561 compliance with comprehensive type hint support. This improves:
+ChemPy Toolkit is committed to achieving PEP 561 compliance with comprehensive type hint support.
+ This improves:
 
 - **IDE Support**: Better autocomplete and inline documentation
 - **Type Safety**: Early detection of potential bugs

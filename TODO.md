@@ -2,6 +2,16 @@
 
 This document tracks medium-to-high risk improvements and known issues identified during the modernization effort. These items require careful consideration and broader refactoring efforts.
 
+## Branding & Searchability
+
+### Medium Priority
+- **Evaluate full package rename (e.g., `rmgchem`)**
+  - Current status: Transitioned PyPI distribution name to `chempy-toolkit`
+  - Future goal: Completely resolve import-name collisions by renaming the package itself
+  - Effort: Medium (requires global search/replace of all imports)
+  - Risk: Medium (breaking change for existing scripts)
+  - Impact: Would eliminate all confusion with Björn Dahlgren's `chempy` package
+
 ## Type Annotations
 
 ### High Priority

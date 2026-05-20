@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2024-XX-XX
+
+### Added
+- Explicit branding as "ChemPy Toolkit" to distinguish from Björn Dahlgren's `chempy` package
+- SEO-focused keywords and description in `pyproject.toml`
+- Naming and installation notice in `README.md`
+- Support for `chempy-toolkit` as the official PyPI distribution name
+
+### Changed
+- Renamed PyPI distribution to `chempy-toolkit` (import remains `import chempy`)
+- Updated documentation titles and references to reflect "ChemPy Toolkit" branding
+- Updated installation instructions in `README.md`
+
 ## [Unreleased]
 
 ### Added

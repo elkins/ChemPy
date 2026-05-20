@@ -1,4 +1,4 @@
-# ChemPy - A Chemistry Toolkit for Python
+# ChemPy Toolkit
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![Python 3.13](https://img.shields.io/badge/python-3.13-brightgreen.svg)](https://www.python.org/downloads/)
@@ -11,7 +11,15 @@
 [![PEP 561 Compliant](https://img.shields.io/badge/pep-561-blue.svg)](https://www.python.org/dev/peps/pep-0561/)
 [![Benchmarks](https://github.com/elkins/ChemPy/actions/workflows/benchmarks.yml/badge.svg?branch=master)](https://github.com/elkins/ChemPy/actions/workflows/benchmarks.yml?query=branch%3Amaster)
 
-**ChemPy** is a free, open-source Python toolkit for chemistry, chemical engineering, and materials science applications.
+**ChemPy Toolkit** is a free, open-source Python toolkit for chemistry, chemical engineering, and materials science applications, with a focus on molecular structures, thermodynamics, and chemical kinetics.
+
+> [!IMPORTANT]
+> **Naming & Installation Notice**
+> This project is the **ChemPy Toolkit** (distribution name: `chempy-toolkit`), originally developed by Joshua W. Allen as part of the [RMG](https://rmgpy.github.io/) ecosystem.
+>
+> It is **distinct** from the general-purpose `chempy` package on PyPI by Björn Dahlgren.
+> - To install this toolkit, use: `pip install chempy-toolkit`
+> - Once installed, it is imported as: `import chempy`
 
 ## Quick Links
 
@@ -56,7 +64,7 @@ Note: Features such as SMILES parsing and certain rotor-counting utilities depen
 Install via pip:
 
 ```bash
-pip install chempy
+pip install chempy-toolkit
 ```
 
 Or install from source with development dependencies:

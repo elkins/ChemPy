@@ -2,10 +2,13 @@
 # -*- coding: utf-8 -*-
 
 """
-ChemPy - A comprehensive chemistry toolkit for Python
+ChemPy Toolkit - A comprehensive chemistry toolkit for Python
 
 A free, open-source Python toolkit for chemistry, chemical engineering,
-and materials science applications.
+and materials science applications. Part of the RMG ecosystem.
+
+Note: This package is the ChemPy Toolkit (distribution: chempy-toolkit),
+distinct from the 'chempy' package by Björn Dahlgren.
 
 Modules:
     constants: Physical and chemical constants
