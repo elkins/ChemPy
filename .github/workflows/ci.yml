@@ -32,7 +32,7 @@ jobs:
 
       - name: Run tests and save benchmarks
         run: |
-          pytest -q
+          pytest -q --benchmark-autosave
 
       - name: Upload benchmark artifacts
         if: success()
