@@ -36,17 +36,35 @@ jobs:
 
       - name: Run tests and save benchmarks
         run: |
-          python -m pytest -v tests/ unittest/ benchmarks/ --benchmark-autosave
+          # Create a dummy benchmark that has no dependencies to verify pytest-benchmark is working
+          echo "def test_simple_bench(benchmark): benchmark(lambda: sum(range(100)))" > benchmarks/test_simple_bench.py
+          
+          # Print environment info for debugging
+          python --version
+          pip list | grep -E "pytest|benchmark|openbabel"
+          python -c "import openbabel; print('OpenBabel OK') if hasattr(openbabel, 'OBConversion') else print('OpenBabel partial')" || echo "OpenBabel import failed"
+          
+          # Run pytest with explicit config and multiple output formats
+          # We use --benchmark-json to force a file creation we can definitely find
+          python -m pytest -v tests/ unittest/ benchmarks/ --benchmark-autosave --benchmark-json=benchmarks-result.json
 
       - name: List benchmark files (diagnostic)
-        run: ls -R .benchmarks || echo "No .benchmarks directory found"
+        run: |
+          echo "Checking for .benchmarks directory:"
+          ls -R .benchmarks || echo ".benchmarks directory not found"
+          echo "Checking for explicit JSON output:"
+          ls -l benchmarks-result.json || echo "benchmarks-result.json not found"
+          echo "Searching for any JSON files generated:"
+          find . -name "*.json" -not -path "./.git/*"
 
       - name: Upload benchmark artifacts
-        if: success()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: benchmarks-json
-          path: .benchmarks
+          path: |
+            .benchmarks/
+            benchmarks-result.json
           if-no-files-found: warn
 
   compare-artifacts:
