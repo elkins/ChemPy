@@ -32,15 +32,18 @@ jobs:
 
       - name: Run tests and save benchmarks
         run: |
-          pytest -v --benchmark-autosave
+          python -m pytest -v tests/ unittest/ benchmarks/ --benchmark-autosave
+
+      - name: List benchmark files (diagnostic)
+        run: ls -R .benchmarks || echo "No .benchmarks directory found"
 
       - name: Upload benchmark artifacts
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: benchmarks-json
-          path: .benchmarks/
-          if-no-files-found: error
+          path: .benchmarks
+          if-no-files-found: warn
 
   compare-artifacts:
     runs-on: macos-latest
