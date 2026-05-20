@@ -11,6 +11,9 @@ on:
       - '.github/workflows/benchmarks.yml'
   workflow_dispatch:  # Manual trigger
 
+permissions:
+  contents: read
+
 jobs:
   benchmark:
     runs-on: ubuntu-latest
