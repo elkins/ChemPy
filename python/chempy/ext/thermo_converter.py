@@ -42,7 +42,8 @@ import math
 from math import log
 
 import numpy  # noqa: F401
-from scipy import integrate, linalg, optimize, zeros
+from scipy import integrate, linalg, optimize
+from numpy import zeros
 
 import chempy.constants as constants
 from chempy._cython_compat import cython

@@ -269,14 +269,31 @@ impl Molecule {
     }
 
     pub fn is_subgraph_isomorphic(&self, other: &Molecule) -> bool {
-        self.graph.is_subgraph_isomorphic(&other.graph)
+        other.graph.is_subgraph_isomorphic_with(
+            &self.graph,
+            |v1, v2| v1.equivalent(v2),
+            |e1, e2| e1.equivalent(e2),
+        )
     }
 
     pub fn find_subgraph_isomorphisms(
         &self,
         other: &Molecule,
     ) -> Vec<std::collections::HashMap<usize, usize>> {
-        self.graph.find_subgraph_isomorphisms(&other.graph)
+        let mut mappings = Vec::new();
+        let mut mapping = std::collections::HashMap::new();
+        let mut reverse_mapping = std::collections::HashMap::new();
+        other.graph.vf2_all_matches_with(
+            &self.graph,
+            &mut mapping,
+            &mut reverse_mapping,
+            0,
+            true,
+            &mut mappings,
+            |v1, v2| v1.equivalent(v2),
+            |e1, e2| e1.equivalent(e2),
+        );
+        mappings
     }
 }
 
