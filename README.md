@@ -44,6 +44,23 @@ cd python
 pytest unittest/benchmarksTest.py --benchmark-only
 ```
 
+## Glossary & Acronyms
+- **SMILES**: Simplified Molecular Input Line Entry System. A notation for representing chemical structures as strings.
+- **InChI**: International Chemical Identifier. A standardized string representation for chemical substances.
+- **NASA Polynomials**: A standard format (initially developed by NASA) for representing thermodynamic data ($C_p, H, S$) as a function of temperature.
+- **Wilhoit Model**: A robust thermodynamic model for heat capacity that ensures physical behavior at extremely low ($T \to 0$) and high ($T \to \infty$) temperatures.
+- **VF2 Algorithm**: A high-performance algorithm for graph and subgraph isomorphism matching, used here for molecular pattern recognition.
+- **GA (Group Additivity)**: A method for estimating thermodynamic properties of molecules based on their constituent functional groups.
+- **SCF Energy**: Self-Consistent Field energy; the electronic energy of a molecule calculated via quantum chemical methods (e.g., Gaussian).
+- **Partition Function**: A function that describes the statistical properties of a system in thermodynamic equilibrium.
+
+## References
+- **Pitzer, K. S.** (1946). "The Energy Levels of Restricted Rotors." *J. Chem. Phys.* **14**, p. 239-243. (Used for hindered rotor calculations).
+- **East, A. L. L. and Radom, L.** (1997). "Ab initio statistical thermodynamical models for the computation of high-temperature thermodynamic functions." *J. Chem. Phys.* **106**, p. 6655-6674. (Foundational for `StatesModel`).
+- **Cordella, L. P., Foggia, P., Sansone, C., and Vento, M.** (2004). "A (Sub)Graph Isomorphism Algorithm for Matching Large Graphs." *IEEE Trans. Pattern Anal. Mach. Intell.* **26**, p. 1367-1372. (The VF2 algorithm used in `graph.rs`).
+- **Wilhoit, R. C.** (1975). "Thermodynamic properties of normal and branched alkanes." *J. Phys. Chem. Ref. Data* **2**, p. 427-437. (The Wilhoit heat capacity model).
+- **Burcat, A. and Ruscic, B.** (2005). "Third Millennium Ideal Gas Thermodynamic Data for Combustion and Air-Pollution Use." *TAE 960 Report*. (Source for NASA polynomial standards).
+
 ## License
 ChemPy is licensed under the MIT License - see [LICENSE](LICENSE) for details.
 

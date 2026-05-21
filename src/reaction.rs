@@ -95,3 +95,41 @@ impl Reaction {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::thermo::NASAPolynomial;
+    use crate::species::Species;
+    use std::sync::Arc;
+
+    #[test]
+    fn test_reaction_thermo() {
+        // 2 H2 + O2 -> 2 H2O
+        let h2_nasa = NASAPolynomial::new(200.0, 1000.0, [3.29812431E+00, 8.24944177E-04, -8.14301529E-07, -9.47543410E-11, 4.13487234E-13, -1.01252083E+03, -3.29405039E+00]);
+        let o2_nasa = NASAPolynomial::new(200.0, 1000.0, [3.21293640E+00, 1.12748635E-03, -5.75615047E-07, 1.31387723E-09, -8.76855392E-13, -1.00524902E+03, 3.61111620E+00]);
+        let h2o_nasa = NASAPolynomial::new(200.0, 1000.0, [3.38684249E+00, 3.47498246E-03, -6.35469633E-06, 6.96858127E-09, -2.50658847E-12, -3.02081133E+04, 2.59023285E+00]);
+
+        let mut h2 = Species::new("H2"); h2.thermo = Some(Box::new(h2_nasa));
+        let mut o2 = Species::new("O2"); o2.thermo = Some(Box::new(o2_nasa));
+        let mut h2o = Species::new("H2O"); h2o.thermo = Some(Box::new(h2o_nasa));
+
+        let h2_arc = Arc::new(h2);
+        let o2_arc = Arc::new(o2);
+        let h2o_arc = Arc::new(h2o);
+
+        let reaction = Reaction::new(
+            vec![h2_arc.clone(), h2_arc, o2_arc],
+            vec![h2o_arc.clone(), h2o_arc],
+        );
+
+        let t = 298.15;
+        let dh = reaction.get_enthalpy_of_reaction(t);
+        let ds = reaction.get_entropy_of_reaction(t);
+
+        // Expected values for H2 + O2 -> H2O at 298.15 K
+        // This is a simple test, values are approximate
+        assert!(dh < 0.0); // Exothermic
+        assert!(ds < 0.0); // Entropy decreases
+    }
+}
